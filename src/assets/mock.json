@@ -14,11 +14,10 @@
         "text": "my awesome text about gnomes"
       }
     ],
-    "audio": [],
-    "video": [],
-    "PDF": [],
-    "slider": [],
-    "collage": []
+    "images": [],
+    "videos": [],
+    "PDFs": [],
+    "audios": []
   },
   "junctions": [
     {

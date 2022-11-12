@@ -28,11 +28,11 @@ export enum Tools {
 }
 
 export enum MediaFileTypes {
-  TEXT,
-  IMAGES,
-  VIDEOS,
-  PDFs,
-  AUDIOS,
+  TEXT = 'text',
+  IMAGES = 'images',
+  VIDEOS = 'videos',
+  PDFs = 'PDFs',
+  AUDIOS = 'audios',
 }
 
 export type MultimediaFiles = {
