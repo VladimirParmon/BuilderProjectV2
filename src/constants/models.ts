@@ -5,22 +5,20 @@ type TextFieldId = string;
 
 export interface JSONDataStorage {
   contentsList: SinglePageInfo[];
-  contentsData: {
-    files: MultimediaFiles;
-    dataStructures: Junction;
-  };
+  files: MultimediaFiles;
+  junctions: Junction[];
 }
 
-type Junction = Collage | Slider | Audio | Video | PDF | Text;
+export type Junction = Collage | Slider | Audio | Video | PDF | Text;
 
-interface SinglePageInfo {
+export interface SinglePageInfo {
   id: PageId;
   name: string;
   childrenPages: PageId[];
   tools: ToolDescriptionId[];
 }
 
-enum Tools {
+export enum Tools {
   TEXT,
   AUDIO,
   VIDEO,
@@ -29,26 +27,34 @@ enum Tools {
   COLLAGE,
 }
 
-interface MultimediaFiles {
-  textFields: TextField[];
-  images: ImageDescription[];
-  videos: FileDescription[];
-  PDFs: FileDescription[];
-  audios: FileDescription[];
+export enum MediaFileTypes {
+  TEXT,
+  IMAGES,
+  VIDEOS,
+  PDFs,
+  AUDIOS,
 }
 
-interface TextField {
+export type MultimediaFiles = {
+  [MediaFileTypes.TEXT]: TextField[];
+  [MediaFileTypes.IMAGES]: ImageDescription[];
+  [MediaFileTypes.VIDEOS]: FileDescription[];
+  [MediaFileTypes.PDFs]: FileDescription[];
+  [MediaFileTypes.AUDIOS]: FileDescription[];
+};
+
+export interface TextField {
   id: TextFieldId;
   text: string;
 }
 
-interface FileDescription {
+export interface FileDescription {
   id: FileDescriptionId;
   pathToFile: string;
   title?: string;
 }
 
-interface ImageDescription extends FileDescription {
+export interface ImageDescription extends FileDescription {
   width: number;
 }
 
