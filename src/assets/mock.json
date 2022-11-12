@@ -1,0 +1,30 @@
+{
+  "contentsList": [
+    {
+      "id": "somePageId",
+      "name": "somePageName",
+      "childPages": [],
+      "tools": ["someToolDescriptionId"]
+    }
+  ],
+  "files": {
+    "text": [
+      {
+        "id": "someTextId",
+        "text": "my awesome text about gnomes"
+      }
+    ],
+    "audio": [],
+    "video": [],
+    "PDF": [],
+    "slider": [],
+    "collage": []
+  },
+  "junctions": [
+    {
+      "id": "someToolDescriptionId",
+      "type": "text",
+      "files": "someTextFieldId"
+    }
+  ]
+}
