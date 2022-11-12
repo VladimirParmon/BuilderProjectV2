@@ -19,12 +19,12 @@ export interface SinglePageInfo {
 }
 
 export enum Tools {
-  TEXT,
-  AUDIO,
-  VIDEO,
-  PDF,
-  SLIDER,
-  COLLAGE,
+  TEXT = 'text',
+  AUDIO = 'audio',
+  VIDEO = 'video',
+  PDF = 'PDF',
+  SLIDER = 'slider',
+  COLLAGE = 'collage',
 }
 
 export enum MediaFileTypes {
