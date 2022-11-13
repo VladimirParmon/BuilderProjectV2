@@ -20,6 +20,11 @@ export const selectAllPagesInfo = createSelector(
   (data: SinglePageInfo[]) => data
 );
 
+export const getPagesUsingIds = (ids: string[]) =>
+  createSelector(selectContentsListState, (data: SinglePageInfo[]) =>
+    data.filter((el) => ids.includes(el.id))
+  );
+
 export const getOnePageInfo = (id: string) =>
   createSelector(selectContentsListState, (data: SinglePageInfo[]) =>
     data.filter((el) => el.id === id)
