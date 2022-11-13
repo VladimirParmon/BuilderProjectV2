@@ -11,9 +11,13 @@ enum APIActions {
 }
 
 enum ContentsActions {
-  updatePageName = '[Contents/Page name] Update the name of a page using its id',
+  updatePageName = '[Contents/Page] Update the name of a page using its id',
   updatePageChildren = '[Contents/Children pages] Update the array of children pages ids',
   updateTools = '[Contents/Tools] Update the array of tools that a page displays',
+  changePageParent = '[Contents/Page] Change parentId of a page',
+  removeChildPage = '[Contents/Page] Remove a child from the children pages array',
+  addChildPage = '[Contents/Page] Add a child to the children pages array',
+  updateWholeChildrenArray = '[Contents/Page] Insert newly formed array as a part of DND operation',
 }
 
 enum FileActions {
@@ -52,6 +56,22 @@ const updatePageChildren = createAction(
 const updateTools = createAction(
   ContentsActions.updateTools,
   props<{ pageId: string; newToolsIds: string[] }>()
+);
+const changePageParent = createAction(
+  ContentsActions.changePageParent,
+  props<{ targetPageId: string; newParentId: string }>()
+);
+const removeChildPage = createAction(
+  ContentsActions.removeChildPage,
+  props<{ targetPageId: string; pageToRemoveId: string }>()
+);
+const addChildPage = createAction(
+  ContentsActions.addChildPage,
+  props<{ targetPageId: string; pageToAddId: string }>()
+);
+const updateWholeChildrenArray = createAction(
+  ContentsActions.updateWholeChildrenArray,
+  props<{ targetPageId: string; newArray: string[] }>()
 );
 
 //Files
@@ -116,6 +136,10 @@ export const contentsActions = {
   updatePageName,
   updatePageChildren,
   updateTools,
+  changePageParent,
+  removeChildPage,
+  addChildPage,
+  updateWholeChildrenArray,
 };
 
 export const filesActions = {

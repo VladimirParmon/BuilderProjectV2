@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { selectAllPagesInfo } from 'src/redux/selectors';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 import { UtilsService } from './utils.service';
+import { contentsActions } from 'src/redux/actions';
 
 @Injectable({
   providedIn: 'root',
@@ -48,119 +49,153 @@ export class TreeService {
     });
   }
 
-  drop(event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>) {
-    if (!this.dropActionToDo) return;
-
-    const draggedItemId: string = event.item.data;
-    const parentItemId: string = event.previousContainer.id;
-    const targetListId: string = this.getParentNodeId(
-      this.dropActionToDo.targetId,
-      this.contentsData,
-      'main'
-    );
-
-    console.log(event);
-
-    const draggedItem = this.nodeLookup[draggedItemId];
-
-    const oldItemContainer =
-      parentItemId != 'main'
-        ? this.nodeLookup[parentItemId].childNodes
-        : this.contentsData;
-    const newContainer =
-      targetListId != 'main'
-        ? this.nodeLookup[targetListId].childNodes
-        : this.contentsData;
-
-    if (oldItemContainer && newContainer) {
-      let i = oldItemContainer.findIndex(
-        (c: RecursiveTreeNode) => c.relatedPageId === draggedItemId
-      );
-      oldItemContainer.splice(i, 1);
-
-      switch (this.dropActionToDo.action) {
-        case ActionCases.BEFORE:
-        case ActionCases.AFTER:
-          const targetIndex = newContainer!.findIndex(
-            (c: RecursiveTreeNode) =>
-              c.relatedPageId === this.dropActionToDo?.targetId
-          );
-          this.dropActionToDo.action == ActionCases.BEFORE
-            ? newContainer!.splice(targetIndex, 0, draggedItem)
-            : newContainer!.splice(targetIndex + 1, 0, draggedItem);
-          break;
-
-        case ActionCases.INSIDE:
-          {
-            const destination = this.nodeLookup[this.dropActionToDo.targetId];
-            destination.childNodes.push(draggedItem);
-            destination.isExpanded = true;
-          }
-          break;
-      }
-
-      // if (this.contentsData)
-      //this.store.dispatch()
-      //this.stateService.treeData$.next(this.contentsData);
-    }
-    this.clearDragInfo(true);
-  }
-
   dragMoved(event: CdkDragMove) {
     let element = this.document.elementFromPoint(
       event.pointerPosition.x,
       event.pointerPosition.y
     );
-
     if (!element) {
       this.clearDragInfo();
       return;
     }
+
     let container = element.classList.contains('node-item')
       ? element
       : element.closest('.node-item');
     if (!container) {
       this.clearDragInfo();
-      return;
     }
 
-    const newTargetId: string | null = container.getAttribute('data-id');
-    let newAction: ActionCases;
-    const targetRect = container.getBoundingClientRect();
-    const oneThird = targetRect.height / 3;
-    if (event.pointerPosition.y - targetRect.top < oneThird) {
-      newAction = ActionCases.BEFORE;
-    } else if (event.pointerPosition.y - targetRect.top > 2 * oneThird) {
-      newAction = ActionCases.AFTER;
-    } else {
-      newAction = ActionCases.INSIDE;
-    }
-
-    if (newTargetId && newAction) {
+    const newTargetId: string = container?.getAttribute('data-id') || 'main';
+    let newAction = this.chooseActionCase(container, event);
+    if (newAction) {
       this.dropActionToDo = {
         targetId: newTargetId,
         action: newAction,
       };
-      this.showDragInfo();
+      if (container) this.showDragInfo();
     } else {
       this.clearDragInfo();
       return;
     }
   }
 
-  getParentNodeId(
-    id: string,
-    nodesToSearch: RecursiveTreeNode[] | null,
-    parentId: string
-  ): string {
-    if (nodesToSearch) {
-      for (let node of nodesToSearch) {
-        if (node.relatedPageId == id) return parentId;
-        let ret = this.getParentNodeId(id, node.childNodes, node.relatedPageId);
-        if (ret !== 'null') return ret;
-      }
+  drop(event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>) {
+    if (!this.dropActionToDo) return;
+
+    const draggedItemId: string = event.item.data;
+    const oldParentNodeId: string = this.nodeLookup[draggedItemId].parentNodeId;
+
+    if (this.dropActionToDo.targetId !== 'main') {
+      const newParentNodeId =
+        this.dropActionToDo.action === ActionCases.INSIDE
+          ? this.nodeLookup[this.dropActionToDo.targetId].relatedPageId
+          : this.nodeLookup[this.dropActionToDo.targetId].parentNodeId;
+
+      const newParentNodeChildren = this.nodeLookup[
+        newParentNodeId
+      ].childNodes.map((el) => el.relatedPageId);
+
+      const newParentIndex = this.getNewParentIndex(newParentNodeChildren);
+      if (!newParentIndex) return;
+
+      const newParentFinalArray = newParentNodeChildren.splice(
+        newParentIndex,
+        0,
+        draggedItemId
+      );
+
+      this.dispatchStandardDNDOperationResult(
+        newParentNodeId,
+        newParentFinalArray,
+        draggedItemId,
+        oldParentNodeId
+      );
+    } else {
+      this.dispatchParentlessDNDOperationResult(draggedItemId, oldParentNodeId);
     }
-    return 'null';
+  }
+
+  getNewParentIndex(newParentNodeChildren: string[]) {
+    if (!this.dropActionToDo) return null;
+    let newParentIndex;
+    switch (this.dropActionToDo.action) {
+      case ActionCases.AFTER:
+        newParentIndex =
+          newParentNodeChildren.indexOf(this.dropActionToDo.targetId) + 1;
+        break;
+      case ActionCases.BEFORE:
+        newParentIndex =
+          newParentNodeChildren.indexOf(this.dropActionToDo.targetId) - 1;
+        break;
+      case ActionCases.INSIDE:
+        newParentIndex = newParentNodeChildren.length + 1;
+        break;
+    }
+    return newParentIndex;
+  }
+
+  chooseActionCase(container: Element | null, event: CdkDragMove) {
+    let newAction: ActionCases;
+    if (container) {
+      const targetRect = container.getBoundingClientRect();
+      const oneThird = targetRect.height / 3;
+      if (event.pointerPosition.y - targetRect.top < oneThird) {
+        newAction = ActionCases.BEFORE;
+      } else if (event.pointerPosition.y - targetRect.top > 2 * oneThird) {
+        newAction = ActionCases.AFTER;
+      } else {
+        newAction = ActionCases.INSIDE;
+      }
+    } else {
+      newAction = ActionCases.AFTER;
+    }
+    return newAction;
+  }
+
+  dispatchStandardDNDOperationResult(
+    newParentNodeId: string,
+    newParentFinalArray: string[],
+    draggedItemId: string,
+    oldParentNodeId: string
+  ) {
+    this.store.dispatch(
+      contentsActions.updateWholeChildrenArray({
+        targetPageId: newParentNodeId,
+        newArray: newParentFinalArray,
+      })
+    );
+    this.store.dispatch(
+      contentsActions.changePageParent({
+        targetPageId: draggedItemId,
+        newParentId: newParentNodeId,
+      })
+    );
+    this.store.dispatch(
+      contentsActions.removeChildPage({
+        targetPageId: oldParentNodeId,
+        pageToRemoveId: draggedItemId,
+      })
+    );
+  }
+
+  dispatchParentlessDNDOperationResult(
+    draggedItemId: string,
+    oldParentNodeId: string
+  ) {
+    console.log(draggedItemId, oldParentNodeId);
+    this.store.dispatch(
+      contentsActions.changePageParent({
+        targetPageId: draggedItemId,
+        newParentId: '',
+      })
+    );
+    this.store.dispatch(
+      contentsActions.removeChildPage({
+        targetPageId: oldParentNodeId,
+        pageToRemoveId: draggedItemId,
+      })
+    );
   }
 
   //Visuals------------------------------------------------------------------

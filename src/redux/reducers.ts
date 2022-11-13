@@ -34,6 +34,30 @@ const contentsReducer = createReducer(
   ),
   on(contentsActions.updateTools, (state, { pageId, newToolsIds }) =>
     state.map((el) => (el.id === pageId ? { ...el, tools: newToolsIds } : el))
+  ),
+  on(
+    contentsActions.updateWholeChildrenArray,
+    (state, { targetPageId, newArray }) =>
+      state.map((el) =>
+        el.id === targetPageId ? { ...el, childPages: newArray } : el
+      )
+  ),
+  on(contentsActions.changePageParent, (state, { targetPageId, newParentId }) =>
+    state.map((el) =>
+      el.id === targetPageId ? { ...el, parentId: newParentId } : el
+    )
+  ),
+  on(
+    contentsActions.removeChildPage,
+    (state, { targetPageId, pageToRemoveId }) =>
+      state.map((el) =>
+        el.id === targetPageId
+          ? {
+              ...el,
+              childPages: el.childPages.filter((p) => p !== pageToRemoveId),
+            }
+          : el
+      )
   )
 );
 
