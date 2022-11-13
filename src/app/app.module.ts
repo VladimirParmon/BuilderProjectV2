@@ -16,6 +16,7 @@ import { TextComponent } from './components/tools/text/text.component';
 import { HttpClientModule } from '@angular/common/http';
 import { reducers } from 'src/redux/reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     AppRoutingModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({}),
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
