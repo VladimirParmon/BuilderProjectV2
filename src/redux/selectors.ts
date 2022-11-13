@@ -5,7 +5,7 @@ import {
   Junction,
   MultimediaFiles,
   SinglePageInfo,
-  TextField,
+  TextFieldDescription,
   Tools,
   MediaFileTypes,
 } from '../constants/models';
@@ -44,7 +44,9 @@ export const getFiles = (props: { id: string; type: Tools }) => {
 
   return createSelector(selectFilesState, (data: MultimediaFiles) =>
     (
-      data[fileType] as Array<TextField | ImageDescription | FileDescription>
+      data[fileType] as Array<
+        TextFieldDescription | ImageDescription | FileDescription
+      >
     ).filter((el) => el.id === props.id)
   );
 };

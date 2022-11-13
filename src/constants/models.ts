@@ -14,7 +14,7 @@ export type Junction = Collage | Slider | Audio | Video | PDF | Text;
 export interface SinglePageInfo {
   id: PageId;
   name: string;
-  childrenPages: PageId[];
+  childPages: PageId[];
   tools: ToolDescriptionId[];
 }
 
@@ -36,14 +36,14 @@ export enum MediaFileTypes {
 }
 
 export type MultimediaFiles = {
-  [MediaFileTypes.TEXT]: TextField[];
+  [MediaFileTypes.TEXT]: TextFieldDescription[];
   [MediaFileTypes.IMAGES]: ImageDescription[];
   [MediaFileTypes.VIDEOS]: FileDescription[];
   [MediaFileTypes.PDFs]: FileDescription[];
   [MediaFileTypes.AUDIOS]: FileDescription[];
 };
 
-export interface TextField {
+export interface TextFieldDescription {
   id: TextFieldId;
   text: string;
 }
