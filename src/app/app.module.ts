@@ -14,6 +14,8 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ToolGeneratorComponent } from './components/tool-generator/tool-generator.component';
 import { TextComponent } from './components/tools/text/text.component';
 import { HttpClientModule } from '@angular/common/http';
+import { reducers } from 'src/redux/reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot(reducers),
+    StoreDevtoolsModule.instrument({}),
   ],
   providers: [],
   bootstrap: [AppComponent],
