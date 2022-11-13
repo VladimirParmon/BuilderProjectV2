@@ -14,8 +14,17 @@ export type Junction = Collage | Slider | Audio | Video | PDF | Text;
 export interface SinglePageInfo {
   id: PageId;
   name: string;
-  childPages: PageId[];
   tools: ToolDescriptionId[];
+  childPages: PageId[];
+  parentId: PageId;
+}
+
+export interface RecursiveTreeNode {
+  parentNodeId: PageId;
+  relatedPageId: PageId;
+  relatedPageName: string;
+  childNodes: RecursiveTreeNode[];
+  isExpanded: boolean;
 }
 
 export enum Tools {
@@ -87,4 +96,32 @@ export enum FlexboxPositioningOptions {
 export enum FlexboxFlowOptions {
   ROW = 'row',
   COLUMN = 'column',
+}
+
+export interface Lookup {
+  [key: string]: RecursiveTreeNode;
+}
+
+export interface DropInfo {
+  targetId: string;
+  action: ActionCases;
+}
+
+export enum ActionCases {
+  BEFORE = 'before',
+  AFTER = 'after',
+  INSIDE = 'inside',
+}
+
+export enum ExpandButtonInnerText {
+  OPEN = 'Свернуть',
+  CLOSE = 'Развернуть',
+}
+
+type ExpandKey = 'open' | 'close';
+type ExpandButtonInfo = Record<ExpandKey, ExpandButtonInnerText>;
+
+export interface ExpandButtonState {
+  expanded: boolean;
+  text: ExpandButtonInfo;
 }

@@ -1,1 +1,145 @@
-<p>contents works!</p>
+<ng-template #tmplNode let-node="node">
+  <div
+    class="node-item"
+    [attr.data-id]="node.relatedPageId"
+    [attr.id]="'node-' + node.relatedPageId"
+    [ngClass]="{
+      'child-node': node.childNodes?.length && !isDraggable,
+      'node-item__zone-padding': isDraggable
+    }"
+  >
+    <div class="node-item__drop-zone" *ngIf="isDraggable">
+      <mat-icon>drag_indicator</mat-icon>
+    </div>
+
+    <div class="node-title">
+      <mat-icon
+        *ngIf="node.childNodes?.length"
+        (click)="node.isExpanded = !node.isExpanded"
+        aria-hidden="false"
+        aria-label="expand icon"
+        class="node-title__icon"
+      >
+        {{ node.isExpanded ? "expand_less" : "expand_more" }}
+      </mat-icon>
+      <span
+        class="node-title__name-span"
+        (click)="navigate(node.relatedPageId)"
+        >{{ node.relatedPageName }}</span
+      >
+      <span class="item-notes" *ngIf="node.childNodes?.length"
+        >({{ node.childNodes?.length }})</span
+      >
+      <span class="node-title__spacer"></span>
+      <mat-icon
+        *ngIf="isGlobalEditOn$ | async"
+        color="accent"
+        aria-hidden="false"
+        aria-label="delete icon"
+        class="node-title__icon node-title__icon-delete"
+        (click)="openDeletePageDialog(node.relatedPageId)"
+        >delete</mat-icon
+      >
+    </div>
+
+    <div
+      *ngIf="node.isExpanded && node.childNodes?.length"
+      class="node-children"
+      cdkDropList
+      [cdkDropListData]="node.childNodes"
+      [id]="node.relatedPageId"
+      [cdkDropListConnectedTo]="treeService.dropTargetIds"
+      (cdkDropListDropped)="treeService.drop($event)"
+      [cdkDropListSortingDisabled]="true"
+      @fold
+    >
+      <div
+        *ngFor="let node of node.childNodes"
+        cdkDrag
+        [cdkDragData]="node.relatedPageId"
+        [cdkDragDisabled]="!isDraggable"
+        (cdkDragMoved)="treeService.dragMoved($event)"
+        @fold
+      >
+        <ng-container
+          *ngTemplateOutlet="tmplNode; context: { node: node }"
+        ></ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div
+  cdkDropList
+  [cdkDropListData]="treeService.contentsData"
+  id="main"
+  [cdkDropListConnectedTo]="treeService.dropTargetIds"
+  (cdkDropListDropped)="treeService.drop($event)"
+  [cdkDropListSortingDisabled]="true"
+  *ngIf="isMenuOpen$ | async"
+  @animate
+>
+  <div class="tree-controls">
+    <div class="tree-buttons">
+      <button
+        class="tree-button"
+        mat-raised-button
+        (click)="isTreeExpanded(treeService.contentsData)"
+      >
+        {{
+          expandButtonState.expanded
+            ? expandButtonState.text.open
+            : expandButtonState.text.close
+        }}
+      </button>
+      <button
+        class="tree-button"
+        mat-raised-button
+        (click)="openAddNewPageDialog()"
+        onclick="this.blur()"
+      >
+        Добавить
+      </button>
+    </div>
+    <div class="tree-checkboxes">
+      <mat-checkbox
+        class="tree-checkbox"
+        (change)="toggleDND($event.checked)"
+        [(ngModel)]="isDraggable"
+        [disabled]="!(isGlobalEditOn$ | async)"
+        >Дропзоны</mat-checkbox
+      >
+      <mat-checkbox
+        class="tree-checkbox"
+        [checked]="isGlobalEditOn$ | async"
+        (change)="toggleGlobalEdit($event.checked)"
+        >Редактирование</mat-checkbox
+      >
+    </div>
+  </div>
+
+  <div
+    *ngFor="let node of treeService.contentsData"
+    cdkDrag
+    [cdkDragData]="node.relatedPageId"
+    [cdkDragDisabled]="!isDraggable"
+    (cdkDragMoved)="treeService.dragMoved($event)"
+  >
+    <ng-container
+      *ngTemplateOutlet="tmplNode; context: { node: node }"
+    ></ng-container>
+  </div>
+
+  <div class="tree-buttons__bottom">
+    <button
+      class="tree-button"
+      mat-raised-button
+      (click)="saveTree(treeService.contentsData)"
+    >
+      Сохранить
+    </button>
+    <button class="tree-button" mat-raised-button (click)="generate()">
+      Генерировать
+    </button>
+  </div>
+</div>

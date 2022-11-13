@@ -3,14 +3,23 @@
     {
       "id": "somePageId",
       "name": "somePageName",
-      "childPages": ["somePageId2"],
-      "tools": ["someToolDescriptionId"]
+      "childPages": ["somePageId2", "somePageId3"],
+      "tools": ["someToolDescriptionId"],
+      "parentId": ""
     },
     {
       "id": "somePageId2",
       "name": "somePageName2",
       "childPages": [],
-      "tools": ["someToolDescriptionId"]
+      "tools": ["someToolDescriptionId"],
+      "parentId": "somePageId"
+    },
+    {
+      "id": "somePageId3",
+      "name": "somePageName3",
+      "childPages": [],
+      "tools": [],
+      "parentId": "somePageId"
     }
   ],
   "files": {

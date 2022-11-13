@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { reducers } from 'src/redux/reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -42,6 +43,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     TextComponent,
   ],
   imports: [
+    FormsModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
