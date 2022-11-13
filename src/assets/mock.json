@@ -3,6 +3,12 @@
     {
       "id": "somePageId",
       "name": "somePageName",
+      "childPages": ["somePageId2"],
+      "tools": ["someToolDescriptionId"]
+    },
+    {
+      "id": "somePageId2",
+      "name": "somePageName2",
       "childPages": [],
       "tools": ["someToolDescriptionId"]
     }
