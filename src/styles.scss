@@ -1,39 +1,154 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
+@use "@angular/material" as mat;
+@use "./constants/_palette" as palette;
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$BuilderProjectV2-primary: mat.define-palette(mat.$indigo-palette);
-$BuilderProjectV2-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+//@import "~quill/dist/quill.snow.css";
 
-// The warn palette is optional (defaults to red).
-$BuilderProjectV2-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$BuilderProjectV2-theme: mat.define-light-theme((
-  color: (
-    primary: $BuilderProjectV2-primary,
-    accent: $BuilderProjectV2-accent,
-    warn: $BuilderProjectV2-warn,
+$Builder-primary: mat.define-palette(palette.$mslu);
+$Builder-accent: mat.define-palette(palette.$mslu-light);
+$Builder-warn: mat.define-palette(mat.$red-palette, 800);
+$Builder-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $Builder-primary,
+      accent: $Builder-accent,
+      warn: $Builder-warn,
+    ),
   )
-));
+);
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($BuilderProjectV2-theme);
+@include mat.all-component-themes($Builder-theme);
 
-/* You can add global styles to this file, and also import other style files */
+$main-blue: #14609a;
+$light-blue: #dde6ef;
+$bg-light: #ffffff;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+$header-height: 60px;
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  // transition: 0.4s;
+}
+
+.add-page-dialog {
+  .mat-dialog-content {
+    padding: 0;
+    margin: 0;
+  }
+
+  .mat-dialog-container {
+    padding: 1rem 2rem 2rem 2rem;
+    margin: 1rem;
+    overflow: hidden;
+  }
+}
+
+.delete-page-dialog {
+  .mat-dialog-content {
+    padding: 1rem;
+    overflow: hidden;
+  }
+}
+
+app-view,
+app-text,
+app-image,
+app-pdf,
+app-video,
+app-audio,
+app-slider {
+  width: 100%;
+}
+
+app-image,
+app-audio,
+app-pdf,
+app-video {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+// .hide-toolbar {
+//   .ql-container {
+//     border: none;
+//   }
+
+//   .ql-toolbar {
+//     display: none;
+//   }
+// }
+
+.custom-images {
+  .mat-radio-container {
+    display: none;
+  }
+
+  .mat-radio-checked {
+    border-left: 5px solid $main-blue;
+  }
+
+  .mat-radio-label-content {
+    display: flex;
+  }
+
+  .mat-radio-label {
+    white-space: normal;
+  }
+}
+
+.choose-file-dialog {
+  .mat-dialog-content {
+    overflow: hidden;
+  }
+}
+
+// /* Set dropdown font-families */
+
+// [quill-editor-toolbar] .ql-font span[data-label="Aref Ruqaa"]::before {
+//   font-family: "Aref Ruqaa";
+// }
+
+// [quill-editor-toolbar] .ql-font span[data-label="Mirza"]::before {
+//   font-family: "Mirza";
+// }
+
+// [quill-editor-toolbar] .ql-font span[data-label="Roboto"]::before {
+//   font-family: "Roboto";
+// }
+
+// /* Set content font-families */
+
+// .ql-font-mirza {
+//   font-family: "Mirza";
+// }
+
+// .ql-font-aref {
+//   font-family: "Aref Ruqaa";
+// }
+
+// .ql-font-roboto {
+//   font-family: "Roboto";
+// }
+
+@media screen and (max-width: 640px) {
+  app-contents {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    background-color: rgba(
+      $color: mat.get-color-from-palette($Builder-accent, 50),
+      $alpha: 0.97
+    );
+  }
+}

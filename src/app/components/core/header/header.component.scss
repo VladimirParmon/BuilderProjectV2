@@ -1,0 +1,21 @@
+@use "../../../../styles.scss";
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.header {
+  height: styles.$header-height;
+}
+
+.header-logo {
+  position: relative;
+  top: 10px;
+  width: 65px;
+  margin-right: 15px;
+  z-index: 100;
+}
+
+.mat-toolbar-row {
+  padding: 8px;
+}
