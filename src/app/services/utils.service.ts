@@ -15,4 +15,10 @@ export class UtilsService {
         childNodes: this.arrayToTree(array, child.relatedPageId),
       }));
   }
+
+  moveInArray(arr: any, oldIndex: number, newIndex: number) {
+    const arrayDeepCopy = JSON.parse(JSON.stringify(arr));
+    arrayDeepCopy.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+    return arrayDeepCopy;
+  }
 }

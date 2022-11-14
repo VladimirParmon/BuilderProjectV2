@@ -51,6 +51,7 @@ export class ContentsComponent {
   };
 
   isDraggable: boolean = false;
+  nodesThatAreExpanded: string[] = [];
 
   constructor(
     public treeService: TreeService,
@@ -62,22 +63,24 @@ export class ContentsComponent {
   navigate(id: string) {}
   openDeletePageDialog(id: string) {}
 
-  isTreeExpanded(nodes: RecursiveTreeNode[] | null) {
-    const transform = (nodes: RecursiveTreeNode[], command: boolean) => {
-      for (let node of nodes) {
-        node.isExpanded = command;
-        if (node.childNodes) {
-          transform(node.childNodes, command);
-        }
-      }
-    };
-
-    if (nodes) {
-      this.expandButtonState.expanded = !this.expandButtonState.expanded;
-      const command = this.expandButtonState.expanded;
-      transform(nodes, command);
-    }
+  expandNodeSwitch(nodeId: string) {
+    const isAlreadyExpanded = this.isNodeExpanded(nodeId);
+    isAlreadyExpanded
+      ? (this.nodesThatAreExpanded = this.nodesThatAreExpanded.filter(
+          (el) => el !== nodeId
+        ))
+      : this.nodesThatAreExpanded.push(nodeId);
   }
+  isNodeExpanded(nodeId: string) {
+    return this.nodesThatAreExpanded.includes(nodeId);
+  }
+  wholeTreeExpansionSwitch() {
+    this.expandButtonState.expanded
+      ? (this.nodesThatAreExpanded = [])
+      : (this.nodesThatAreExpanded = this.treeService.dropTargetIds);
+    this.expandButtonState.expanded = !this.expandButtonState.expanded;
+  }
+
   openAddNewPageDialog() {}
 
   toggleDND(checkboxValue: boolean) {

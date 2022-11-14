@@ -58,7 +58,8 @@ const contentsReducer = createReducer(
             }
           : el
       )
-  )
+  ),
+  on(contentsActions.updateWholeSlice, (state, { newArray }) => newArray)
 );
 
 export const filesReducer = createReducer(

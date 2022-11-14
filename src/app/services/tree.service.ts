@@ -4,6 +4,7 @@ import {
   DropInfo,
   Lookup,
   ActionCases,
+  SinglePageInfo,
 } from 'src/constants/models';
 import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
@@ -16,6 +17,7 @@ import { contentsActions } from 'src/redux/actions';
   providedIn: 'root',
 })
 export class TreeService {
+  allPagesData: SinglePageInfo[] | null = null;
   contentsData: RecursiveTreeNode[] | null = null;
 
   dropTargetIds: string[] = [];
@@ -29,12 +31,12 @@ export class TreeService {
   ) {
     this.store.select(selectAllPagesInfo).subscribe((data) => {
       if (data) {
+        this.allPagesData = data;
         const recursiveTreeNodes: RecursiveTreeNode[] = [...data].map((el) => ({
           parentNodeId: el.parentId,
           relatedPageId: el.id,
           relatedPageName: el.name,
           childNodes: [],
-          isExpanded: false,
         }));
         this.prepareDragDrop(recursiveTreeNodes);
         this.contentsData = this.utilsService.arrayToTree(recursiveTreeNodes);
@@ -59,25 +61,29 @@ export class TreeService {
       return;
     }
 
-    let container = element.classList.contains('node-item')
-      ? element
-      : element.closest('.node-item');
-    if (!container) {
-      this.clearDragInfo();
-    }
-
-    const newTargetId: string = container?.getAttribute('data-id') || 'main';
-    let newAction = this.chooseActionCase(container, event);
-    if (newAction) {
+    const container = this.getContainer(element);
+    if (container) {
+      const newTargetId: string =
+        container.getAttribute('data-id') ||
+        'Something went wrong. Check the DOM tree';
+      const newAction = this.chooseActionCase(container, event);
       this.dropActionToDo = {
         targetId: newTargetId,
         action: newAction,
       };
-      if (container) this.showDragInfo();
+      this.showDragInfo();
     } else {
-      this.clearDragInfo();
-      return;
+      this.dropActionToDo = {
+        targetId: 'No target id is required here',
+        action: ActionCases.OUT_OF_BOUNDS,
+      };
     }
+  }
+
+  getContainer(element: Element) {
+    return element.classList.contains('node-item')
+      ? element
+      : element.closest('.node-item');
   }
 
   drop(event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>) {
@@ -86,33 +92,53 @@ export class TreeService {
     const draggedItemId: string = event.item.data;
     const oldParentNodeId: string = this.nodeLookup[draggedItemId].parentNodeId;
 
-    if (this.dropActionToDo.targetId !== 'main') {
+    if (this.dropActionToDo.action === ActionCases.OUT_OF_BOUNDS) {
+      this.dispatchDNDOutOfBounds(draggedItemId, oldParentNodeId);
+      return;
+    }
+
+    if (
+      this.nodeLookup[this.dropActionToDo.targetId].parentNodeId ||
+      this.dropActionToDo.action === ActionCases.INSIDE
+    ) {
       const newParentNodeId =
         this.dropActionToDo.action === ActionCases.INSIDE
           ? this.nodeLookup[this.dropActionToDo.targetId].relatedPageId
           : this.nodeLookup[this.dropActionToDo.targetId].parentNodeId;
 
-      const newParentNodeChildren = this.nodeLookup[
-        newParentNodeId
-      ].childNodes.map((el) => el.relatedPageId);
-
+      if (!this.allPagesData) return;
+      const newParentNodeChildren: string[] = JSON.parse(
+        JSON.stringify(
+          this.allPagesData.find((page) => page.id === newParentNodeId)
+            ?.childPages
+        )
+      );
+      if (!newParentNodeChildren) return;
       const newParentIndex = this.getNewParentIndex(newParentNodeChildren);
       if (!newParentIndex) return;
 
-      const newParentFinalArray = newParentNodeChildren.splice(
-        newParentIndex,
-        0,
-        draggedItemId
-      );
+      newParentNodeChildren.splice(newParentIndex, 0, draggedItemId);
 
       this.dispatchStandardDNDOperationResult(
         newParentNodeId,
-        newParentFinalArray,
+        newParentNodeChildren,
         draggedItemId,
         oldParentNodeId
       );
     } else {
-      this.dispatchParentlessDNDOperationResult(draggedItemId, oldParentNodeId);
+      console.log('block 2');
+      if (!this.allPagesData) return;
+      const store = [...this.allPagesData];
+      const storeLookup = store.map((el) => el.id);
+      const oldIndex = storeLookup.indexOf(draggedItemId);
+      const newIndex = this.getNewParentIndex(storeLookup);
+      const draggedItem = this.allPagesData.find(
+        (el) => el.id === draggedItemId
+      );
+      if (!newIndex) return;
+      if (!draggedItem) return;
+      const newArray = this.utilsService.moveInArray(store, oldIndex, newIndex);
+      this.dispatchParentlessDNDOperationResult(newArray);
     }
   }
 
@@ -129,9 +155,11 @@ export class TreeService {
           newParentNodeChildren.indexOf(this.dropActionToDo.targetId) - 1;
         break;
       case ActionCases.INSIDE:
-        newParentIndex = newParentNodeChildren.length + 1;
+        newParentIndex = newParentNodeChildren.length;
         break;
     }
+    console.log(newParentNodeChildren);
+    console.log('index: ', newParentIndex);
     return newParentIndex;
   }
 
@@ -155,14 +183,22 @@ export class TreeService {
 
   dispatchStandardDNDOperationResult(
     newParentNodeId: string,
-    newParentFinalArray: string[],
+    newParentNodeChildren: string[],
     draggedItemId: string,
-    oldParentNodeId: string
+    oldParentNodeId?: string
   ) {
+    if (oldParentNodeId) {
+      this.store.dispatch(
+        contentsActions.removeChildPage({
+          targetPageId: oldParentNodeId,
+          pageToRemoveId: draggedItemId,
+        })
+      );
+    }
     this.store.dispatch(
       contentsActions.updateWholeChildrenArray({
         targetPageId: newParentNodeId,
-        newArray: newParentFinalArray,
+        newArray: newParentNodeChildren,
       })
     );
     this.store.dispatch(
@@ -171,32 +207,39 @@ export class TreeService {
         newParentId: newParentNodeId,
       })
     );
-    this.store.dispatch(
-      contentsActions.removeChildPage({
-        targetPageId: oldParentNodeId,
-        pageToRemoveId: draggedItemId,
-      })
-    );
   }
 
-  dispatchParentlessDNDOperationResult(
-    draggedItemId: string,
-    oldParentNodeId: string
-  ) {
-    console.log(draggedItemId, oldParentNodeId);
+  dispatchDNDOutOfBounds(draggedItemId: string, oldParentNodeId?: string) {
+    if (oldParentNodeId) {
+      this.store.dispatch(
+        contentsActions.removeChildPage({
+          targetPageId: oldParentNodeId,
+          pageToRemoveId: draggedItemId,
+        })
+      );
+    }
     this.store.dispatch(
       contentsActions.changePageParent({
         targetPageId: draggedItemId,
         newParentId: '',
       })
     );
-    this.store.dispatch(
-      contentsActions.removeChildPage({
-        targetPageId: oldParentNodeId,
-        pageToRemoveId: draggedItemId,
-      })
-    );
   }
+
+  dispatchParentlessDNDOperationResult(newArray: SinglePageInfo[]) {
+    this.store.dispatch(contentsActions.updateWholeSlice({ newArray }));
+  }
+
+  // expansionHandler(node: RecursiveTreeNode) {
+  //   if (node.isExpanded) {
+  //     this.nodesThatAreExpanded = this.nodesThatAreExpanded.filter(
+  //       (el) => el !== node.relatedPageId
+  //     );
+  //   } else {
+  //     this.nodesThatAreExpanded.push(node.relatedPageId);
+  //   }
+  //   node.isExpanded = !node.isExpanded;
+  // }
 
   //Visuals------------------------------------------------------------------
 

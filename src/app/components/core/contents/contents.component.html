@@ -15,12 +15,12 @@
     <div class="node-title">
       <mat-icon
         *ngIf="node.childNodes?.length"
-        (click)="node.isExpanded = !node.isExpanded"
+        (click)="expandNodeSwitch(node.relatedPageId)"
         aria-hidden="false"
         aria-label="expand icon"
         class="node-title__icon"
       >
-        {{ node.isExpanded ? "expand_less" : "expand_more" }}
+        {{ isNodeExpanded(node.relatedPageId) ? "expand_less" : "expand_more" }}
       </mat-icon>
       <span
         class="node-title__name-span"
@@ -43,7 +43,7 @@
     </div>
 
     <div
-      *ngIf="node.isExpanded && node.childNodes?.length"
+      *ngIf="isNodeExpanded(node.relatedPageId) && node.childNodes?.length"
       class="node-children"
       cdkDropList
       [cdkDropListData]="node.childNodes"
@@ -85,7 +85,7 @@
       <button
         class="tree-button"
         mat-raised-button
-        (click)="isTreeExpanded(treeService.contentsData)"
+        (click)="wholeTreeExpansionSwitch()"
       >
         {{
           expandButtonState.expanded

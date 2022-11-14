@@ -3,6 +3,7 @@ import {
   FlexboxFlowOptions,
   FlexboxPositioningOptions,
   JSONDataStorage,
+  SinglePageInfo,
   Tools,
 } from '../constants/models';
 
@@ -18,6 +19,7 @@ enum ContentsActions {
   removeChildPage = '[Contents/Page] Remove a child from the children pages array',
   addChildPage = '[Contents/Page] Add a child to the children pages array',
   updateWholeChildrenArray = '[Contents/Page] Insert newly formed array as a part of DND operation',
+  updateWholeSlice = '[Contents/Whole] Update the whole contents array',
 }
 
 enum FileActions {
@@ -72,6 +74,10 @@ const addChildPage = createAction(
 const updateWholeChildrenArray = createAction(
   ContentsActions.updateWholeChildrenArray,
   props<{ targetPageId: string; newArray: string[] }>()
+);
+const updateWholeSlice = createAction(
+  ContentsActions.updateWholeSlice,
+  props<{ newArray: SinglePageInfo[] }>()
 );
 
 //Files
@@ -140,6 +146,7 @@ export const contentsActions = {
   removeChildPage,
   addChildPage,
   updateWholeChildrenArray,
+  updateWholeSlice,
 };
 
 export const filesActions = {

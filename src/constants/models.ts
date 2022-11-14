@@ -24,7 +24,6 @@ export interface RecursiveTreeNode {
   relatedPageId: PageId;
   relatedPageName: string;
   childNodes: RecursiveTreeNode[];
-  isExpanded: boolean;
 }
 
 export enum Tools {
@@ -111,6 +110,8 @@ export enum ActionCases {
   BEFORE = 'before',
   AFTER = 'after',
   INSIDE = 'inside',
+  PARENTLESS = 'parentless',
+  OUT_OF_BOUNDS = 'outOfBounds',
 }
 
 export enum ExpandButtonInnerText {
