@@ -72,7 +72,8 @@ export class TreeService {
   drop(
     event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>,
     nodeLookup: Lookup,
-    allPagesData: SinglePageInfo[]
+    allPagesData: SinglePageInfo[],
+    dropTargetIds: string[]
   ) {
     if (!this.dropActionToDo) return;
 
@@ -97,13 +98,11 @@ export class TreeService {
         (page) => page.id === newParentNodeId
       )?.childPages;
       if (!newParentNodeChildren) return;
-      console.log('new Parent Children found');
 
       const newParentIndex = this.getNewParentIndex(newParentNodeChildren);
       if (newParentIndex === -1) return;
-      console.log('new index found');
 
-      const final = this.utilsService.moveInArray(
+      const finalArrayThatGoesToTheStore = this.utilsService.moveInArray(
         newParentNodeChildren,
         newParentIndex,
         draggedItemId
@@ -111,12 +110,20 @@ export class TreeService {
 
       this.dispatchStandardDNDOperationResult(
         newParentNodeId,
-        final,
+        finalArrayThatGoesToTheStore,
         draggedItemId,
         oldParentNodeId
       );
     } else {
-      console.log('block 2');
+      const targetNode = nodeLookup[draggedItemId];
+      const newParentIndex = this.getNewParentIndex(dropTargetIds);
+      if (newParentIndex === -1) return;
+      const finalArrayThatGoesToTheStore = this.utilsService.moveInArray(
+        allPagesData,
+        newParentIndex,
+        targetNode
+      );
+      this.dispatchParentlessDNDOperationResult(finalArrayThatGoesToTheStore);
     }
   }
 
@@ -160,7 +167,7 @@ export class TreeService {
 
   dispatchStandardDNDOperationResult(
     newParentNodeId: string,
-    newParentNodeChildren: string[],
+    finalArrayThatGoesToTheStore: string[],
     draggedItemId: string,
     oldParentNodeId?: string
   ) {
@@ -175,7 +182,7 @@ export class TreeService {
     this.store.dispatch(
       contentsActions.updateWholeChildrenArray({
         targetPageId: newParentNodeId,
-        newArray: newParentNodeChildren,
+        newArray: finalArrayThatGoesToTheStore,
       })
     );
     this.store.dispatch(

@@ -35,7 +35,7 @@ export class UtilsService {
 
   moveInArray<T>(array: T[], newIndex: number, element: T) {
     let arrayDeepCopy = this.arrayDeepCopy(array);
-    const alreadyThere = arrayDeepCopy.includes(element);
+    const alreadyThere = array.includes(element);
 
     if (alreadyThere) {
       const oldIndex = arrayDeepCopy.indexOf(element);

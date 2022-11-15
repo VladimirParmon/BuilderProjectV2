@@ -132,7 +132,12 @@ export class ContentsComponent implements OnDestroy {
 
   drop(event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>) {
     if (!this.fetchedData) return;
-    this.treeService.drop(event, this.nodeLookup, this.fetchedData);
+    this.treeService.drop(
+      event,
+      this.nodeLookup,
+      this.fetchedData,
+      this.dropTargetIds
+    );
   }
 
   openAddNewPageDialog() {}
