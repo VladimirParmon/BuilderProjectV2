@@ -214,17 +214,6 @@ export class TreeService {
     this.store.dispatch(contentsActions.updateWholeSlice({ newArray }));
   }
 
-  // expansionHandler(node: RecursiveTreeNode) {
-  //   if (node.isExpanded) {
-  //     this.nodesThatAreExpanded = this.nodesThatAreExpanded.filter(
-  //       (el) => el !== node.relatedPageId
-  //     );
-  //   } else {
-  //     this.nodesThatAreExpanded.push(node.relatedPageId);
-  //   }
-  //   node.isExpanded = !node.isExpanded;
-  // }
-
   //Visuals------------------------------------------------------------------
 
   showDragInfo() {
