@@ -15,7 +15,7 @@ export class UtilsService {
     array: SinglePageInfo[],
     nodeLookup: Lookup
   ): RecursiveTreeNode[] {
-    const arrayDeepCopy: SinglePageInfo[] = JSON.parse(JSON.stringify(array));
+    const arrayDeepCopy = this.arrayDeepCopy(array);
     const parents = arrayDeepCopy.filter((el) => !el.parentId).map((p) => p.id);
     return curse(parents);
 
@@ -33,8 +33,8 @@ export class UtilsService {
     }
   }
 
-  moveInArray<T>(arr: T[], newIndex: number, element: T) {
-    let arrayDeepCopy = JSON.parse(JSON.stringify(arr));
+  moveInArray<T>(array: T[], newIndex: number, element: T) {
+    let arrayDeepCopy = this.arrayDeepCopy(array);
     const alreadyThere = arrayDeepCopy.includes(element);
 
     if (alreadyThere) {
@@ -43,5 +43,9 @@ export class UtilsService {
     }
     arrayDeepCopy.splice(newIndex, 0, element);
     return arrayDeepCopy;
+  }
+
+  arrayDeepCopy<T>(array: T[]) {
+    return JSON.parse(JSON.stringify(array)) as T[];
   }
 }
