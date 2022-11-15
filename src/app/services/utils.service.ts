@@ -24,7 +24,7 @@ export class UtilsService {
       return ids.map((i) => {
         const info = nodeLookup[i];
         return {
-          parentNodeId: info.parentId,
+          parentNodeId: info.parentId || '',
           relatedPageId: info.id,
           relatedPageName: info.name,
           childNodes: curse(info.childPages),
@@ -38,7 +38,7 @@ export class UtilsService {
     const alreadyThere = array.includes(element);
 
     if (alreadyThere) {
-      const oldIndex = arrayDeepCopy.indexOf(element);
+      const oldIndex = array.indexOf(element);
       arrayDeepCopy.splice(oldIndex, 1)[0];
     }
     arrayDeepCopy.splice(newIndex, 0, element);

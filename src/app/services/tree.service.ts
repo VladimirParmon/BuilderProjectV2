@@ -60,6 +60,7 @@ export class TreeService {
         targetId: 'No target id is required here',
         action: ActionCases.OUT_OF_BOUNDS,
       };
+      this.clearDragInfo();
     }
   }
 
@@ -81,7 +82,7 @@ export class TreeService {
     const oldParentNodeId: string = nodeLookup[draggedItemId].parentId;
 
     if (this.dropActionToDo.action === ActionCases.OUT_OF_BOUNDS) {
-      this.dispatchDNDOutOfBounds(draggedItemId, oldParentNodeId);
+      //this.dispatchDNDOutOfBounds(draggedItemId, oldParentNodeId);
       return;
     }
 
@@ -123,7 +124,11 @@ export class TreeService {
         newParentIndex,
         targetNode
       );
-      this.dispatchParentlessDNDOperationResult(finalArrayThatGoesToTheStore);
+      this.dispatchParentlessDNDOperationResult(
+        finalArrayThatGoesToTheStore,
+        targetNode.parentId,
+        draggedItemId
+      );
     }
   }
 
@@ -193,25 +198,45 @@ export class TreeService {
     );
   }
 
-  dispatchDNDOutOfBounds(draggedItemId: string, oldParentNodeId?: string) {
-    if (oldParentNodeId) {
+  // dispatchDNDOutOfBounds(draggedItemId: string, oldParentNodeId?: string) {
+  //   if (oldParentNodeId) {
+  //     this.store.dispatch(
+  //       contentsActions.removeChildPage({
+  //         targetPageId: oldParentNodeId,
+  //         pageToRemoveId: draggedItemId,
+  //       })
+  //     );
+  //   }
+  //   this.store.dispatch(
+  //     contentsActions.changePageParent({
+  //       targetPageId: draggedItemId,
+  //       newParentId: '',
+  //     })
+  //   );
+  // }
+
+  dispatchParentlessDNDOperationResult(
+    newArray: SinglePageInfo[],
+    oldParentNodeId?: string,
+    draggedItemId?: string
+  ) {
+    this.store.dispatch(contentsActions.updateWholeSlice({ newArray }));
+    if (oldParentNodeId && draggedItemId) {
       this.store.dispatch(
-        contentsActions.removeChildPage({
-          targetPageId: oldParentNodeId,
-          pageToRemoveId: draggedItemId,
+        contentsActions.changePageParent({
+          targetPageId: draggedItemId,
+          newParentId: '',
         })
       );
+      if (oldParentNodeId) {
+        this.store.dispatch(
+          contentsActions.removeChildPage({
+            targetPageId: oldParentNodeId,
+            pageToRemoveId: draggedItemId,
+          })
+        );
+      }
     }
-    this.store.dispatch(
-      contentsActions.changePageParent({
-        targetPageId: draggedItemId,
-        newParentId: '',
-      })
-    );
-  }
-
-  dispatchParentlessDNDOperationResult(newArray: SinglePageInfo[]) {
-    this.store.dispatch(contentsActions.updateWholeSlice({ newArray }));
   }
 
   //Visuals------------------------------------------------------------------
