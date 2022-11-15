@@ -48,8 +48,8 @@
       cdkDropList
       [cdkDropListData]="node.childNodes"
       [id]="node.relatedPageId"
-      [cdkDropListConnectedTo]="treeService.dropTargetIds"
-      (cdkDropListDropped)="treeService.drop($event)"
+      [cdkDropListConnectedTo]="dropTargetIds"
+      (cdkDropListDropped)="drop($event)"
       [cdkDropListSortingDisabled]="true"
       @fold
     >
@@ -58,7 +58,7 @@
         cdkDrag
         [cdkDragData]="node.relatedPageId"
         [cdkDragDisabled]="!isDraggable"
-        (cdkDragMoved)="treeService.dragMoved($event)"
+        (cdkDragMoved)="dragMoved($event)"
         @fold
       >
         <ng-container
@@ -71,11 +71,11 @@
 
 <div
   cdkDropList
-  [cdkDropListData]="treeService.contentsData"
+  [cdkDropListData]="contentsData"
   id="main"
   data-id="main"
-  [cdkDropListConnectedTo]="treeService.dropTargetIds"
-  (cdkDropListDropped)="treeService.drop($event)"
+  [cdkDropListConnectedTo]="dropTargetIds"
+  (cdkDropListDropped)="drop($event)"
   [cdkDropListSortingDisabled]="true"
   *ngIf="isMenuOpen$ | async"
   @animate
@@ -120,11 +120,11 @@
   </div>
 
   <div
-    *ngFor="let node of treeService.contentsData"
+    *ngFor="let node of contentsData"
     cdkDrag
     [cdkDragData]="node.relatedPageId"
     [cdkDragDisabled]="!isDraggable"
-    (cdkDragMoved)="treeService.dragMoved($event)"
+    (cdkDragMoved)="dragMoved($event)"
   >
     <ng-container
       *ngTemplateOutlet="tmplNode; context: { node: node }"
@@ -135,7 +135,7 @@
     <button
       class="tree-button"
       mat-raised-button
-      (click)="saveTree(treeService.contentsData)"
+      (click)="saveTree(contentsData)"
     >
       Сохранить
     </button>

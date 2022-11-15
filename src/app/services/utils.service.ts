@@ -16,9 +16,15 @@ export class UtilsService {
       }));
   }
 
-  moveInArray(arr: any, oldIndex: number, newIndex: number) {
-    const arrayDeepCopy = JSON.parse(JSON.stringify(arr));
-    arrayDeepCopy.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+  moveInArray<T>(arr: T[], newIndex: number, element: T) {
+    let arrayDeepCopy = JSON.parse(JSON.stringify(arr));
+    const alreadyThere = arrayDeepCopy.includes(element);
+
+    if (alreadyThere) {
+      const oldIndex = arrayDeepCopy.indexOf(element);
+      arrayDeepCopy.splice(oldIndex, 1)[0];
+    }
+    arrayDeepCopy.splice(newIndex, 0, element);
     return arrayDeepCopy;
   }
 }

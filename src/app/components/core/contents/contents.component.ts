@@ -1,8 +1,14 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { TreeService } from 'src/app/services/tree.service';
 import {
@@ -10,7 +16,12 @@ import {
   ExpandButtonInnerText,
   ExpandButtonState,
   SinglePageInfo,
+  Lookup,
+  DropInfo,
 } from 'src/constants/models';
+import { selectAllPagesInfo } from 'src/redux/selectors';
+import { of, tap, map } from 'rxjs';
+import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-contents',
@@ -39,7 +50,7 @@ import {
     ]),
   ],
 })
-export class ContentsComponent {
+export class ContentsComponent implements OnDestroy {
   isMenuOpen$: BehaviorSubject<boolean> = this.stateService.isContentsMenuOpen;
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn;
   expandButtonState: ExpandButtonState = {
@@ -53,12 +64,45 @@ export class ContentsComponent {
   isDraggable: boolean = false;
   nodesThatAreExpanded: string[] = [];
 
+  storeSubscription: Subscription;
+  fetchedData: SinglePageInfo[] | null = null;
+  contentsData: RecursiveTreeNode[] | null = null;
+  dropTargetIds: string[] = [];
+  nodeLookup: Lookup = {};
+  dropActionToDo: DropInfo | null = null;
+
   constructor(
     public treeService: TreeService,
     public stateService: StateService,
     private store: Store,
     public dialog: MatDialog
-  ) {}
+  ) {
+    this.storeSubscription = this.store
+      .select(selectAllPagesInfo)
+      .pipe(
+        tap((raw) => {
+          if (raw) {
+            const recursiveNodes =
+              this.treeService.buildRecursiveTreeNodes(raw);
+            const { dropTargetIds, nodeLookup } =
+              this.treeService.prepareDragDrop(recursiveNodes);
+            this.dropTargetIds = dropTargetIds;
+            this.nodeLookup = nodeLookup;
+            this.contentsData =
+              this.treeService.buildRecursiveTree(recursiveNodes);
+          }
+        })
+      )
+      .subscribe((data) => {
+        if (data) {
+          this.fetchedData = data;
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.storeSubscription.unsubscribe();
+  }
 
   navigate(id: string) {}
   openDeletePageDialog(id: string) {}
@@ -71,14 +115,25 @@ export class ContentsComponent {
         ))
       : this.nodesThatAreExpanded.push(nodeId);
   }
+
   isNodeExpanded(nodeId: string) {
     return this.nodesThatAreExpanded.includes(nodeId);
   }
+
   wholeTreeExpansionSwitch() {
     this.expandButtonState.expanded
       ? (this.nodesThatAreExpanded = [])
-      : (this.nodesThatAreExpanded = this.treeService.dropTargetIds);
+      : (this.nodesThatAreExpanded = this.dropTargetIds);
     this.expandButtonState.expanded = !this.expandButtonState.expanded;
+  }
+
+  dragMoved(event: CdkDragMove) {
+    this.treeService.dragMoved(event);
+  }
+
+  drop(event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>) {
+    if (!this.fetchedData) return;
+    this.treeService.drop(event, this.nodeLookup, this.fetchedData);
   }
 
   openAddNewPageDialog() {}

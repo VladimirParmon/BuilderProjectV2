@@ -8,7 +8,6 @@ import {
 } from 'src/constants/models';
 import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { selectAllPagesInfo } from 'src/redux/selectors';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 import { UtilsService } from './utils.service';
 import { contentsActions } from 'src/redux/actions';
@@ -17,38 +16,36 @@ import { contentsActions } from 'src/redux/actions';
   providedIn: 'root',
 })
 export class TreeService {
-  allPagesData: SinglePageInfo[] | null = null;
-  contentsData: RecursiveTreeNode[] | null = null;
-
-  dropTargetIds: string[] = [];
-  nodeLookup: Lookup = {};
   dropActionToDo: DropInfo | null = null;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private store: Store,
     private utilsService: UtilsService
-  ) {
-    this.store.select(selectAllPagesInfo).subscribe((data) => {
-      if (data) {
-        this.allPagesData = data;
-        const recursiveTreeNodes: RecursiveTreeNode[] = [...data].map((el) => ({
-          parentNodeId: el.parentId,
-          relatedPageId: el.id,
-          relatedPageName: el.name,
-          childNodes: [],
-        }));
-        this.prepareDragDrop(recursiveTreeNodes);
-        this.contentsData = this.utilsService.arrayToTree(recursiveTreeNodes);
-      }
-    });
+  ) {}
+
+  buildRecursiveTreeNodes(data: SinglePageInfo[]) {
+    const recursiveTreeNodes: RecursiveTreeNode[] = [...data].map((el) => ({
+      parentNodeId: el.parentId,
+      relatedPageId: el.id,
+      relatedPageName: el.name,
+      childNodes: [],
+    }));
+    return recursiveTreeNodes;
+  }
+
+  buildRecursiveTree(recursiveTreeNodes: RecursiveTreeNode[]) {
+    return this.utilsService.arrayToTree(recursiveTreeNodes);
   }
 
   prepareDragDrop(nodes: RecursiveTreeNode[]) {
+    let dropTargetIds: string[] = [];
+    let nodeLookup: Lookup = {};
     nodes.forEach((node) => {
-      this.dropTargetIds.push(node.relatedPageId);
-      this.nodeLookup[node.relatedPageId] = node;
+      dropTargetIds.push(node.relatedPageId);
+      nodeLookup[node.relatedPageId] = node;
     });
+    return { dropTargetIds, nodeLookup };
   }
 
   dragMoved(event: CdkDragMove) {
@@ -86,11 +83,15 @@ export class TreeService {
       : element.closest('.node-item');
   }
 
-  drop(event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>) {
+  drop(
+    event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>,
+    nodeLookup: Lookup,
+    allPagesData: SinglePageInfo[]
+  ) {
     if (!this.dropActionToDo) return;
 
     const draggedItemId: string = event.item.data;
-    const oldParentNodeId: string = this.nodeLookup[draggedItemId].parentNodeId;
+    const oldParentNodeId: string = nodeLookup[draggedItemId].parentNodeId;
 
     if (this.dropActionToDo.action === ActionCases.OUT_OF_BOUNDS) {
       this.dispatchDNDOutOfBounds(draggedItemId, oldParentNodeId);
@@ -98,68 +99,69 @@ export class TreeService {
     }
 
     if (
-      this.nodeLookup[this.dropActionToDo.targetId].parentNodeId ||
+      nodeLookup[this.dropActionToDo.targetId].parentNodeId ||
       this.dropActionToDo.action === ActionCases.INSIDE
     ) {
       const newParentNodeId =
         this.dropActionToDo.action === ActionCases.INSIDE
-          ? this.nodeLookup[this.dropActionToDo.targetId].relatedPageId
-          : this.nodeLookup[this.dropActionToDo.targetId].parentNodeId;
+          ? nodeLookup[this.dropActionToDo.targetId].relatedPageId
+          : nodeLookup[this.dropActionToDo.targetId].parentNodeId;
 
-      if (!this.allPagesData) return;
-      const newParentNodeChildren: string[] = JSON.parse(
-        JSON.stringify(
-          this.allPagesData.find((page) => page.id === newParentNodeId)
-            ?.childPages
-        )
-      );
+      const newParentNodeChildren = allPagesData.find(
+        (page) => page.id === newParentNodeId
+      )?.childPages;
       if (!newParentNodeChildren) return;
-      const newParentIndex = this.getNewParentIndex(newParentNodeChildren);
-      if (!newParentIndex) return;
+      console.log('new Parent Children found');
 
-      newParentNodeChildren.splice(newParentIndex, 0, draggedItemId);
+      const newParentIndex = this.getNewParentIndex(newParentNodeChildren);
+      if (newParentIndex === -1) return;
+      console.log('new index found');
+
+      const final = this.utilsService.moveInArray(
+        newParentNodeChildren,
+        newParentIndex,
+        draggedItemId
+      );
 
       this.dispatchStandardDNDOperationResult(
         newParentNodeId,
-        newParentNodeChildren,
+        final,
         draggedItemId,
         oldParentNodeId
       );
     } else {
       console.log('block 2');
-      if (!this.allPagesData) return;
-      const store = [...this.allPagesData];
-      const storeLookup = store.map((el) => el.id);
-      const oldIndex = storeLookup.indexOf(draggedItemId);
-      const newIndex = this.getNewParentIndex(storeLookup);
-      const draggedItem = this.allPagesData.find(
-        (el) => el.id === draggedItemId
-      );
-      if (!newIndex) return;
-      if (!draggedItem) return;
-      const newArray = this.utilsService.moveInArray(store, oldIndex, newIndex);
-      this.dispatchParentlessDNDOperationResult(newArray);
+      // const store = [...this.allPagesData];
+      // const storeLookup = store.map((el) => el.id);
+      // const oldIndex = storeLookup.indexOf(draggedItemId);
+      // const newIndex = this.getNewParentIndex(storeLookup);
+      // const draggedItem = this.allPagesData.find(
+      //   (el) => el.id === draggedItemId
+      // );
+      // if (!newIndex) return;
+      // if (!draggedItem) return;
+      // const newArray = this.utilsService.moveInArray(store, oldIndex, newIndex);
+      // this.dispatchParentlessDNDOperationResult(newArray);
     }
   }
 
   getNewParentIndex(newParentNodeChildren: string[]) {
-    if (!this.dropActionToDo) return null;
-    let newParentIndex;
+    if (!this.dropActionToDo) return -1;
+    let newParentIndex = -1;
     switch (this.dropActionToDo.action) {
       case ActionCases.AFTER:
         newParentIndex =
           newParentNodeChildren.indexOf(this.dropActionToDo.targetId) + 1;
         break;
       case ActionCases.BEFORE:
-        newParentIndex =
-          newParentNodeChildren.indexOf(this.dropActionToDo.targetId) - 1;
+        newParentIndex = newParentNodeChildren.indexOf(
+          this.dropActionToDo.targetId
+        );
         break;
       case ActionCases.INSIDE:
         newParentIndex = newParentNodeChildren.length;
         break;
     }
-    console.log(newParentNodeChildren);
-    console.log('index: ', newParentIndex);
     return newParentIndex;
   }
 
