@@ -24,26 +24,12 @@ export class TreeService {
     private utilsService: UtilsService
   ) {}
 
-  buildRecursiveTreeNodes(data: SinglePageInfo[]) {
-    const recursiveTreeNodes: RecursiveTreeNode[] = [...data].map((el) => ({
-      parentNodeId: el.parentId,
-      relatedPageId: el.id,
-      relatedPageName: el.name,
-      childNodes: [],
-    }));
-    return recursiveTreeNodes;
-  }
-
-  buildRecursiveTree(recursiveTreeNodes: RecursiveTreeNode[]) {
-    return this.utilsService.arrayToTree(recursiveTreeNodes);
-  }
-
-  prepareDragDrop(nodes: RecursiveTreeNode[]) {
+  prepareDragDrop(nodes: SinglePageInfo[]) {
     let dropTargetIds: string[] = [];
     let nodeLookup: Lookup = {};
     nodes.forEach((node) => {
-      dropTargetIds.push(node.relatedPageId);
-      nodeLookup[node.relatedPageId] = node;
+      dropTargetIds.push(node.id);
+      nodeLookup[node.id] = node;
     });
     return { dropTargetIds, nodeLookup };
   }
@@ -91,7 +77,7 @@ export class TreeService {
     if (!this.dropActionToDo) return;
 
     const draggedItemId: string = event.item.data;
-    const oldParentNodeId: string = nodeLookup[draggedItemId].parentNodeId;
+    const oldParentNodeId: string = nodeLookup[draggedItemId].parentId;
 
     if (this.dropActionToDo.action === ActionCases.OUT_OF_BOUNDS) {
       this.dispatchDNDOutOfBounds(draggedItemId, oldParentNodeId);
@@ -99,13 +85,13 @@ export class TreeService {
     }
 
     if (
-      nodeLookup[this.dropActionToDo.targetId].parentNodeId ||
+      nodeLookup[this.dropActionToDo.targetId].parentId ||
       this.dropActionToDo.action === ActionCases.INSIDE
     ) {
       const newParentNodeId =
         this.dropActionToDo.action === ActionCases.INSIDE
-          ? nodeLookup[this.dropActionToDo.targetId].relatedPageId
-          : nodeLookup[this.dropActionToDo.targetId].parentNodeId;
+          ? nodeLookup[this.dropActionToDo.targetId].id
+          : nodeLookup[this.dropActionToDo.targetId].parentId;
 
       const newParentNodeChildren = allPagesData.find(
         (page) => page.id === newParentNodeId
@@ -131,17 +117,6 @@ export class TreeService {
       );
     } else {
       console.log('block 2');
-      // const store = [...this.allPagesData];
-      // const storeLookup = store.map((el) => el.id);
-      // const oldIndex = storeLookup.indexOf(draggedItemId);
-      // const newIndex = this.getNewParentIndex(storeLookup);
-      // const draggedItem = this.allPagesData.find(
-      //   (el) => el.id === draggedItemId
-      // );
-      // if (!newIndex) return;
-      // if (!draggedItem) return;
-      // const newArray = this.utilsService.moveInArray(store, oldIndex, newIndex);
-      // this.dispatchParentlessDNDOperationResult(newArray);
     }
   }
 

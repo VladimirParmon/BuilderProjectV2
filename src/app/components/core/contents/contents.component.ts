@@ -22,6 +22,7 @@ import {
 import { selectAllPagesInfo } from 'src/redux/selectors';
 import { of, tap, map } from 'rxjs';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-contents',
@@ -74,6 +75,7 @@ export class ContentsComponent implements OnDestroy {
   constructor(
     public treeService: TreeService,
     public stateService: StateService,
+    public utilsService: UtilsService,
     private store: Store,
     public dialog: MatDialog
   ) {
@@ -82,14 +84,11 @@ export class ContentsComponent implements OnDestroy {
       .pipe(
         tap((raw) => {
           if (raw) {
-            const recursiveNodes =
-              this.treeService.buildRecursiveTreeNodes(raw);
             const { dropTargetIds, nodeLookup } =
-              this.treeService.prepareDragDrop(recursiveNodes);
+              this.treeService.prepareDragDrop(raw);
             this.dropTargetIds = dropTargetIds;
             this.nodeLookup = nodeLookup;
-            this.contentsData =
-              this.treeService.buildRecursiveTree(recursiveNodes);
+            this.contentsData = this.utilsService.arrayToTree(raw, nodeLookup);
           }
         })
       )

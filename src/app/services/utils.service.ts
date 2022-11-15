@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { RecursiveTreeNode } from 'src/constants/models';
+import {
+  Lookup,
+  RecursiveTreeNode,
+  SinglePageInfo,
+} from 'src/constants/models';
 
 @Injectable({
   providedIn: 'root',
@@ -7,13 +11,26 @@ import { RecursiveTreeNode } from 'src/constants/models';
 export class UtilsService {
   constructor() {}
 
-  arrayToTree(array: RecursiveTreeNode[], parentId = ''): RecursiveTreeNode[] {
-    return array
-      .filter((item) => item.parentNodeId === parentId)
-      .map((child: RecursiveTreeNode) => ({
-        ...child,
-        childNodes: this.arrayToTree(array, child.relatedPageId),
-      }));
+  arrayToTree(
+    array: SinglePageInfo[],
+    nodeLookup: Lookup
+  ): RecursiveTreeNode[] {
+    const arrayDeepCopy: SinglePageInfo[] = JSON.parse(JSON.stringify(array));
+    const parents = arrayDeepCopy.filter((el) => !el.parentId).map((p) => p.id);
+    return curse(parents);
+
+    function curse(ids: string[]): RecursiveTreeNode[] {
+      if (!ids.length) return [];
+      return ids.map((i) => {
+        const info = nodeLookup[i];
+        return {
+          parentNodeId: info.parentId,
+          relatedPageId: info.id,
+          relatedPageName: info.name,
+          childNodes: curse(info.childPages),
+        };
+      });
+    }
   }
 
   moveInArray<T>(arr: T[], newIndex: number, element: T) {

@@ -98,7 +98,7 @@ export enum FlexboxFlowOptions {
 }
 
 export interface Lookup {
-  [key: string]: RecursiveTreeNode;
+  [key: string]: SinglePageInfo;
 }
 
 export interface DropInfo {
