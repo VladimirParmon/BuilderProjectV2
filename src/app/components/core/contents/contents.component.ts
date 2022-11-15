@@ -20,7 +20,7 @@ import {
   DropInfo,
 } from 'src/constants/models';
 import { selectAllPagesInfo } from 'src/redux/selectors';
-import { of, tap, map } from 'rxjs';
+import { tap } from 'rxjs';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 import { UtilsService } from 'src/app/services/utils.service';
 
@@ -52,8 +52,8 @@ import { UtilsService } from 'src/app/services/utils.service';
   ],
 })
 export class ContentsComponent implements OnDestroy {
-  isMenuOpen$: BehaviorSubject<boolean> = this.stateService.isContentsMenuOpen;
-  isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn;
+  isMenuOpen$: BehaviorSubject<boolean> = this.stateService.isContentsMenuOpen$;
+  isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   expandButtonState: ExpandButtonState = {
     expanded: false,
     text: {
@@ -148,7 +148,7 @@ export class ContentsComponent implements OnDestroy {
 
   toggleGlobalEdit(checkboxValue: boolean) {
     this.isDraggable = false;
-    this.stateService.isGlobalEditOn.next(checkboxValue);
+    this.stateService.isGlobalEditOn$.next(checkboxValue);
   }
 
   saveTree(treeData: RecursiveTreeNode[] | null) {

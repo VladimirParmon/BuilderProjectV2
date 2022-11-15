@@ -1,14 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { StateService } from 'src/app/services/state.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
-  constructor() {}
+export class HeaderComponent implements OnDestroy {
+  isMenuOpen: boolean = false;
+  constructor(public stateService: StateService) {
+    this.subscription = this.stateService.isContentsMenuOpen$.subscribe(
+      (data) => (this.isMenuOpen = data)
+    );
+  }
+  subscription: Subscription;
 
-  ngOnInit(): void {}
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
-  toggleMenu() {}
+  toggleMenu() {
+    this.stateService.isContentsMenuOpen$.next(!this.isMenuOpen);
+  }
 }
