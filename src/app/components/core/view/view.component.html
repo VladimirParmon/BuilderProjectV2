@@ -1,1 +1,43 @@
+<div
+  *ngIf="pageData"
+  class="view"
+  cdkDropList
+  (cdkDropListDropped)="drop($event)"
+>
+  <h1 align="center" *ngIf="!isEditorOn || !(isGlobalEditOn$ | async)">
+    {{ pageData.name }}
+    <mat-icon
+      class="view-icon"
+      (click)="editPageName()"
+      *ngIf="isGlobalEditOn$ | async"
+      >edit</mat-icon
+    >
+  </h1>
+  <ng-container *ngIf="isGlobalEditOn$ | async">
+    <form class="h1-form" *ngIf="isEditorOn">
+      <mat-form-field appearance="fill" class="view__h1-field">
+        <input
+          [(ngModel)]="inputValue"
+          matInput
+          class="view__h1-input"
+          name="title"
+          #title="ngModel"
+          required
+          minlength="3"
+        />
+        <mat-error *ngIf="title.invalid"
+          >Поле должно содержать как минимум 3 символа</mat-error
+        >
+      </mat-form-field>
+      <mat-icon
+        class="view-icon"
+        [ngClass]="{ disabled: title.invalid }"
+        (click)="savePageName()"
+        *ngIf="isGlobalEditOn$ | async"
+        >save</mat-icon
+      >
+    </form>
+  </ng-container>
 
+  <app-tool-generator *ngFor="let tool of pageData.tools"></app-tool-generator>
+</div>

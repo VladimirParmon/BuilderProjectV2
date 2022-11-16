@@ -26,8 +26,9 @@ export const getPagesUsingIds = (ids: string[]) =>
   );
 
 export const getOnePageInfo = (id: string) =>
-  createSelector(selectContentsListState, (data: SinglePageInfo[]) =>
-    data.filter((el) => el.id === id)
+  createSelector(
+    selectContentsListState,
+    (data: SinglePageInfo[]) => data.filter((el) => el.id === id)[0]
   );
 
 export const getFiles = (props: { id: string; type: Tools }) => {
