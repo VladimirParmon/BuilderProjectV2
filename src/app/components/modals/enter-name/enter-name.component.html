@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>{{ dialogRefData }}</h2>
+<mat-dialog-content class="newPageDialog">
+  <form>
+    <mat-form-field appearance="fill" class="newPageDialog__form-field">
+      <mat-label>Введите название</mat-label>
+      <input
+        [(ngModel)]="pageName"
+        matInput
+        class="newPageDialog__input"
+        name="title"
+        #title="ngModel"
+        required
+        minlength="3"
+      />
+      <mat-error *ngIf="title.invalid"
+        >Поле должно содержать как минимум 3 символа</mat-error
+      >
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    [mat-dialog-close]="title.control.value"
+    [disabled]="title.invalid"
+  >
+    Создать
+  </button>
+  <button mat-raised-button [mat-dialog-close]>Отмена</button>
+</mat-dialog-actions>

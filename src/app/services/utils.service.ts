@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatDialogConfig } from '@angular/material/dialog';
 import {
   Lookup,
   RecursiveTreeNode,
@@ -47,5 +48,20 @@ export class UtilsService {
 
   arrayDeepCopy<T>(array: T[]) {
     return JSON.parse(JSON.stringify(array)) as T[];
+  }
+
+  createMatDialogConfig(
+    panelClass: string[],
+    data?: any,
+    position: number = 5,
+    autoFocus: boolean = false
+  ) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = autoFocus;
+    dialogConfig.position = { top: position + '%' };
+    dialogConfig.panelClass = panelClass;
+    dialogConfig.data = data;
+    return dialogConfig;
   }
 }

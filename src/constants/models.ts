@@ -126,3 +126,9 @@ export interface ExpandButtonState {
   expanded: boolean;
   text: ExpandButtonInfo;
 }
+
+export enum ModalWindowsText {
+  CREATE_NEW_PAGE = 'Пожалуйста, введите имя новой страницы',
+  DELETE_PAGE = 'Удалить страницу',
+  GENERATE_SITE = 'Пожалуйста, дайте проекту имя',
+}

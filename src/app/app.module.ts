@@ -28,6 +28,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ConfirmActionComponent } from './components/modals/confirm-action/confirm-action.component';
+import { EnterNameComponent } from './components/modals/enter-name/enter-name.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     ToolbarComponent,
     ToolGeneratorComponent,
     TextComponent,
+    ConfirmActionComponent,
+    EnterNameComponent,
   ],
   imports: [
     FormsModule,

@@ -1,12 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import {
-  Component,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Component, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
@@ -18,11 +12,15 @@ import {
   SinglePageInfo,
   Lookup,
   DropInfo,
+  ModalWindowsText,
 } from 'src/constants/models';
 import { selectAllPagesInfo } from 'src/redux/selectors';
 import { tap } from 'rxjs';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 import { UtilsService } from 'src/app/services/utils.service';
+import { ConfirmActionComponent } from '../../modals/confirm-action/confirm-action.component';
+import { EnterNameComponent } from '../../modals/enter-name/enter-name.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contents',
@@ -77,7 +75,8 @@ export class ContentsComponent implements OnDestroy {
     public stateService: StateService,
     public utilsService: UtilsService,
     private store: Store,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router
   ) {
     this.storeSubscription = this.store
       .select(selectAllPagesInfo)
@@ -103,9 +102,20 @@ export class ContentsComponent implements OnDestroy {
     this.storeSubscription.unsubscribe();
   }
 
-  navigate(id: string) {}
-  openDeletePageDialog(id: string) {}
+  toggleGlobalEdit(checkboxValue: boolean) {
+    this.isDraggable = false;
+    this.stateService.isGlobalEditOn$.next(checkboxValue);
+  }
 
+  getPageNameById(id: string) {
+    return this.fetchedData?.find((page) => page.id === id)?.id;
+  }
+
+  navigate(id: string) {
+    this.router.navigate(['/view', id]);
+  }
+
+  //Tree controls ---------------------------------------------------------
   expandNodeSwitch(nodeId: string) {
     const isAlreadyExpanded = this.isNodeExpanded(nodeId);
     isAlreadyExpanded
@@ -126,6 +136,11 @@ export class ContentsComponent implements OnDestroy {
     this.expandButtonState.expanded = !this.expandButtonState.expanded;
   }
 
+  saveTree(treeData: RecursiveTreeNode[] | null) {
+    //if (treeData) this.stateService.write(treeData); //TODO: make an API call to save JSON
+  }
+
+  //Drag and drop handlers ---------------------------------------------------------
   dragMoved(event: CdkDragMove) {
     this.treeService.dragMoved(event);
   }
@@ -140,32 +155,41 @@ export class ContentsComponent implements OnDestroy {
     );
   }
 
-  openAddNewPageDialog() {}
-
   toggleDND(checkboxValue: boolean) {
     this.isDraggable = checkboxValue;
   }
 
-  toggleGlobalEdit(checkboxValue: boolean) {
-    this.isDraggable = false;
-    this.stateService.isGlobalEditOn$.next(checkboxValue);
+  //Dialog modal windows ---------------------------------------------------------
+  openAddNewPageDialog() {
+    const dialogConfig = this.utilsService.createMatDialogConfig(
+      ['add-page-dialog'],
+      ModalWindowsText.CREATE_NEW_PAGE
+    );
+    const dialogRef = this.dialog.open(EnterNameComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((pageName) => {
+      //if (pageName) doSmth; //TODO: add page logic
+    });
   }
 
-  saveTree(treeData: RecursiveTreeNode[] | null) {
-    //if (treeData) this.stateService.write(treeData);
+  openDeletePageDialog(nodeId: string) {
+    const dialogConfig = this.utilsService.createMatDialogConfig(
+      ['delete-page-dialog'],
+      ModalWindowsText.DELETE_PAGE + ' ' + this.getPageNameById(nodeId) + '?'
+    );
+    const dialogRef = this.dialog.open(ConfirmActionComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((positiveAnswer) => {
+      //if(positiveAnswer) do smth //TODO: delete page logic
+    });
   }
 
-  generate() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.autoFocus = false;
-    dialogConfig.position = { top: '5%' };
-    dialogConfig.panelClass = ['add-page-dialog'];
-    dialogConfig.data = 'Создать новый сайт';
-
-    // let dialogRef = this.dialog.open(NewPageComponent, dialogConfig);
-    // dialogRef.afterClosed().subscribe((pageName) => {
-    //   if (pageName) this.stateService.generate(pageName);
-    // });
+  openGenerateSiteDialog() {
+    const dialogConfig = this.utilsService.createMatDialogConfig(
+      ['add-page-dialog'], //TODO: change this
+      ModalWindowsText.GENERATE_SITE
+    );
+    const dialogRef = this.dialog.open(EnterNameComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((siteName) => {
+      //if (siteName) do smth; //TODO: send generate call to API
+    });
   }
 }
