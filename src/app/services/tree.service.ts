@@ -24,6 +24,7 @@ export class TreeService {
     private utilsService: UtilsService
   ) {}
 
+  //A reference list for Angular CDK and a lookup for our convenience
   prepareDragDrop(nodes: SinglePageInfo[]) {
     let dropTargetIds: string[] = [];
     let nodeLookup: Lookup = {};
@@ -34,6 +35,7 @@ export class TreeService {
     return { dropTargetIds, nodeLookup };
   }
 
+  //Drag and drop event handlers ("User moved something, what to do?")
   dragMoved(event: CdkDragMove) {
     let element = this.document.elementFromPoint(
       event.pointerPosition.x,
@@ -46,14 +48,7 @@ export class TreeService {
 
     const container = this.getContainer(element);
     if (container) {
-      const newTargetId: string =
-        container.getAttribute('data-id') ||
-        'Something went wrong. Check the DOM tree';
-      const newAction = this.chooseActionCase(container, event);
-      this.dropActionToDo = {
-        targetId: newTargetId,
-        action: newAction,
-      };
+      this.setWhereToDrop(container, event);
       this.showDragInfo();
     } else {
       this.dropActionToDo = {
@@ -64,12 +59,6 @@ export class TreeService {
     }
   }
 
-  getContainer(element: Element) {
-    return element.classList.contains('node-item')
-      ? element
-      : element.closest('.node-item');
-  }
-
   drop(
     event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>,
     nodeLookup: Lookup,
@@ -77,59 +66,48 @@ export class TreeService {
     dropTargetIds: string[]
   ) {
     if (!this.dropActionToDo) return;
+    if (this.dropActionToDo.action === ActionCases.OUT_OF_BOUNDS) return;
 
     const draggedItemId: string = event.item.data;
     const oldParentNodeId: string = nodeLookup[draggedItemId].parentId;
-
-    if (this.dropActionToDo.action === ActionCases.OUT_OF_BOUNDS) {
-      //this.dispatchDNDOutOfBounds(draggedItemId, oldParentNodeId);
-      return;
-    }
 
     if (
       nodeLookup[this.dropActionToDo.targetId].parentId ||
       this.dropActionToDo.action === ActionCases.INSIDE
     ) {
-      const newParentNodeId =
-        this.dropActionToDo.action === ActionCases.INSIDE
-          ? nodeLookup[this.dropActionToDo.targetId].id
-          : nodeLookup[this.dropActionToDo.targetId].parentId;
-
-      const newParentNodeChildren = allPagesData.find(
-        (page) => page.id === newParentNodeId
-      )?.childPages;
-      if (!newParentNodeChildren) return;
-
-      const newParentIndex = this.getNewParentIndex(newParentNodeChildren);
-      if (newParentIndex === -1) return;
-
-      const finalArrayThatGoesToTheStore = this.utilsService.moveInArray(
-        newParentNodeChildren,
-        newParentIndex,
-        draggedItemId
-      );
-
-      this.dispatchStandardDNDOperationResult(
-        newParentNodeId,
-        finalArrayThatGoesToTheStore,
+      this.DNDInsideTheTree(
+        this.dropActionToDo,
+        nodeLookup,
+        allPagesData,
         draggedItemId,
         oldParentNodeId
       );
     } else {
-      const targetNode = nodeLookup[draggedItemId];
-      const newParentIndex = this.getNewParentIndex(dropTargetIds);
-      if (newParentIndex === -1) return;
-      const finalArrayThatGoesToTheStore = this.utilsService.moveInArray(
-        allPagesData,
-        newParentIndex,
-        targetNode
-      );
-      this.dispatchParentlessDNDOperationResult(
-        finalArrayThatGoesToTheStore,
-        targetNode.parentId,
-        draggedItemId
+      this.DNDInTheOuterContainer(
+        nodeLookup,
+        draggedItemId,
+        dropTargetIds,
+        allPagesData
       );
     }
+  }
+
+  //Drag and drop metadata ("Where should everything go to?")
+  setWhereToDrop(container: Element, event: CdkDragMove) {
+    const newTargetId: string =
+      container.getAttribute('data-id') ||
+      'Something went wrong. Check the DOM tree';
+    const newAction = this.chooseActionCase(container, event);
+    this.dropActionToDo = {
+      targetId: newTargetId,
+      action: newAction,
+    };
+  }
+
+  getContainer(element: Element) {
+    return element.classList.contains('node-item')
+      ? element
+      : element.closest('.node-item');
   }
 
   getNewParentIndex(newParentNodeChildren: string[]) {
@@ -170,6 +148,63 @@ export class TreeService {
     return newAction;
   }
 
+  //Drag and drop data manipulation logic ("I know what to do and were everything needs to go, now it's time to move it")
+  DNDInsideTheTree(
+    dropActionToDo: DropInfo,
+    nodeLookup: Lookup,
+    allPagesData: SinglePageInfo[],
+    draggedItemId: string,
+    oldParentNodeId: string
+  ) {
+    const newParentNodeId =
+      dropActionToDo.action === ActionCases.INSIDE
+        ? nodeLookup[dropActionToDo.targetId].id
+        : nodeLookup[dropActionToDo.targetId].parentId;
+
+    const newParentNodeChildren = allPagesData.find(
+      (page) => page.id === newParentNodeId
+    )?.childPages;
+    if (!newParentNodeChildren) return;
+
+    const newParentIndex = this.getNewParentIndex(newParentNodeChildren);
+    if (newParentIndex === -1) return;
+
+    const finalArrayThatGoesToTheStore = this.utilsService.moveInArray(
+      newParentNodeChildren,
+      newParentIndex,
+      draggedItemId
+    );
+
+    this.dispatchStandardDNDOperationResult(
+      newParentNodeId,
+      finalArrayThatGoesToTheStore,
+      draggedItemId,
+      oldParentNodeId
+    );
+  }
+
+  DNDInTheOuterContainer(
+    nodeLookup: Lookup,
+    draggedItemId: string,
+    dropTargetIds: string[],
+    allPagesData: SinglePageInfo[]
+  ) {
+    const targetNode = nodeLookup[draggedItemId];
+    const newParentIndex = this.getNewParentIndex(dropTargetIds);
+    if (newParentIndex === -1) return;
+    const finalArrayThatGoesToTheStore = this.utilsService.moveInArray(
+      allPagesData,
+      newParentIndex,
+      targetNode
+    );
+    this.dispatchParentlessDNDOperationResult(
+      finalArrayThatGoesToTheStore,
+      targetNode.parentId,
+      draggedItemId
+    );
+  }
+
+  //Save changes by dispatching them to the store
   dispatchStandardDNDOperationResult(
     newParentNodeId: string,
     finalArrayThatGoesToTheStore: string[],
@@ -197,23 +232,6 @@ export class TreeService {
       })
     );
   }
-
-  // dispatchDNDOutOfBounds(draggedItemId: string, oldParentNodeId?: string) {
-  //   if (oldParentNodeId) {
-  //     this.store.dispatch(
-  //       contentsActions.removeChildPage({
-  //         targetPageId: oldParentNodeId,
-  //         pageToRemoveId: draggedItemId,
-  //       })
-  //     );
-  //   }
-  //   this.store.dispatch(
-  //     contentsActions.changePageParent({
-  //       targetPageId: draggedItemId,
-  //       newParentId: '',
-  //     })
-  //   );
-  // }
 
   dispatchParentlessDNDOperationResult(
     newArray: SinglePageInfo[],
