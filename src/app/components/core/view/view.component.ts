@@ -35,7 +35,7 @@ export class ViewComponent implements OnDestroy {
       )
       .subscribe(() => {
         const pageId = this.route.snapshot.paramMap.get('id');
-        if (pageId)
+        if (pageId) {
           this.store
             .select(getOnePageInfo(pageId))
             .pipe(takeUntil(this.destroy$))
@@ -45,6 +45,8 @@ export class ViewComponent implements OnDestroy {
                 this.inputValue = data.name;
               }
             });
+          this.stateService.currentPageId$.next(pageId);
+        }
       });
   }
 

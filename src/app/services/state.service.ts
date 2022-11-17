@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { JSONDataStorage } from 'src/constants/models';
 import { globalActions } from 'src/redux/actions';
 
@@ -11,6 +11,7 @@ import { globalActions } from 'src/redux/actions';
 export class StateService {
   isContentsMenuOpen$ = new BehaviorSubject(true);
   isGlobalEditOn$ = new BehaviorSubject(true);
+  currentPageId$ = new Subject<string>();
   private _jsonURL = 'assets/mock.json';
 
   constructor(private http: HttpClient, private store: Store) {}
