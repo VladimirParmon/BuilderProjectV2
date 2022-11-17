@@ -45,7 +45,7 @@
     {
       "id": "someToolDescriptionId",
       "type": "text",
-      "files": "someTextFieldId"
+      "content": "someTextId"
     }
   ]
 }

@@ -4,7 +4,6 @@ import {
   FlexboxPositioningOptions,
   JSONDataStorage,
   SinglePageInfo,
-  Tools,
 } from '../constants/models';
 
 enum APIActions {

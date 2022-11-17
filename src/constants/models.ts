@@ -1,7 +1,7 @@
 type PageId = string;
 type ToolDescriptionId = string;
 type FileDescriptionId = string;
-type TextFieldId = string;
+export type TextFieldId = string;
 
 export interface JSONDataStorage {
   contentsList: SinglePageInfo[];
@@ -26,7 +26,7 @@ export interface RecursiveTreeNode {
   childNodes: RecursiveTreeNode[];
 }
 
-export enum Tools {
+export enum ToolNames {
   TEXT = 'text',
   AUDIO = 'audio',
   VIDEO = 'video',
@@ -68,9 +68,14 @@ export interface ImageDescription extends FileDescription {
 
 interface ToolDescription {
   id: ToolDescriptionId;
-  type: Tools;
-  files: FileDescriptionId[] | FileDescriptionId | TextFieldId;
+  type: ToolNames;
+  content: ToolDescriptionContent;
 }
+
+export type ToolDescriptionContent =
+  | FileDescriptionId[]
+  | FileDescriptionId
+  | TextFieldId;
 
 export interface Collage extends ToolDescription {
   currentJustifyContent: FlexboxPositioningOptions;
@@ -82,7 +87,7 @@ type Slider = ToolDescription;
 type Audio = ToolDescription;
 type Video = ToolDescription;
 type PDF = ToolDescription;
-type Text = ToolDescription;
+export type Text = ToolDescription;
 
 export enum FlexboxPositioningOptions {
   START = 'flex-start',
@@ -131,4 +136,23 @@ export enum ModalWindowsText {
   CREATE_NEW_PAGE = 'Пожалуйста, введите имя новой страницы',
   DELETE_PAGE = 'Удалить страницу',
   GENERATE_SITE = 'Пожалуйста, дайте проекту имя',
+  DELETE_TOOL = 'tekst dlya tula',
+}
+
+export interface ToolsListOption {
+  name: ToolNames;
+  icon: string;
+}
+
+export enum inputTypes {
+  IMAGES = '.png, .jpg, .jpeg, .gif',
+  VIDEO = '.mp4, .webm, .avi, .3gp',
+  AUDIO = '.mp3, .wav, .flac',
+  PDF = '.pdf',
+}
+
+export interface imageDescription {
+  index: number;
+  src: string;
+  width: number;
 }

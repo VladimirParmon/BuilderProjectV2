@@ -1,4 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
+import { UtilsService } from 'src/app/services/utils.service';
 import {
   FileDescription,
   ImageDescription,
@@ -6,7 +7,7 @@ import {
   MultimediaFiles,
   SinglePageInfo,
   TextFieldDescription,
-  Tools,
+  ToolNames,
   MediaFileTypes,
 } from '../constants/models';
 
@@ -26,38 +27,36 @@ export const getPagesUsingIds = (ids: string[]) =>
   );
 
 export const getOnePageInfo = (id: string) =>
-  createSelector(
-    selectContentsListState,
-    (data: SinglePageInfo[]) => data.filter((el) => el.id === id)[0]
+  createSelector(selectContentsListState, (data: SinglePageInfo[]) =>
+    data.find((el) => el.id === id)
   );
 
-export const getFiles = (props: { id: string; type: Tools }) => {
-  let fileType: keyof MultimediaFiles;
-  switch (props.type) {
-    case Tools.TEXT:
-      fileType = MediaFileTypes.TEXT;
-      break;
-    case Tools.AUDIO:
-      fileType = MediaFileTypes.AUDIOS;
-      break;
-    case Tools.PDF:
-      fileType = MediaFileTypes.PDFs;
-      break;
-    case Tools.VIDEO:
-      fileType = MediaFileTypes.VIDEOS;
-      break;
-  }
-
+export const getSingleFile = (props: { id: string; type: ToolNames }) => {
+  const fileType = UtilsService.getFileTypeFromToolType(
+    props.type
+  ) as MediaFileTypes;
   return createSelector(selectFilesState, (data: MultimediaFiles) =>
     (
       data[fileType] as Array<
         TextFieldDescription | ImageDescription | FileDescription
       >
-    ).filter((el) => el.id === props.id)
+    ).find((el) => el.id === props.id)
   );
 };
 
-export const selectJunctions = (id: string) =>
+export const getMultipleFiles = (props: { ids: string[]; type: ToolNames }) => {
+  const fileType = UtilsService.getFileTypeFromToolType(
+    props.type
+  ) as MediaFileTypes;
+  return createSelector(selectFilesState, (data: MultimediaFiles) => {
+    const shelf = data[fileType] as Array<
+      TextFieldDescription | ImageDescription | FileDescription
+    >;
+    return props.ids.map((id) => shelf.find((el) => el.id === id));
+  });
+};
+
+export const selectJunction = (id: string) =>
   createSelector(selectJunctionsState, (data: Junction[]) =>
-    data.filter((el) => el.id === id)
+    data.find((el) => el.id === id)
   );

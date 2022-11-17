@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import {
   Lookup,
+  MediaFileTypes,
   RecursiveTreeNode,
   SinglePageInfo,
+  ToolNames,
 } from 'src/constants/models';
 
 @Injectable({
@@ -63,5 +65,32 @@ export class UtilsService {
     dialogConfig.panelClass = panelClass;
     dialogConfig.data = data;
     return dialogConfig;
+  }
+
+  static getFileTypeFromToolType(type: ToolNames) {
+    switch (type) {
+      case ToolNames.TEXT:
+        return MediaFileTypes.TEXT;
+      case ToolNames.AUDIO:
+        return MediaFileTypes.AUDIOS;
+      case ToolNames.PDF:
+        return MediaFileTypes.PDFs;
+      case ToolNames.VIDEO:
+        return MediaFileTypes.VIDEOS;
+      default:
+        return null;
+    }
+  }
+
+  isNonEmptyArrayOfStrings(value: unknown): value is string[] {
+    return (
+      Array.isArray(value) &&
+      value.length > 0 &&
+      value.every((item) => typeof item === 'string')
+    );
+  }
+
+  isString(value: unknown): value is string {
+    return typeof value === 'string' ? true : false;
   }
 }

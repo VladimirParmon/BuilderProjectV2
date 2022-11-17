@@ -1,1 +1,19 @@
-<p>tool-generator works!</p>
+`
+<div
+  *ngIf="toolDescription"
+  [ngSwitch]="toolDescription.type"
+  class="block"
+  appFullscreen
+>
+  <mat-icon
+    *ngIf="isGlobalEditOn$ | async"
+    color="accent"
+    class="tool-icon"
+    (click)="openDeleteDialog()"
+    >delete</mat-icon
+  >
+  <app-text
+    *ngSwitchCase="names.TEXT"
+    [toolContent]="toolDescription.content"
+  ></app-text>
+</div>

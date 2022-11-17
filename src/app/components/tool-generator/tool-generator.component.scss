@@ -1,0 +1,14 @@
+.tool-icon {
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+}
+
+.block {
+  display: flex;
+}
+
+.disabled {
+  pointer-events: none;
+}

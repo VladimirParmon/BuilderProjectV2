@@ -5,7 +5,11 @@ import {
   contentsActions,
   junctionsActions,
 } from './actions';
-import { JSONDataStorage, MediaFileTypes, Tools } from '../constants/models';
+import {
+  JSONDataStorage,
+  MediaFileTypes,
+  ToolNames,
+} from '../constants/models';
 import { v4 as uuidv4 } from 'uuid';
 import { Defaults } from 'src/app/services/defaults';
 
@@ -139,8 +143,8 @@ const junctionsReducer = createReducer(
     (state, { files, justify, align, flow }) => {
       const newCollageTool = {
         id: uuidv4(),
-        type: Tools.COLLAGE,
-        files: files,
+        type: ToolNames.COLLAGE,
+        content: files,
         currentJustifyContent: justify || Defaults.justifyContent,
         currentAlignItems: align || Defaults.alignItems,
         currentFlow: flow || Defaults.flow,
@@ -151,40 +155,40 @@ const junctionsReducer = createReducer(
   on(junctionsActions.insertNewAudioTool, (state, { files }) => {
     const newAudioTool = {
       id: uuidv4(),
-      type: Tools.AUDIO,
-      files: files,
+      type: ToolNames.AUDIO,
+      content: files,
     };
     return [...state, { ...newAudioTool }];
   }),
   on(junctionsActions.insertNewSliderTool, (state, { files }) => {
     const newSliderTool = {
       id: uuidv4(),
-      type: Tools.SLIDER,
-      files: files,
+      type: ToolNames.SLIDER,
+      content: files,
     };
     return [...state, { ...newSliderTool }];
   }),
   on(junctionsActions.insertNewVideoTool, (state, { files }) => {
     const newVideoTool = {
       id: uuidv4(),
-      type: Tools.VIDEO,
-      files: files,
+      type: ToolNames.VIDEO,
+      content: files,
     };
     return [...state, { ...newVideoTool }];
   }),
   on(junctionsActions.insertNewTextTool, (state, { files }) => {
     const newTextTool = {
       id: uuidv4(),
-      type: Tools.TEXT,
-      files: files,
+      type: ToolNames.TEXT,
+      content: files,
     };
     return [...state, { ...newTextTool }];
   }),
   on(junctionsActions.insertNewPDFTool, (state, { files }) => {
     const newPDFTool = {
       id: uuidv4(),
-      type: Tools.PDF,
-      files: files,
+      type: ToolNames.PDF,
+      content: files,
     };
     return [...state, { ...newPDFTool }];
   })

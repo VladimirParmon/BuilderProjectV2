@@ -39,5 +39,8 @@
     </form>
   </ng-container>
 
-  <app-tool-generator *ngFor="let tool of pageData.tools"></app-tool-generator>
+  <app-tool-generator
+    *ngFor="let tool of pageData.tools"
+    [toolId]="tool"
+  ></app-tool-generator>
 </div>

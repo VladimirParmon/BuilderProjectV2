@@ -62,10 +62,6 @@ export class ViewComponent implements OnDestroy {
     //TODO: implement page DND
   }
 
-  deleteTool(toolId: string) {
-    //TODO: delete the tool
-  }
-
   savePageName() {
     this.isEditorOn = false;
     if (!this.pageData) return;
