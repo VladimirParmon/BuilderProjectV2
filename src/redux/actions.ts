@@ -19,6 +19,7 @@ enum ContentsActions {
   addChildPage = '[Contents/Page] Add a child to the children pages array',
   updateWholeChildrenArray = '[Contents/Page] Insert newly formed array as a part of DND operation',
   updateWholeSlice = '[Contents/Whole] Update the whole contents array',
+  deleteTool = '[Contents/Tools] Delete a tool from page tools array',
 }
 
 enum FileActions {
@@ -28,6 +29,7 @@ enum FileActions {
   insertVideo = '[Files/Video] Insert a new video storage unit',
   insertPDF = '[Files/PDF] Insert a new PDF storage unit',
   insertAudio = '[Files/Audio] Insert a new audio storage unit',
+  deleteText = '[Files/Text] Delete a text storage unit',
 }
 
 enum JunctionsActions {
@@ -37,6 +39,7 @@ enum JunctionsActions {
   insertNewVideoTool = '[Junctions/Video] Insert a new video tool description',
   insertNewPDFTool = '[Junctions/PDF] Insert a new PDF tool description',
   insertNewTextTool = '[Junctions/Text] Insert a new text tool description',
+  deleteTextTool = '[Junctions/Text] Delete a text tool using its id',
 }
 
 //Global
@@ -78,6 +81,10 @@ const updateWholeSlice = createAction(
   ContentsActions.updateWholeSlice,
   props<{ newArray: SinglePageInfo[] }>()
 );
+const deleteTool = createAction(
+  ContentsActions.deleteTool,
+  props<{ pageId: string; toolDescriptionId: string }>()
+);
 
 //Files
 const updateTextStorageUnit = createAction(
@@ -100,6 +107,10 @@ const insertNewPDFStorageUnit = createAction(
 const insertNewAudioStorageUnit = createAction(
   FileActions.insertAudio,
   props<{ path: string; title?: string }>()
+);
+const deleteTextStorageUnit = createAction(
+  FileActions.deleteText,
+  props<{ id: string }>()
 );
 
 //Junctions
@@ -132,6 +143,10 @@ const insertNewTextTool = createAction(
   JunctionsActions.insertNewTextTool,
   props<{ files: string[] }>()
 );
+const deleteTextTool = createAction(
+  JunctionsActions.deleteTextTool,
+  props<{ toolDescriptionId: string }>()
+);
 
 export const globalActions = {
   saveRetrievedData,
@@ -146,6 +161,7 @@ export const contentsActions = {
   addChildPage,
   updateWholeChildrenArray,
   updateWholeSlice,
+  deleteTool,
 };
 
 export const filesActions = {
@@ -155,6 +171,7 @@ export const filesActions = {
   insertNewVideoStorageUnit,
   insertNewPDFStorageUnit,
   insertNewAudioStorageUnit,
+  deleteTextStorageUnit,
 };
 
 export const junctionsActions = {
@@ -164,4 +181,5 @@ export const junctionsActions = {
   insertNewSliderTool,
   insertNewPDFTool,
   insertNewTextTool,
+  deleteTextTool,
 };

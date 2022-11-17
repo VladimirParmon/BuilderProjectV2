@@ -8,6 +8,11 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { ConfirmActionComponent } from '../modals/confirm-action/confirm-action.component';
 import { Store } from '@ngrx/store';
 import { selectJunction } from 'src/redux/selectors';
+import {
+  contentsActions,
+  filesActions,
+  junctionsActions,
+} from 'src/redux/actions';
 
 @Component({
   selector: 'app-tool-generator',
@@ -29,7 +34,8 @@ import { selectJunction } from 'src/redux/selectors';
   ],
 })
 export class ToolGeneratorComponent implements OnInit, OnDestroy {
-  @Input() toolId: string = '';
+  @Input() toolDescriptionId: string = '';
+  @Input() pageId: string = '';
   names = ToolNames;
   destroy$: Subject<boolean> = new Subject<boolean>();
   toolDescription: Junction | null = null;
@@ -45,7 +51,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store
-      .select(selectJunction(this.toolId))
+      .select(selectJunction(this.toolDescriptionId))
       .pipe(takeUntil(this.destroy$))
       .subscribe((toolData) => {
         if (toolData) this.toolDescription = toolData;
@@ -58,7 +64,28 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    //TODO: dispatch action to delete tool
+    if (this.toolDescription) {
+      const toolDescriptionId = this.toolDescriptionId;
+      const toolType = this.toolDescription.type;
+      switch (toolType) {
+        case ToolNames.TEXT:
+          this.deleteTextTool(toolDescriptionId);
+          break;
+      }
+    }
+  }
+
+  deleteTextTool(toolDescriptionId: string) {
+    this.store.dispatch(junctionsActions.deleteTextTool({ toolDescriptionId }));
+    this.store.dispatch(
+      contentsActions.deleteTool({ pageId: this.pageId, toolDescriptionId })
+    );
+    if (this.toolDescription) {
+      const toolId = this.toolDescription.content;
+      if (this.utilsService.isString(toolId)) {
+        this.store.dispatch(filesActions.deleteTextStorageUnit({ id: toolId }));
+      }
+    }
   }
 
   openDeleteDialog() {
@@ -67,11 +94,8 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
       ModalWindowsText.DELETE_TOOL
     );
     const dialogRef = this.dialog.open(ConfirmActionComponent, dialogConfig);
-    dialogRef
-      .afterClosed()
-      .subscribe((positiveAnswer) => {
-        if (positiveAnswer) this.delete();
-      })
-      .unsubscribe();
+    dialogRef.afterClosed().subscribe((positiveAnswer) => {
+      if (positiveAnswer) this.delete();
+    });
   }
 }

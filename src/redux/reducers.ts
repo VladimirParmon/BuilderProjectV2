@@ -63,7 +63,19 @@ const contentsReducer = createReducer(
           : el
       )
   ),
-  on(contentsActions.updateWholeSlice, (state, { newArray }) => newArray)
+  on(contentsActions.updateWholeSlice, (state, { newArray }) => newArray),
+  on(contentsActions.deleteTool, (state, { pageId, toolDescriptionId }) => {
+    return state.map((el) => {
+      if (el.id === pageId) {
+        return {
+          ...el,
+          tools: el.tools.filter((t) => t !== toolDescriptionId),
+        };
+      } else {
+        return el;
+      }
+    });
+  })
 );
 
 export const filesReducer = createReducer(
@@ -132,7 +144,11 @@ export const filesReducer = createReducer(
       ...state,
       audios: [...state.audios, { ...newAudioUnit }],
     };
-  })
+  }),
+  on(filesActions.deleteTextStorageUnit, (state, { id }) => ({
+    ...state,
+    text: state.text.filter((u) => u.id !== id),
+  }))
 );
 
 const junctionsReducer = createReducer(
@@ -191,7 +207,10 @@ const junctionsReducer = createReducer(
       content: files,
     };
     return [...state, { ...newPDFTool }];
-  })
+  }),
+  on(junctionsActions.deleteTextTool, (state, { toolDescriptionId }) =>
+    state.filter((el) => el.id !== toolDescriptionId)
+  )
 );
 
 export const reducers: ActionReducerMap<JSONDataStorage> = {

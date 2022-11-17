@@ -40,7 +40,8 @@
   </ng-container>
 
   <app-tool-generator
-    *ngFor="let tool of pageData.tools"
-    [toolId]="tool"
+    *ngFor="let toolDescription of pageData.tools"
+    [toolDescriptionId]="toolDescription"
+    [pageId]="pageData.id"
   ></app-tool-generator>
 </div>
