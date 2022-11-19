@@ -11,6 +11,8 @@ import {
   PDFFileDescription,
   PDFToolDescription,
   SliderToolDescription,
+  VideoFileDescription,
+  VideoToolDescription,
 } from '../constants/models';
 
 enum APIActions {
@@ -108,9 +110,9 @@ const insertNewImageFilesDescriptions = createAction(
   FileActions.insertImages,
   props<{ filesDescriptions: ImageFileDescription[] }>()
 );
-const insertNewVideoStorageUnit = createAction(
+const insertNewVideoFileDescription = createAction(
   FileActions.insertVideo,
-  props<{ path: string; title?: string }>()
+  props<{ fileDescription: VideoFileDescription }>()
 );
 const insertNewPDFFilesDescriptions = createAction(
   FileActions.insertPDF,
@@ -136,7 +138,7 @@ const insertNewAudioTool = createAction(
 );
 const insertNewVideoTool = createAction(
   ToolsActions.insertNewVideoTool,
-  props<{ files: string[] }>()
+  props<{ videoToolDescription: VideoToolDescription }>()
 );
 const insertNewSliderTool = createAction(
   ToolsActions.insertNewSliderTool,
@@ -148,7 +150,7 @@ const insertNewPDFTool = createAction(
 );
 const insertNewTextTool = createAction(
   ToolsActions.insertNewTextTool,
-  props<{ toolDescription: TextToolDescription }>()
+  props<{ textToolDescription: TextToolDescription }>()
 );
 const deleteTextTool = createAction(
   ToolsActions.deleteTextTool,
@@ -179,6 +181,7 @@ export const filesActions = {
   insertNewAudioFilesDescriptions,
   insertNewPDFFilesDescriptions,
   deleteTextStorageUnit,
+  insertNewVideoFileDescription,
 };
 
 export const toolsActions = {

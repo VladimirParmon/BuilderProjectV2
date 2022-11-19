@@ -119,16 +119,11 @@ const toolsReducer = createReducer(
   on(toolsActions.insertNewSliderTool, (state, { sliderToolDescription }) => {
     return [...state, sliderToolDescription];
   }),
-  on(toolsActions.insertNewVideoTool, (state, { files }) => {
-    const newVideoTool = {
-      id: '',
-      type: ToolNames.VIDEO,
-      content: files,
-    };
-    return [...state, { ...newVideoTool }];
+  on(toolsActions.insertNewVideoTool, (state, { videoToolDescription }) => {
+    return [...state, videoToolDescription];
   }),
-  on(toolsActions.insertNewTextTool, (state, { toolDescription }) => {
-    return [...state, toolDescription];
+  on(toolsActions.insertNewTextTool, (state, { textToolDescription }) => {
+    return [...state, textToolDescription];
   }),
   on(toolsActions.deleteTextTool, (state, { toolDescriptionId }) =>
     state.filter((el) => el.id !== toolDescriptionId)
