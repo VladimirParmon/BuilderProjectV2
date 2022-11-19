@@ -4,11 +4,9 @@ import {
   SinglePageInfo,
   TextToolDescription,
   TextDescription,
+  ImageFileDescription,
+  CollageToolDescription,
 } from '../constants/models';
-import {
-  FlexboxFlowOptions,
-  FlexboxPositioningOptions,
-} from '../constants/constants';
 
 enum APIActions {
   retrieveFromJSONSuccess = '[Server call/Load project] Save retrieved from the local JSON file data',
@@ -30,7 +28,7 @@ enum ContentsActions {
 enum FileActions {
   updateText = '[Files/Text] Update the description of a text storage unit',
   insertText = '[Files/Text] Insert a new text storage unit',
-  insertImage = '[Files/Image] Insert a new image storage unit',
+  insertImages = '[Files/Image] Insert new images to the files storage',
   insertVideo = '[Files/Video] Insert a new video storage unit',
   insertPDF = '[Files/PDF] Insert a new PDF storage unit',
   insertAudio = '[Files/Audio] Insert a new audio storage unit',
@@ -90,10 +88,7 @@ const deleteTool = createAction(
   ContentsActions.deleteTool,
   props<{ pageId: string; toolDescriptionId: string }>()
 );
-const addTool = createAction(
-  ContentsActions.addTool,
-  props<{ pageId: string; toolId: string }>()
-);
+const addTool = createAction(ContentsActions.addTool, props<{ pageId: string; toolId: string }>());
 
 //Files
 const updateTextStorageUnit = createAction(
@@ -104,9 +99,9 @@ const insertNewTextStorageUnit = createAction(
   FileActions.insertText,
   props<{ textDescription: TextDescription }>()
 );
-const insertNewImageStorageUnit = createAction(
-  FileActions.insertImage,
-  props<{ path: string; title?: string; width?: number }>()
+const insertNewImageFileDescriptions = createAction(
+  FileActions.insertImages,
+  props<{ filesDescriptions: ImageFileDescription[] }>()
 );
 const insertNewVideoStorageUnit = createAction(
   FileActions.insertVideo,
@@ -120,19 +115,13 @@ const insertNewAudioStorageUnit = createAction(
   FileActions.insertAudio,
   props<{ path: string; title?: string }>()
 );
-const deleteTextStorageUnit = createAction(
-  FileActions.deleteText,
-  props<{ id: string }>()
-);
+const deleteTextStorageUnit = createAction(FileActions.deleteText, props<{ id: string }>());
 
 //Tools
 const insertNewCollageTool = createAction(
   ToolsActions.insertNewCollageTool,
   props<{
-    files: string[];
-    justify?: FlexboxPositioningOptions;
-    align?: FlexboxPositioningOptions;
-    flow?: FlexboxFlowOptions;
+    collageToolDescription: CollageToolDescription;
   }>()
 );
 const insertNewAudioTool = createAction(
@@ -147,10 +136,7 @@ const insertNewSliderTool = createAction(
   ToolsActions.insertNewSliderTool,
   props<{ files: string[] }>()
 );
-const insertNewPDFTool = createAction(
-  ToolsActions.insertNewPDFTool,
-  props<{ files: string[] }>()
-);
+const insertNewPDFTool = createAction(ToolsActions.insertNewPDFTool, props<{ files: string[] }>());
 const insertNewTextTool = createAction(
   ToolsActions.insertNewTextTool,
   props<{ toolDescription: TextToolDescription }>()
@@ -180,7 +166,7 @@ export const contentsActions = {
 export const filesActions = {
   updateTextStorageUnit,
   insertNewTextStorageUnit,
-  insertNewImageStorageUnit,
+  insertNewImageFileDescriptions,
   insertNewVideoStorageUnit,
   insertNewPDFStorageUnit,
   insertNewAudioStorageUnit,

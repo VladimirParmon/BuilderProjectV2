@@ -1,10 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  RecursiveTreeNode,
-  DropInfo,
-  Lookup,
-  SinglePageInfo,
-} from 'src/constants/models';
+import { RecursiveTreeNode, DropInfo, Lookup, SinglePageInfo } from 'src/constants/models';
 import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
@@ -37,10 +32,7 @@ export class TreeService {
 
   //Drag and drop event handlers ("User moved something, what to do?")
   dragMoved(event: CdkDragMove) {
-    let element = this.document.elementFromPoint(
-      event.pointerPosition.x,
-      event.pointerPosition.y
-    );
+    let element = this.document.elementFromPoint(event.pointerPosition.x, event.pointerPosition.y);
     if (!element) {
       this.clearDragInfo();
       return;
@@ -83,20 +75,14 @@ export class TreeService {
         oldParentNodeId
       );
     } else {
-      this.DNDInTheOuterContainer(
-        nodeLookup,
-        draggedItemId,
-        dropTargetIds,
-        allPagesData
-      );
+      this.DNDInTheOuterContainer(nodeLookup, draggedItemId, dropTargetIds, allPagesData);
     }
   }
 
   //Drag and drop metadata ("Where should everything go to?")
   setWhereToDrop(container: Element, event: CdkDragMove) {
     const newTargetId: string =
-      container.getAttribute('data-id') ||
-      'Something went wrong. Check the DOM tree';
+      container.getAttribute('data-id') || 'Something went wrong. Check the DOM tree';
     const newAction = this.chooseActionCase(container, event);
     this.dropActionToDo = {
       targetId: newTargetId,
@@ -105,9 +91,7 @@ export class TreeService {
   }
 
   getContainer(element: Element) {
-    return element.classList.contains('node-item')
-      ? element
-      : element.closest('.node-item');
+    return element.classList.contains('node-item') ? element : element.closest('.node-item');
   }
 
   getNewParentIndex(newParentNodeChildren: string[]) {
@@ -115,13 +99,10 @@ export class TreeService {
     let newParentIndex = -1;
     switch (this.dropActionToDo.action) {
       case ActionCases.AFTER:
-        newParentIndex =
-          newParentNodeChildren.indexOf(this.dropActionToDo.targetId) + 1;
+        newParentIndex = newParentNodeChildren.indexOf(this.dropActionToDo.targetId) + 1;
         break;
       case ActionCases.BEFORE:
-        newParentIndex = newParentNodeChildren.indexOf(
-          this.dropActionToDo.targetId
-        );
+        newParentIndex = newParentNodeChildren.indexOf(this.dropActionToDo.targetId);
         break;
       case ActionCases.INSIDE:
         newParentIndex = newParentNodeChildren.length;

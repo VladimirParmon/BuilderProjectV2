@@ -1,10 +1,5 @@
 import { ActionReducerMap, createReducer, on } from '@ngrx/store';
-import {
-  globalActions,
-  filesActions,
-  contentsActions,
-  toolsActions,
-} from './actions';
+import { globalActions, filesActions, contentsActions, toolsActions } from './actions';
 import { JSONDataStorage } from '../constants/models';
 import { Defaults } from 'src/app/services/defaults';
 import { MediaFileTypes, ToolNames } from '../constants/constants';
@@ -28,36 +23,26 @@ const contentsReducer = createReducer(
     state.map((el) => (el.id === pageId ? { ...el, name: newName } : el))
   ),
   on(contentsActions.updatePageChildren, (state, { pageId, newChildrenIds }) =>
-    state.map((el) =>
-      el.id === pageId ? { ...el, childPages: newChildrenIds } : el
-    )
+    state.map((el) => (el.id === pageId ? { ...el, childPages: newChildrenIds } : el))
   ),
   on(contentsActions.updateTools, (state, { pageId, newToolsIds }) =>
     state.map((el) => (el.id === pageId ? { ...el, tools: newToolsIds } : el))
   ),
-  on(
-    contentsActions.updateWholeChildrenArray,
-    (state, { targetPageId, newArray }) =>
-      state.map((el) =>
-        el.id === targetPageId ? { ...el, childPages: newArray } : el
-      )
+  on(contentsActions.updateWholeChildrenArray, (state, { targetPageId, newArray }) =>
+    state.map((el) => (el.id === targetPageId ? { ...el, childPages: newArray } : el))
   ),
   on(contentsActions.changePageParent, (state, { targetPageId, newParentId }) =>
-    state.map((el) =>
-      el.id === targetPageId ? { ...el, parentId: newParentId } : el
-    )
+    state.map((el) => (el.id === targetPageId ? { ...el, parentId: newParentId } : el))
   ),
-  on(
-    contentsActions.removeChildPage,
-    (state, { targetPageId, pageToRemoveId }) =>
-      state.map((el) =>
-        el.id === targetPageId
-          ? {
-              ...el,
-              childPages: el.childPages.filter((p) => p !== pageToRemoveId),
-            }
-          : el
-      )
+  on(contentsActions.removeChildPage, (state, { targetPageId, pageToRemoveId }) =>
+    state.map((el) =>
+      el.id === targetPageId
+        ? {
+            ...el,
+            childPages: el.childPages.filter((p) => p !== pageToRemoveId),
+          }
+        : el
+    )
   ),
   on(contentsActions.updateWholeSlice, (state, { newArray }) => newArray),
   on(contentsActions.deleteTool, (state, { pageId, toolDescriptionId }) => {
@@ -94,25 +79,14 @@ export const filesReducer = createReducer(
   }),
   on(filesActions.updateTextStorageUnit, (state, { id, newText }) => ({
     ...state,
-    text: state.text.map((el) =>
-      el.id === id ? { ...el, text: newText } : el
-    ),
+    text: state.text.map((el) => (el.id === id ? { ...el, text: newText } : el)),
   })),
-  on(
-    filesActions.insertNewImageStorageUnit,
-    (state, { path, title, width }) => {
-      const newImageUnit = {
-        id: '',
-        pathToFile: path,
-        title: title,
-        width: width || Defaults.defaultImageWidth,
-      };
-      return {
-        ...state,
-        images: [...state.images, { ...newImageUnit }],
-      };
-    }
-  ),
+  on(filesActions.insertNewImageFileDescriptions, (state, { filesDescriptions }) => {
+    return {
+      ...state,
+      images: [...state.images, ...filesDescriptions],
+    };
+  }),
   on(filesActions.insertNewVideoStorageUnit, (state, { path, title }) => {
     const newVideoUnit = {
       id: '',
@@ -155,20 +129,9 @@ export const filesReducer = createReducer(
 const toolsReducer = createReducer(
   initialState.tools,
   on(globalActions.saveRetrievedData, (state, { data }) => data.tools),
-  on(
-    toolsActions.insertNewCollageTool,
-    (state, { files, justify, align, flow }) => {
-      const newCollageTool = {
-        id: '',
-        type: ToolNames.COLLAGE,
-        content: files,
-        currentJustifyContent: justify || Defaults.justifyContent,
-        currentAlignItems: align || Defaults.alignItems,
-        currentFlow: flow || Defaults.flow,
-      };
-      return [...state, { ...newCollageTool }];
-    }
-  ),
+  on(toolsActions.insertNewCollageTool, (state, { collageToolDescription }) => {
+    return [...state, collageToolDescription];
+  }),
   on(toolsActions.insertNewAudioTool, (state, { files }) => {
     const newAudioTool = {
       id: '',
