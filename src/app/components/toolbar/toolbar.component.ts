@@ -47,8 +47,7 @@ export class ToolbarComponent implements OnDestroy {
   useTool(name: ToolNames): void {
     switch (name) {
       case ToolNames.TEXT:
-        if (this.currentPageId)
-          this.toolService.createNewTextTool(this.currentPageId);
+        if (this.currentPageId) this.toolService.createNewTextTool(this.currentPageId);
         break;
       case ToolNames.AUDIO:
         this.openNewDialog(ToolNames.AUDIO);
@@ -79,19 +78,13 @@ export class ToolbarComponent implements OnDestroy {
       if (this.currentPageId)
         switch (toolName) {
           case ToolNames.VIDEO:
-            this.toolService.createNewVideoTool(
-              this.currentPageId,
-              fileNames[0]
-            );
+            this.toolService.createNewVideoTool(this.currentPageId, fileNames[0]);
             break;
           case ToolNames.AUDIO:
             this.toolService.createNewAudioTool(this.currentPageId, fileNames);
             break;
           case ToolNames.COLLAGE:
-            this.toolService.createNewCollageTool(
-              this.currentPageId,
-              fileNames
-            );
+            this.toolService.createNewCollageTool(this.currentPageId, fileNames);
             break;
           case ToolNames.PDF:
             this.toolService.createNewPDFTool(this.currentPageId, fileNames);

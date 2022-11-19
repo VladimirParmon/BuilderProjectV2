@@ -9,7 +9,7 @@ import {
 
 type PageId = string;
 export type ToolDescriptionId = string;
-type FileDescriptionId = string;
+export type FileDescriptionId = string;
 export type TextDescriptionId = string;
 
 export interface JSONDataStorage {
@@ -74,10 +74,7 @@ interface BasicToolDescription {
   content: ToolDescriptionContent;
 }
 
-export type ToolDescriptionContent =
-  | FileDescriptionId[]
-  | FileDescriptionId
-  | TextDescription;
+export type ToolDescriptionContent = FileDescriptionId[] | FileDescriptionId | TextDescription;
 
 export interface CollageToolDescription extends BasicToolDescription {
   currentJustifyContent: FlexboxPositioningOptions;

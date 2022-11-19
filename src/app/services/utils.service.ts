@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
-import {
-  Lookup,
-  RecursiveTreeNode,
-  SinglePageInfo,
-} from 'src/constants/models';
+import { Lookup, RecursiveTreeNode, SinglePageInfo } from 'src/constants/models';
 import { MediaFileTypes, ToolNames } from 'src/constants/constants';
 
 @Injectable({
@@ -13,10 +9,7 @@ import { MediaFileTypes, ToolNames } from 'src/constants/constants';
 export class UtilsService {
   constructor() {}
 
-  arrayToTree(
-    array: SinglePageInfo[],
-    nodeLookup: Lookup
-  ): RecursiveTreeNode[] {
+  arrayToTree(array: SinglePageInfo[], nodeLookup: Lookup): RecursiveTreeNode[] {
     const arrayDeepCopy = this.arrayDeepCopy(array);
     const parents = arrayDeepCopy.filter((el) => !el.parentId).map((p) => p.id);
     return curse(parents);
@@ -83,9 +76,7 @@ export class UtilsService {
 
   isNonEmptyArrayOfStrings(value: unknown): value is string[] {
     return (
-      Array.isArray(value) &&
-      value.length > 0 &&
-      value.every((item) => typeof item === 'string')
+      Array.isArray(value) && value.length > 0 && value.every((item) => typeof item === 'string')
     );
   }
 

@@ -12,10 +12,7 @@ import {
   Lookup,
   DropInfo,
 } from 'src/constants/models';
-import {
-  ModalWindowsText,
-  ExpandButtonInnerText,
-} from 'src/constants/constants';
+import { ModalWindowsText, ExpandButtonInnerText } from 'src/constants/constants';
 import { selectAllPagesInfo } from 'src/redux/selectors';
 import { tap } from 'rxjs';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
@@ -30,10 +27,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./contents.component.scss'],
   animations: [
     trigger('animate', [
-      transition('void => *', [
-        style({ width: '0' }),
-        animate(100, style({ width: '*' })),
-      ]),
+      transition('void => *', [style({ width: '0' }), animate(100, style({ width: '*' }))]),
       transition('* => void', [animate(100, style({ width: '0' }))]),
       transition('* => *', animate('300ms ease-out')),
     ]),
@@ -85,8 +79,7 @@ export class ContentsComponent implements OnDestroy {
       .pipe(
         tap((raw) => {
           if (raw) {
-            const { dropTargetIds, nodeLookup } =
-              this.treeService.prepareDragDrop(raw);
+            const { dropTargetIds, nodeLookup } = this.treeService.prepareDragDrop(raw);
             this.dropTargetIds = dropTargetIds;
             this.nodeLookup = nodeLookup;
             this.contentsData = this.utilsService.arrayToTree(raw, nodeLookup);
@@ -121,9 +114,7 @@ export class ContentsComponent implements OnDestroy {
   expandNodeSwitch(nodeId: string) {
     const isAlreadyExpanded = this.isNodeExpanded(nodeId);
     isAlreadyExpanded
-      ? (this.nodesThatAreExpanded = this.nodesThatAreExpanded.filter(
-          (el) => el !== nodeId
-        ))
+      ? (this.nodesThatAreExpanded = this.nodesThatAreExpanded.filter((el) => el !== nodeId))
       : this.nodesThatAreExpanded.push(nodeId);
   }
 
@@ -149,12 +140,7 @@ export class ContentsComponent implements OnDestroy {
 
   drop(event: CdkDragDrop<RecursiveTreeNode[] | null, any, any>) {
     if (!this.fetchedData) return;
-    this.treeService.drop(
-      event,
-      this.nodeLookup,
-      this.fetchedData,
-      this.dropTargetIds
-    );
+    this.treeService.drop(event, this.nodeLookup, this.fetchedData, this.dropTargetIds);
   }
 
   toggleDND(checkboxValue: boolean) {

@@ -74,9 +74,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
   deleteTextTool(toolDescriptionId: string) {
     this.store.dispatch(toolsActions.deleteTextTool({ toolDescriptionId }));
-    this.store.dispatch(
-      contentsActions.deleteTool({ pageId: this.pageId, toolDescriptionId })
-    );
+    this.store.dispatch(contentsActions.deleteTool({ pageId: this.pageId, toolDescriptionId }));
     if (this.toolDescription) {
       const toolId = this.toolDescription.content;
       if (this.utilsService.isString(toolId)) {

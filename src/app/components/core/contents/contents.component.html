@@ -22,11 +22,9 @@
       >
         {{ isNodeExpanded(node.relatedPageId) ? "expand_less" : "expand_more" }}
       </mat-icon>
-      <span
-        class="node-title__name-span"
-        (click)="navigate(node.relatedPageId)"
-        >{{ node.relatedPageName }}</span
-      >
+      <span class="node-title__name-span" (click)="navigate(node.relatedPageId)">{{
+        node.relatedPageName
+      }}</span>
       <span class="item-notes" *ngIf="node.childNodes?.length"
         >({{ node.childNodes?.length }})</span
       >
@@ -61,9 +59,7 @@
         (cdkDragMoved)="dragMoved($event)"
         @fold
       >
-        <ng-container
-          *ngTemplateOutlet="tmplNode; context: { node: node }"
-        ></ng-container>
+        <ng-container *ngTemplateOutlet="tmplNode; context: { node: node }"></ng-container>
       </div>
     </div>
   </div>
@@ -82,15 +78,9 @@
 >
   <div class="tree-controls">
     <div class="tree-buttons">
-      <button
-        class="tree-button"
-        mat-raised-button
-        (click)="wholeTreeExpansionSwitch()"
-      >
+      <button class="tree-button" mat-raised-button (click)="wholeTreeExpansionSwitch()">
         {{
-          expandButtonState.expanded
-            ? expandButtonState.text.open
-            : expandButtonState.text.close
+          expandButtonState.expanded ? expandButtonState.text.open : expandButtonState.text.close
         }}
       </button>
       <button
@@ -126,24 +116,14 @@
     [cdkDragDisabled]="!isDraggable"
     (cdkDragMoved)="dragMoved($event)"
   >
-    <ng-container
-      *ngTemplateOutlet="tmplNode; context: { node: node }"
-    ></ng-container>
+    <ng-container *ngTemplateOutlet="tmplNode; context: { node: node }"></ng-container>
   </div>
 
   <div class="tree-buttons__bottom">
-    <button
-      class="tree-button"
-      mat-raised-button
-      (click)="saveTree(contentsData)"
-    >
+    <button class="tree-button" mat-raised-button (click)="saveTree(contentsData)">
       Сохранить
     </button>
-    <button
-      class="tree-button"
-      mat-raised-button
-      (click)="openGenerateSiteDialog()"
-    >
+    <button class="tree-button" mat-raised-button (click)="openGenerateSiteDialog()">
       Генерировать
     </button>
   </div>

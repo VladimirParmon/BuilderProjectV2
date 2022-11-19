@@ -16,10 +16,8 @@ export class StateService {
   constructor(private http: HttpClient, private store: Store) {}
 
   getData(): void {
-    this.http
-      .get<JSONDataStorage>('http://127.0.0.1:3000/getTree')
-      .subscribe((data) => {
-        this.store.dispatch(globalActions.saveRetrievedData({ data }));
-      });
+    this.http.get<JSONDataStorage>('http://127.0.0.1:3000/getTree').subscribe((data) => {
+      this.store.dispatch(globalActions.saveRetrievedData({ data }));
+    });
   }
 }
