@@ -116,13 +116,8 @@ const toolsReducer = createReducer(
   on(toolsActions.insertNewPDFTool, (state, { PDFToolDescription }) => {
     return [...state, PDFToolDescription];
   }),
-  on(toolsActions.insertNewSliderTool, (state, { files }) => {
-    const newSliderTool = {
-      id: '',
-      type: ToolNames.SLIDER,
-      content: files,
-    };
-    return [...state, { ...newSliderTool }];
+  on(toolsActions.insertNewSliderTool, (state, { sliderToolDescription }) => {
+    return [...state, sliderToolDescription];
   }),
   on(toolsActions.insertNewVideoTool, (state, { files }) => {
     const newVideoTool = {

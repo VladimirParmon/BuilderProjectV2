@@ -12,6 +12,7 @@ import {
   AudioToolDescription,
   PDFFileDescription,
   PDFToolDescription,
+  SliderToolDescription,
 } from 'src/constants/models';
 import { contentsActions, filesActions, toolsActions } from 'src/redux/actions';
 import { v4 as uuidv4 } from 'uuid';
@@ -102,5 +103,22 @@ export class ToolService {
     this.store.dispatch(toolsActions.insertNewCollageTool({ collageToolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: collageToolDescriptionId }));
   }
-  createNewSliderTool(pageId: string, fileNames: string[]) {}
+  createNewSliderTool(pageId: string, fileNames: string[]) {
+    const sliderToolDescriptionId = uuidv4();
+    const filesDescriptions: ImageFileDescription[] = fileNames.map((name) => ({
+      id: uuidv4(),
+      pathToFile: name,
+      width: Defaults.defaultImageWidth,
+    }));
+    const fileDescriptionIds: FileDescriptionId[] = filesDescriptions.map((d) => d.id);
+
+    const sliderToolDescription: SliderToolDescription = {
+      id: sliderToolDescriptionId,
+      type: ToolNames.SLIDER,
+      content: fileDescriptionIds,
+    };
+    this.store.dispatch(filesActions.insertNewImageFilesDescriptions({ filesDescriptions }));
+    this.store.dispatch(toolsActions.insertNewSliderTool({ sliderToolDescription }));
+    this.store.dispatch(contentsActions.addTool({ pageId, toolId: sliderToolDescriptionId }));
+  }
 }

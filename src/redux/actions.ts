@@ -10,6 +10,7 @@ import {
   AudioToolDescription,
   PDFFileDescription,
   PDFToolDescription,
+  SliderToolDescription,
 } from '../constants/models';
 
 enum APIActions {
@@ -139,7 +140,7 @@ const insertNewVideoTool = createAction(
 );
 const insertNewSliderTool = createAction(
   ToolsActions.insertNewSliderTool,
-  props<{ files: string[] }>()
+  props<{ sliderToolDescription: SliderToolDescription }>()
 );
 const insertNewPDFTool = createAction(
   ToolsActions.insertNewPDFTool,

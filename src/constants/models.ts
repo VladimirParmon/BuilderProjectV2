@@ -63,7 +63,6 @@ export interface BasicFileDescription {
 export type VideoFileDescription = BasicFileDescription;
 export type PDFFileDescription = BasicFileDescription;
 export type AudioFileDescription = BasicFileDescription;
-
 export interface ImageFileDescription extends BasicFileDescription {
   width: number;
 }
