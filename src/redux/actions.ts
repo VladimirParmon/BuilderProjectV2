@@ -1,12 +1,14 @@
 import { createAction, props } from '@ngrx/store';
 import {
-  FlexboxFlowOptions,
-  FlexboxPositioningOptions,
   JSONDataStorage,
   SinglePageInfo,
   TextToolDescription,
   TextDescription,
 } from '../constants/models';
+import {
+  FlexboxFlowOptions,
+  FlexboxPositioningOptions,
+} from '../constants/constants';
 
 enum APIActions {
   retrieveFromJSONSuccess = '[Server call/Load project] Save retrieved from the local JSON file data',

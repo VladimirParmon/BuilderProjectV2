@@ -1,9 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import {
-  ToolDescription,
-  ModalWindowsText,
-  ToolNames,
-} from 'src/constants/models';
+import { ToolDescription } from 'src/constants/models';
+import { ModalWindowsText, ToolNames } from 'src/constants/constants';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';

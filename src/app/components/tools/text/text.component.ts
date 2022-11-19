@@ -2,12 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
 import { UtilsService } from 'src/app/services/utils.service';
-import {
-  TextDescription,
-  ToolDescriptionContent,
-  ToolNames,
-} from 'src/constants/models';
+import { TextDescription, ToolDescriptionContent } from 'src/constants/models';
 import { getSingleFile } from 'src/redux/selectors';
+import { ToolNames } from 'src/constants/constants';
 
 @Component({
   selector: 'app-text',

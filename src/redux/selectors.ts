@@ -7,9 +7,8 @@ import {
   MultimediaFilesCategories,
   SinglePageInfo,
   TextDescription,
-  ToolNames,
-  MediaFileTypes,
 } from '../constants/models';
+import { ToolNames, MediaFileTypes } from '../constants/constants';
 
 const selectContentsState = createFeatureSelector<SinglePageInfo[]>('contents');
 const selectFilesState =

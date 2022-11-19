@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UtilsService } from 'src/app/services/utils.service';
-import { inputTypes, ToolNames } from 'src/constants/models';
+import { inputTypes, ToolNames } from 'src/constants/constants';
 
 @Component({
   selector: 'app-choose-file',
@@ -40,20 +40,22 @@ export class ChooseFileComponent {
   async submitFiles() {
     let promises: Promise<string>[] = [];
     for (let item of this.files) {
-      const promise = new Promise<string>((resolve) => {
-        const file: File = item;
-        const formData = new FormData();
-        formData.append('my_file', file);
-        this.http
-          .post('http://127.0.0.1:3000/upload', formData)
-          .subscribe(() => {
-            resolve(item.name);
-          });
-      });
+      const promise = this.createFileNameFetchingPromise(item);
       promises.push(promise);
     }
     const result = await Promise.all(promises);
     this.dialogRef.close(result);
+  }
+
+  createFileNameFetchingPromise(item: File) {
+    return new Promise<string>((resolve) => {
+      const file: File = item;
+      const formData = new FormData();
+      formData.append('my_file', file);
+      this.http.post('http://127.0.0.1:3000/upload', formData).subscribe(() => {
+        resolve(item.name);
+      });
+    });
   }
 
   getFileTypes() {

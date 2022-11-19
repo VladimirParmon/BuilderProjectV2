@@ -5,10 +5,10 @@ import {
   TextDescription,
   TextDescriptionId,
   ToolDescriptionId,
-  ToolNames,
 } from 'src/constants/models';
 import { contentsActions, filesActions, toolsActions } from 'src/redux/actions';
 import { v4 as uuidv4 } from 'uuid';
+import { ToolNames } from 'src/constants/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -38,4 +38,10 @@ export class ToolService {
       contentsActions.addTool({ pageId, toolId: textToolDescriptionId })
     );
   }
+
+  createNewAudioTool(pageId: string, fileNames: string[]) {}
+  createNewVideoTool(pageId: string, fileName: string) {}
+  createNewPDFTool(pageId: string, fileNames: string[]) {}
+  createNewCollageTool(pageId: string, fileNames: string[]) {}
+  createNewSliderTool(pageId: string, fileNames: string[]) {}
 }

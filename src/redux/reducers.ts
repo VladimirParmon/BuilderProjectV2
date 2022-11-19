@@ -5,12 +5,9 @@ import {
   contentsActions,
   toolsActions,
 } from './actions';
-import {
-  JSONDataStorage,
-  MediaFileTypes,
-  ToolNames,
-} from '../constants/models';
+import { JSONDataStorage } from '../constants/models';
 import { Defaults } from 'src/app/services/defaults';
+import { MediaFileTypes, ToolNames } from '../constants/constants';
 
 export const initialState: JSONDataStorage = {
   contents: [],

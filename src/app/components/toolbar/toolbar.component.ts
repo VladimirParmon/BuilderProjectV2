@@ -5,45 +5,17 @@ import { BehaviorSubject, filter, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { ToolService } from 'src/app/services/tool.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { ToolNames, ToolbarToolListOption } from 'src/constants/models';
+import { ToolbarToolListOption } from 'src/constants/models';
 import { ChooseFileComponent } from '../modals/choose-file/choose-file.component';
+import { toolsList, ToolNames } from 'src/constants/constants';
+
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnDestroy {
-  toolsList: ToolbarToolListOption[] = [
-    {
-      name: ToolNames.TEXT,
-      icon: 'border_color',
-    },
-    {
-      name: ToolNames.COLLAGE,
-      icon: 'photo_library',
-    },
-    {
-      name: ToolNames.PDF,
-      icon: 'picture_as_pdf',
-    },
-    {
-      name: ToolNames.VIDEO,
-      icon: 'video_library',
-    },
-    {
-      name: ToolNames.AUDIO,
-      icon: 'library_music',
-    },
-
-    {
-      name: ToolNames.SLIDER,
-      icon: 'auto_awesome_motion',
-    },
-    // {
-    //   name: ToolNames.PRESENTATION,
-    //   icon: 'picture_in_picture',
-    // },
-  ];
+  toolsList: ToolbarToolListOption[];
 
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   isToolbarActivated: boolean = false;
@@ -58,6 +30,7 @@ export class ToolbarComponent implements OnDestroy {
     private utilsService: UtilsService,
     private toolService: ToolService
   ) {
+    this.toolsList = toolsList;
     this.router.events
       .pipe(
         filter((e): e is NavigationEnd => e instanceof NavigationEnd),
@@ -86,9 +59,6 @@ export class ToolbarComponent implements OnDestroy {
       case ToolNames.COLLAGE:
         this.openNewDialog(ToolNames.COLLAGE);
         break;
-      // case ToolNames.PRESENTATION:
-      //   //TODO: add a new presentation
-      //   break;
       case ToolNames.VIDEO:
         this.openNewDialog(ToolNames.VIDEO);
         break;
@@ -105,8 +75,31 @@ export class ToolbarComponent implements OnDestroy {
       15
     );
     const dialogRef = this.dialog.open(ChooseFileComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe((fileData: string) => {
-      //TODO: switch-case here
+    dialogRef.afterClosed().subscribe((fileNames: string[]) => {
+      if (this.currentPageId)
+        switch (toolName) {
+          case ToolNames.VIDEO:
+            this.toolService.createNewVideoTool(
+              this.currentPageId,
+              fileNames[0]
+            );
+            break;
+          case ToolNames.AUDIO:
+            this.toolService.createNewAudioTool(this.currentPageId, fileNames);
+            break;
+          case ToolNames.COLLAGE:
+            this.toolService.createNewCollageTool(
+              this.currentPageId,
+              fileNames
+            );
+            break;
+          case ToolNames.PDF:
+            this.toolService.createNewPDFTool(this.currentPageId, fileNames);
+            break;
+          case ToolNames.SLIDER:
+            this.toolService.createNewSliderTool(this.currentPageId, fileNames);
+            break;
+        }
     });
   }
 

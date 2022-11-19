@@ -1,7 +1,7 @@
 import {
   FlexboxPositioningOptions,
   FlexboxFlowOptions,
-} from '../../constants/models';
+} from '../../constants/constants';
 
 export class Defaults {
   public static defaultImageWidth = 200;

@@ -3,7 +3,6 @@ import {
   RecursiveTreeNode,
   DropInfo,
   Lookup,
-  ActionCases,
   SinglePageInfo,
 } from 'src/constants/models';
 import { DOCUMENT } from '@angular/common';
@@ -11,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 import { UtilsService } from './utils.service';
 import { contentsActions } from 'src/redux/actions';
+import { ActionCases } from 'src/constants/constants';
 
 @Injectable({
   providedIn: 'root',

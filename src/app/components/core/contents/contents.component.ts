@@ -7,13 +7,15 @@ import { StateService } from 'src/app/services/state.service';
 import { TreeService } from 'src/app/services/tree.service';
 import {
   RecursiveTreeNode,
-  ExpandButtonInnerText,
   ExpandButtonState,
   SinglePageInfo,
   Lookup,
   DropInfo,
-  ModalWindowsText,
 } from 'src/constants/models';
+import {
+  ModalWindowsText,
+  ExpandButtonInnerText,
+} from 'src/constants/constants';
 import { selectAllPagesInfo } from 'src/redux/selectors';
 import { tap } from 'rxjs';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';

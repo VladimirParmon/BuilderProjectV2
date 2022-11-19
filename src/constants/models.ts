@@ -1,3 +1,12 @@
+import {
+  ActionCases,
+  ExpandButtonInnerText,
+  FlexboxFlowOptions,
+  FlexboxPositioningOptions,
+  MediaFileTypes,
+  ToolNames,
+} from './constants';
+
 type PageId = string;
 export type ToolDescriptionId = string;
 type FileDescriptionId = string;
@@ -30,23 +39,6 @@ export interface RecursiveTreeNode {
   relatedPageId: PageId;
   relatedPageName: string;
   childNodes: RecursiveTreeNode[];
-}
-
-export enum ToolNames {
-  TEXT = 'text',
-  AUDIO = 'audio',
-  VIDEO = 'video',
-  PDF = 'PDF',
-  SLIDER = 'slider',
-  COLLAGE = 'collage',
-}
-
-export enum MediaFileTypes {
-  TEXT = 'text',
-  IMAGES = 'images',
-  VIDEOS = 'videos',
-  PDFs = 'PDFs',
-  AUDIOS = 'audios',
 }
 
 export type MultimediaFilesCategories = {
@@ -99,19 +91,6 @@ type VideoToolDescription = BasicToolDescription;
 type PDFToolDescription = BasicToolDescription;
 export type TextToolDescription = BasicToolDescription;
 
-export enum FlexboxPositioningOptions {
-  START = 'flex-start',
-  CENTER = 'center',
-  END = 'flex-end',
-  BETWEEN = 'space-between',
-  EVENLY = 'space-evenly',
-}
-
-export enum FlexboxFlowOptions {
-  ROW = 'row',
-  COLUMN = 'column',
-}
-
 export interface Lookup {
   [key: string]: SinglePageInfo;
 }
@@ -119,19 +98,6 @@ export interface Lookup {
 export interface DropInfo {
   targetId: string;
   action: ActionCases;
-}
-
-export enum ActionCases {
-  BEFORE = 'before',
-  AFTER = 'after',
-  INSIDE = 'inside',
-  PARENTLESS = 'parentless',
-  OUT_OF_BOUNDS = 'outOfBounds',
-}
-
-export enum ExpandButtonInnerText {
-  OPEN = 'Свернуть',
-  CLOSE = 'Развернуть',
 }
 
 type ExpandKey = 'open' | 'close';
@@ -142,21 +108,7 @@ export interface ExpandButtonState {
   text: ExpandButtonInfo;
 }
 
-export enum ModalWindowsText {
-  CREATE_NEW_PAGE = 'Пожалуйста, введите имя новой страницы',
-  DELETE_PAGE = 'Удалить страницу',
-  GENERATE_SITE = 'Пожалуйста, дайте проекту имя',
-  DELETE_TOOL = 'tekst dlya tula',
-}
-
 export interface ToolbarToolListOption {
   name: ToolNames;
   icon: string;
-}
-
-export enum inputTypes {
-  IMAGES = '.png, .jpg, .jpeg, .gif',
-  VIDEO = '.mp4, .webm, .avi, .3gp',
-  AUDIO = '.mp3, .wav, .flac',
-  PDF = '.pdf',
 }

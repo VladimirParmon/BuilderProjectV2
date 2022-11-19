@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import {
   Lookup,
-  MediaFileTypes,
   RecursiveTreeNode,
   SinglePageInfo,
-  ToolNames,
 } from 'src/constants/models';
+import { MediaFileTypes, ToolNames } from 'src/constants/constants';
 
 @Injectable({
   providedIn: 'root',
