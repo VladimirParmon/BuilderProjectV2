@@ -92,6 +92,12 @@ export const filesReducer = createReducer(
       audios: [...state.images, ...filesDescriptions],
     };
   }),
+  on(filesActions.insertNewPDFFilesDescriptions, (state, { filesDescriptions }) => {
+    return {
+      ...state,
+      PDFs: [...state.images, ...filesDescriptions],
+    };
+  }),
   on(filesActions.deleteTextStorageUnit, (state, { id }) => ({
     ...state,
     text: state.text.filter((u) => u.id !== id),
@@ -106,6 +112,9 @@ const toolsReducer = createReducer(
   }),
   on(toolsActions.insertNewAudioTool, (state, { audioToolDescription }) => {
     return [...state, audioToolDescription];
+  }),
+  on(toolsActions.insertNewPDFTool, (state, { PDFToolDescription }) => {
+    return [...state, PDFToolDescription];
   }),
   on(toolsActions.insertNewSliderTool, (state, { files }) => {
     const newSliderTool = {
@@ -125,14 +134,6 @@ const toolsReducer = createReducer(
   }),
   on(toolsActions.insertNewTextTool, (state, { toolDescription }) => {
     return [...state, toolDescription];
-  }),
-  on(toolsActions.insertNewPDFTool, (state, { files }) => {
-    const newPDFTool = {
-      id: '',
-      type: ToolNames.PDF,
-      content: files,
-    };
-    return [...state, { ...newPDFTool }];
   }),
   on(toolsActions.deleteTextTool, (state, { toolDescriptionId }) =>
     state.filter((el) => el.id !== toolDescriptionId)

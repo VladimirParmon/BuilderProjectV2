@@ -10,6 +10,8 @@ import {
   CollageToolDescription,
   AudioFileDescription,
   AudioToolDescription,
+  PDFFileDescription,
+  PDFToolDescription,
 } from 'src/constants/models';
 import { contentsActions, filesActions, toolsActions } from 'src/redux/actions';
 import { v4 as uuidv4 } from 'uuid';
@@ -60,7 +62,25 @@ export class ToolService {
   }
 
   createNewVideoTool(pageId: string, fileName: string) {}
-  createNewPDFTool(pageId: string, fileNames: string[]) {}
+
+  createNewPDFTool(pageId: string, fileNames: string[]) {
+    const PDFToolDescriptionId = uuidv4();
+    const filesDescriptions: PDFFileDescription[] = fileNames.map((name) => ({
+      id: uuidv4(),
+      pathToFile: name,
+    }));
+    const fileDescriptionIds = filesDescriptions.map((d) => d.id);
+
+    const PDFToolDescription: PDFToolDescription = {
+      id: PDFToolDescriptionId,
+      type: ToolNames.PDF,
+      content: fileDescriptionIds,
+    };
+    this.store.dispatch(filesActions.insertNewPDFFilesDescriptions({ filesDescriptions }));
+    this.store.dispatch(toolsActions.insertNewPDFTool({ PDFToolDescription }));
+    this.store.dispatch(contentsActions.addTool({ pageId, toolId: PDFToolDescriptionId }));
+  }
+
   createNewCollageTool(pageId: string, fileNames: string[]) {
     const collageToolDescriptionId = uuidv4();
     const filesDescriptions: ImageFileDescription[] = fileNames.map((name) => ({
