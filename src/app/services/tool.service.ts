@@ -8,6 +8,8 @@ import {
   FileDescriptionId,
   ImageFileDescription,
   CollageToolDescription,
+  AudioFileDescription,
+  AudioToolDescription,
 } from 'src/constants/models';
 import { contentsActions, filesActions, toolsActions } from 'src/redux/actions';
 import { v4 as uuidv4 } from 'uuid';
@@ -39,7 +41,24 @@ export class ToolService {
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: textToolDescriptionId }));
   }
 
-  createNewAudioTool(pageId: string, fileNames: string[]) {}
+  createNewAudioTool(pageId: string, fileNames: string[]) {
+    const audioToolDescriptionId = uuidv4();
+    const filesDescriptions: AudioFileDescription[] = fileNames.map((name) => ({
+      id: uuidv4(),
+      pathToFile: name,
+    }));
+    const fileDescriptionIds = filesDescriptions.map((d) => d.id);
+
+    const audioToolDescription: AudioToolDescription = {
+      id: audioToolDescriptionId,
+      type: ToolNames.AUDIO,
+      content: fileDescriptionIds,
+    };
+    this.store.dispatch(filesActions.insertNewAudioFilesDescriptions({ filesDescriptions }));
+    this.store.dispatch(toolsActions.insertNewAudioTool({ audioToolDescription }));
+    this.store.dispatch(contentsActions.addTool({ pageId, toolId: audioToolDescriptionId }));
+  }
+
   createNewVideoTool(pageId: string, fileName: string) {}
   createNewPDFTool(pageId: string, fileNames: string[]) {}
   createNewCollageTool(pageId: string, fileNames: string[]) {
@@ -59,7 +78,7 @@ export class ToolService {
       currentAlignItems: Defaults.alignItems,
       currentFlow: Defaults.flow,
     };
-    this.store.dispatch(filesActions.insertNewImageFileDescriptions({ filesDescriptions }));
+    this.store.dispatch(filesActions.insertNewImageFilesDescriptions({ filesDescriptions }));
     this.store.dispatch(toolsActions.insertNewCollageTool({ collageToolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: collageToolDescriptionId }));
   }

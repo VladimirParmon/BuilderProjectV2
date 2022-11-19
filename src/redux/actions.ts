@@ -6,6 +6,8 @@ import {
   TextDescription,
   ImageFileDescription,
   CollageToolDescription,
+  AudioFileDescription,
+  AudioToolDescription,
 } from '../constants/models';
 
 enum APIActions {
@@ -99,7 +101,7 @@ const insertNewTextStorageUnit = createAction(
   FileActions.insertText,
   props<{ textDescription: TextDescription }>()
 );
-const insertNewImageFileDescriptions = createAction(
+const insertNewImageFilesDescriptions = createAction(
   FileActions.insertImages,
   props<{ filesDescriptions: ImageFileDescription[] }>()
 );
@@ -111,10 +113,11 @@ const insertNewPDFStorageUnit = createAction(
   FileActions.insertPDF,
   props<{ path: string; title?: string }>()
 );
-const insertNewAudioStorageUnit = createAction(
+const insertNewAudioFilesDescriptions = createAction(
   FileActions.insertAudio,
-  props<{ path: string; title?: string }>()
+  props<{ filesDescriptions: AudioFileDescription[] }>()
 );
+
 const deleteTextStorageUnit = createAction(FileActions.deleteText, props<{ id: string }>());
 
 //Tools
@@ -126,7 +129,7 @@ const insertNewCollageTool = createAction(
 );
 const insertNewAudioTool = createAction(
   ToolsActions.insertNewAudioTool,
-  props<{ files: string[] }>()
+  props<{ audioToolDescription: AudioToolDescription }>()
 );
 const insertNewVideoTool = createAction(
   ToolsActions.insertNewVideoTool,
@@ -166,10 +169,8 @@ export const contentsActions = {
 export const filesActions = {
   updateTextStorageUnit,
   insertNewTextStorageUnit,
-  insertNewImageFileDescriptions,
-  insertNewVideoStorageUnit,
-  insertNewPDFStorageUnit,
-  insertNewAudioStorageUnit,
+  insertNewImageFilesDescriptions,
+  insertNewAudioFilesDescriptions,
   deleteTextStorageUnit,
 };
 

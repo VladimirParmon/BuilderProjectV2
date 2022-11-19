@@ -1,7 +1,6 @@
 import { ActionReducerMap, createReducer, on } from '@ngrx/store';
 import { globalActions, filesActions, contentsActions, toolsActions } from './actions';
 import { JSONDataStorage } from '../constants/models';
-import { Defaults } from 'src/app/services/defaults';
 import { MediaFileTypes, ToolNames } from '../constants/constants';
 
 export const initialState: JSONDataStorage = {
@@ -81,43 +80,16 @@ export const filesReducer = createReducer(
     ...state,
     text: state.text.map((el) => (el.id === id ? { ...el, text: newText } : el)),
   })),
-  on(filesActions.insertNewImageFileDescriptions, (state, { filesDescriptions }) => {
+  on(filesActions.insertNewImageFilesDescriptions, (state, { filesDescriptions }) => {
     return {
       ...state,
       images: [...state.images, ...filesDescriptions],
     };
   }),
-  on(filesActions.insertNewVideoStorageUnit, (state, { path, title }) => {
-    const newVideoUnit = {
-      id: '',
-      pathToFile: path,
-      title: title,
-    };
+  on(filesActions.insertNewAudioFilesDescriptions, (state, { filesDescriptions }) => {
     return {
       ...state,
-      videos: [...state.videos, { ...newVideoUnit }],
-    };
-  }),
-  on(filesActions.insertNewPDFStorageUnit, (state, { path, title }) => {
-    const newPDFUnit = {
-      id: '',
-      pathToFile: path,
-      title: title,
-    };
-    return {
-      ...state,
-      PDFs: [...state.PDFs, { ...newPDFUnit }],
-    };
-  }),
-  on(filesActions.insertNewAudioStorageUnit, (state, { path, title }) => {
-    const newAudioUnit = {
-      id: '',
-      pathToFile: path,
-      title: title,
-    };
-    return {
-      ...state,
-      audios: [...state.audios, { ...newAudioUnit }],
+      audios: [...state.images, ...filesDescriptions],
     };
   }),
   on(filesActions.deleteTextStorageUnit, (state, { id }) => ({
@@ -132,13 +104,8 @@ const toolsReducer = createReducer(
   on(toolsActions.insertNewCollageTool, (state, { collageToolDescription }) => {
     return [...state, collageToolDescription];
   }),
-  on(toolsActions.insertNewAudioTool, (state, { files }) => {
-    const newAudioTool = {
-      id: '',
-      type: ToolNames.AUDIO,
-      content: files,
-    };
-    return [...state, { ...newAudioTool }];
+  on(toolsActions.insertNewAudioTool, (state, { audioToolDescription }) => {
+    return [...state, audioToolDescription];
   }),
   on(toolsActions.insertNewSliderTool, (state, { files }) => {
     const newSliderTool = {

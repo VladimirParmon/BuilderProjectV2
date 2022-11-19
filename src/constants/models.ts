@@ -82,10 +82,10 @@ export interface CollageToolDescription extends BasicToolDescription {
   currentFlow: FlexboxFlowOptions;
 }
 
-type SliderToolDescription = BasicToolDescription;
-type AudioToolDescription = BasicToolDescription;
-type VideoToolDescription = BasicToolDescription;
-type PDFToolDescription = BasicToolDescription;
+export type SliderToolDescription = BasicToolDescription;
+export type AudioToolDescription = BasicToolDescription;
+export type VideoToolDescription = BasicToolDescription;
+export type PDFToolDescription = BasicToolDescription;
 export type TextToolDescription = BasicToolDescription;
 
 export interface Lookup {
