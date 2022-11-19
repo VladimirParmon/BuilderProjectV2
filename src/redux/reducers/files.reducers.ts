@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { globalActions } from 'src/redux/actions/global.actions';
 import { filesActions } from 'src/redux/actions/files.actions';
-import { initialState } from './index.reducers';
+import { initialState } from 'src/redux/';
 
 export const filesReducer = createReducer(
   initialState.files,

@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { globalActions } from 'src/redux/actions/global.actions';
 import { contentsActions } from 'src/redux/actions/contents.actions';
-import { initialState } from './index.reducers';
+import { initialState } from 'src/redux/';
 
 export const contentsReducer = createReducer(
   initialState.contents,
