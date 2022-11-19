@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { JSONDataStorage } from 'src/constants/models';
-import { globalActions } from 'src/redux/actions';
+import { globalActions } from 'src/redux/actions/global.actions';
 
 @Injectable({
   providedIn: 'root',

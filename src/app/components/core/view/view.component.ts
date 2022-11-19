@@ -7,8 +7,8 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { SinglePageInfo } from 'src/constants/models';
 import { Store } from '@ngrx/store';
-import { getOnePageInfo } from 'src/redux/selectors';
-import { contentsActions } from 'src/redux/actions';
+import { getOnePageInfo } from 'src/redux/selectors/contents.selectors';
+import { contentsActions } from 'src/redux/actions/contents.actions';
 
 @Component({
   selector: 'app-view',

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as m from 'src/constants/models';
-import { contentsActions, filesActions, toolsActions } from 'src/redux/actions';
+import { contentsActions } from 'src/redux/actions/contents.actions';
+import { filesActions } from 'src/redux/actions/files.actions';
+import { toolsActions } from 'src/redux/actions/tools.actions';
 import { v4 as uuidv4 } from 'uuid';
 import { ToolNames } from 'src/constants/constants';
 import { Defaults } from './defaults';

@@ -13,7 +13,7 @@ import {
   DropInfo,
 } from 'src/constants/models';
 import { ModalWindowsText, ExpandButtonInnerText } from 'src/constants/constants';
-import { selectAllPagesInfo } from 'src/redux/selectors';
+import { selectAllPagesInfo } from 'src/redux/selectors/contents.selectors';
 import { tap } from 'rxjs';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 import { UtilsService } from 'src/app/services/utils.service';

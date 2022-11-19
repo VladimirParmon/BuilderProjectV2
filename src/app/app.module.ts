@@ -14,7 +14,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ToolGeneratorComponent } from './components/tool-generator/tool-generator.component';
 import { TextComponent } from './components/tools/text/text.component';
 import { HttpClientModule } from '@angular/common/http';
-import { reducers } from 'src/redux/reducers';
+import { reducers } from 'src/redux/reducers/index.reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';

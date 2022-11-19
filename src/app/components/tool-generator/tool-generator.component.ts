@@ -8,8 +8,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ConfirmActionComponent } from '../modals/confirm-action/confirm-action.component';
 import { Store } from '@ngrx/store';
-import { selectToolDescription } from 'src/redux/selectors';
-import { contentsActions, filesActions, toolsActions } from 'src/redux/actions';
+import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
+import { contentsActions } from 'src/redux/actions/contents.actions';
+import { filesActions } from 'src/redux/actions/files.actions';
+import { toolsActions } from 'src/redux/actions/tools.actions';
 
 @Component({
   selector: 'app-tool-generator',
