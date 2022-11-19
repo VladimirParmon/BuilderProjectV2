@@ -1,5 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Junction, ModalWindowsText, ToolNames } from 'src/constants/models';
+import {
+  ToolDescription,
+  ModalWindowsText,
+  ToolNames,
+} from 'src/constants/models';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
@@ -7,12 +11,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ConfirmActionComponent } from '../modals/confirm-action/confirm-action.component';
 import { Store } from '@ngrx/store';
-import { selectJunction } from 'src/redux/selectors';
-import {
-  contentsActions,
-  filesActions,
-  junctionsActions,
-} from 'src/redux/actions';
+import { selectToolDescription } from 'src/redux/selectors';
+import { contentsActions, filesActions, toolsActions } from 'src/redux/actions';
 
 @Component({
   selector: 'app-tool-generator',
@@ -38,7 +38,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
   @Input() pageId: string = '';
   names = ToolNames;
   destroy$: Subject<boolean> = new Subject<boolean>();
-  toolDescription: Junction | null = null;
+  toolDescription: ToolDescription | null = null;
 
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
 
@@ -51,7 +51,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store
-      .select(selectJunction(this.toolDescriptionId))
+      .select(selectToolDescription(this.toolDescriptionId))
       .pipe(takeUntil(this.destroy$))
       .subscribe((toolData) => {
         if (toolData) this.toolDescription = toolData;
@@ -76,7 +76,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
   }
 
   deleteTextTool(toolDescriptionId: string) {
-    this.store.dispatch(junctionsActions.deleteTextTool({ toolDescriptionId }));
+    this.store.dispatch(toolsActions.deleteTextTool({ toolDescriptionId }));
     this.store.dispatch(
       contentsActions.deleteTool({ pageId: this.pageId, toolDescriptionId })
     );

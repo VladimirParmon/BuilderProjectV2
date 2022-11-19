@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
 import { UtilsService } from 'src/app/services/utils.service';
 import {
-  TextFieldDescription,
+  TextDescription,
   ToolDescriptionContent,
   ToolNames,
 } from 'src/constants/models';
@@ -33,9 +33,8 @@ export class TextComponent implements OnInit {
         .select(getSingleFile({ id: this.textFileId, type: ToolNames.TEXT }))
         .pipe(takeUntil(this.destroy$))
         .subscribe((data) => {
-          const textFieldDescription = data as TextFieldDescription;
-          if (textFieldDescription)
-            this.textToDisplay = textFieldDescription.text;
+          const textDescription = data as TextDescription;
+          if (textDescription) this.textToDisplay = textDescription.text;
         });
     }
   }

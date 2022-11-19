@@ -1,5 +1,5 @@
 {
-  "contentsList": [
+  "contents": [
     {
       "id": "somePageId",
       "name": "somePageName",
@@ -41,7 +41,7 @@
     "PDFs": [],
     "audios": []
   },
-  "junctions": [
+  "tools": [
     {
       "id": "someToolDescriptionId",
       "type": "text",

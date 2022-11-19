@@ -4,6 +4,8 @@ import {
   FlexboxPositioningOptions,
   JSONDataStorage,
   SinglePageInfo,
+  TextToolDescription,
+  TextDescription,
 } from '../constants/models';
 
 enum APIActions {
@@ -20,6 +22,7 @@ enum ContentsActions {
   updateWholeChildrenArray = '[Contents/Page] Insert newly formed array as a part of DND operation',
   updateWholeSlice = '[Contents/Whole] Update the whole contents array',
   deleteTool = '[Contents/Tools] Delete a tool from page tools array',
+  addTool = '[Contents/Tools] Add a new tool id to array of tool ids',
 }
 
 enum FileActions {
@@ -32,14 +35,14 @@ enum FileActions {
   deleteText = '[Files/Text] Delete a text storage unit',
 }
 
-enum JunctionsActions {
-  insertNewCollageTool = '[Junctions/Collage] Insert a new collage tool description',
-  insertNewSliderTool = '[Junctions/Slider] Insert a new slider tool description',
-  insertNewAudioTool = '[Junctions/Audio] Insert a new audio tool description',
-  insertNewVideoTool = '[Junctions/Video] Insert a new video tool description',
-  insertNewPDFTool = '[Junctions/PDF] Insert a new PDF tool description',
-  insertNewTextTool = '[Junctions/Text] Insert a new text tool description',
-  deleteTextTool = '[Junctions/Text] Delete a text tool using its id',
+enum ToolsActions {
+  insertNewCollageTool = '[Tools/Collage] Insert a new collage tool description',
+  insertNewSliderTool = '[Tools/Slider] Insert a new slider tool description',
+  insertNewAudioTool = '[Tools/Audio] Insert a new audio tool description',
+  insertNewVideoTool = '[Tools/Video] Insert a new video tool description',
+  insertNewPDFTool = '[Tools/PDF] Insert a new PDF tool description',
+  insertNewTextTool = '[Tools/Text] Insert a new text tool description',
+  deleteTextTool = '[Tools/Text] Delete a text tool using its id',
 }
 
 //Global
@@ -85,13 +88,20 @@ const deleteTool = createAction(
   ContentsActions.deleteTool,
   props<{ pageId: string; toolDescriptionId: string }>()
 );
+const addTool = createAction(
+  ContentsActions.addTool,
+  props<{ pageId: string; toolId: string }>()
+);
 
 //Files
 const updateTextStorageUnit = createAction(
   FileActions.updateText,
   props<{ id: string; newText: string }>()
 );
-const insertNewTextStorageUnit = createAction(FileActions.insertText);
+const insertNewTextStorageUnit = createAction(
+  FileActions.insertText,
+  props<{ textDescription: TextDescription }>()
+);
 const insertNewImageStorageUnit = createAction(
   FileActions.insertImage,
   props<{ path: string; title?: string; width?: number }>()
@@ -113,9 +123,9 @@ const deleteTextStorageUnit = createAction(
   props<{ id: string }>()
 );
 
-//Junctions
+//Tools
 const insertNewCollageTool = createAction(
-  JunctionsActions.insertNewCollageTool,
+  ToolsActions.insertNewCollageTool,
   props<{
     files: string[];
     justify?: FlexboxPositioningOptions;
@@ -124,27 +134,27 @@ const insertNewCollageTool = createAction(
   }>()
 );
 const insertNewAudioTool = createAction(
-  JunctionsActions.insertNewAudioTool,
+  ToolsActions.insertNewAudioTool,
   props<{ files: string[] }>()
 );
 const insertNewVideoTool = createAction(
-  JunctionsActions.insertNewVideoTool,
+  ToolsActions.insertNewVideoTool,
   props<{ files: string[] }>()
 );
 const insertNewSliderTool = createAction(
-  JunctionsActions.insertNewSliderTool,
+  ToolsActions.insertNewSliderTool,
   props<{ files: string[] }>()
 );
 const insertNewPDFTool = createAction(
-  JunctionsActions.insertNewPDFTool,
+  ToolsActions.insertNewPDFTool,
   props<{ files: string[] }>()
 );
 const insertNewTextTool = createAction(
-  JunctionsActions.insertNewTextTool,
-  props<{ files: string[] }>()
+  ToolsActions.insertNewTextTool,
+  props<{ toolDescription: TextToolDescription }>()
 );
 const deleteTextTool = createAction(
-  JunctionsActions.deleteTextTool,
+  ToolsActions.deleteTextTool,
   props<{ toolDescriptionId: string }>()
 );
 
@@ -162,6 +172,7 @@ export const contentsActions = {
   updateWholeChildrenArray,
   updateWholeSlice,
   deleteTool,
+  addTool,
 };
 
 export const filesActions = {
@@ -174,7 +185,7 @@ export const filesActions = {
   deleteTextStorageUnit,
 };
 
-export const junctionsActions = {
+export const toolsActions = {
   insertNewCollageTool,
   insertNewAudioTool,
   insertNewVideoTool,

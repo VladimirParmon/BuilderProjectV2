@@ -1,15 +1,21 @@
 type PageId = string;
-type ToolDescriptionId = string;
+export type ToolDescriptionId = string;
 type FileDescriptionId = string;
-export type TextFieldId = string;
+export type TextDescriptionId = string;
 
 export interface JSONDataStorage {
-  contentsList: SinglePageInfo[];
-  files: MultimediaFiles;
-  junctions: Junction[];
+  contents: SinglePageInfo[];
+  files: MultimediaFilesCategories;
+  tools: ToolDescription[];
 }
 
-export type Junction = Collage | Slider | Audio | Video | PDF | Text;
+export type ToolDescription =
+  | CollageToolDescription
+  | SliderToolDescription
+  | AudioToolDescription
+  | VideoToolDescription
+  | PDFToolDescription
+  | TextToolDescription;
 
 export interface SinglePageInfo {
   id: PageId;
@@ -43,30 +49,34 @@ export enum MediaFileTypes {
   AUDIOS = 'audios',
 }
 
-export type MultimediaFiles = {
-  [MediaFileTypes.TEXT]: TextFieldDescription[];
-  [MediaFileTypes.IMAGES]: ImageDescription[];
-  [MediaFileTypes.VIDEOS]: FileDescription[];
-  [MediaFileTypes.PDFs]: FileDescription[];
-  [MediaFileTypes.AUDIOS]: FileDescription[];
+export type MultimediaFilesCategories = {
+  [MediaFileTypes.TEXT]: TextDescription[];
+  [MediaFileTypes.IMAGES]: ImageFileDescription[];
+  [MediaFileTypes.VIDEOS]: VideoFileDescription[];
+  [MediaFileTypes.PDFs]: PDFFileDescription[];
+  [MediaFileTypes.AUDIOS]: AudioFileDescription[];
 };
 
-export interface TextFieldDescription {
-  id: TextFieldId;
+export interface TextDescription {
+  id: TextDescriptionId;
   text: string;
 }
 
-export interface FileDescription {
+export interface BasicFileDescription {
   id: FileDescriptionId;
   pathToFile: string;
   title?: string;
 }
 
-export interface ImageDescription extends FileDescription {
+export type VideoFileDescription = BasicFileDescription;
+export type PDFFileDescription = BasicFileDescription;
+export type AudioFileDescription = BasicFileDescription;
+
+export interface ImageFileDescription extends BasicFileDescription {
   width: number;
 }
 
-interface ToolDescription {
+interface BasicToolDescription {
   id: ToolDescriptionId;
   type: ToolNames;
   content: ToolDescriptionContent;
@@ -75,19 +85,19 @@ interface ToolDescription {
 export type ToolDescriptionContent =
   | FileDescriptionId[]
   | FileDescriptionId
-  | TextFieldId;
+  | TextDescription;
 
-export interface Collage extends ToolDescription {
+export interface CollageToolDescription extends BasicToolDescription {
   currentJustifyContent: FlexboxPositioningOptions;
   currentAlignItems: FlexboxPositioningOptions;
   currentFlow: FlexboxFlowOptions;
 }
 
-type Slider = ToolDescription;
-type Audio = ToolDescription;
-type Video = ToolDescription;
-type PDF = ToolDescription;
-export type Text = ToolDescription;
+type SliderToolDescription = BasicToolDescription;
+type AudioToolDescription = BasicToolDescription;
+type VideoToolDescription = BasicToolDescription;
+type PDFToolDescription = BasicToolDescription;
+export type TextToolDescription = BasicToolDescription;
 
 export enum FlexboxPositioningOptions {
   START = 'flex-start',
@@ -139,7 +149,7 @@ export enum ModalWindowsText {
   DELETE_TOOL = 'tekst dlya tula',
 }
 
-export interface ToolsListOption {
+export interface ToolbarToolListOption {
   name: ToolNames;
   icon: string;
 }

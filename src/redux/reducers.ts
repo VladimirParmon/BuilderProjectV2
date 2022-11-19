@@ -3,18 +3,17 @@ import {
   globalActions,
   filesActions,
   contentsActions,
-  junctionsActions,
+  toolsActions,
 } from './actions';
 import {
   JSONDataStorage,
   MediaFileTypes,
   ToolNames,
 } from '../constants/models';
-import { v4 as uuidv4 } from 'uuid';
 import { Defaults } from 'src/app/services/defaults';
 
 export const initialState: JSONDataStorage = {
-  contentsList: [],
+  contents: [],
   files: {
     [MediaFileTypes.TEXT]: [],
     [MediaFileTypes.IMAGES]: [],
@@ -22,12 +21,12 @@ export const initialState: JSONDataStorage = {
     [MediaFileTypes.PDFs]: [],
     [MediaFileTypes.AUDIOS]: [],
   },
-  junctions: [],
+  tools: [],
 };
 
 const contentsReducer = createReducer(
-  initialState.contentsList,
-  on(globalActions.saveRetrievedData, (state, { data }) => data.contentsList),
+  initialState.contents,
+  on(globalActions.saveRetrievedData, (state, { data }) => data.contents),
   on(contentsActions.updatePageName, (state, { pageId, newName }) =>
     state.map((el) => (el.id === pageId ? { ...el, name: newName } : el))
   ),
@@ -75,20 +74,25 @@ const contentsReducer = createReducer(
         return el;
       }
     });
-  })
+  }),
+  on(contentsActions.addTool, (state, { pageId, toolId }) =>
+    state.map((p) => {
+      if (p.id === pageId) {
+        return { ...p, tools: [...p.tools, toolId] };
+      } else {
+        return p;
+      }
+    })
+  )
 );
 
 export const filesReducer = createReducer(
   initialState.files,
   on(globalActions.saveRetrievedData, (state, { data }) => data.files),
-  on(filesActions.insertNewTextStorageUnit, (state) => {
-    const newTextUnit = {
-      id: uuidv4(),
-      text: '',
-    };
+  on(filesActions.insertNewTextStorageUnit, (state, { textDescription }) => {
     return {
       ...state,
-      text: [...state.text, { ...newTextUnit }],
+      text: [...state.text, textDescription],
     };
   }),
   on(filesActions.updateTextStorageUnit, (state, { id, newText }) => ({
@@ -101,7 +105,7 @@ export const filesReducer = createReducer(
     filesActions.insertNewImageStorageUnit,
     (state, { path, title, width }) => {
       const newImageUnit = {
-        id: uuidv4(),
+        id: '',
         pathToFile: path,
         title: title,
         width: width || Defaults.defaultImageWidth,
@@ -114,7 +118,7 @@ export const filesReducer = createReducer(
   ),
   on(filesActions.insertNewVideoStorageUnit, (state, { path, title }) => {
     const newVideoUnit = {
-      id: uuidv4(),
+      id: '',
       pathToFile: path,
       title: title,
     };
@@ -125,7 +129,7 @@ export const filesReducer = createReducer(
   }),
   on(filesActions.insertNewPDFStorageUnit, (state, { path, title }) => {
     const newPDFUnit = {
-      id: uuidv4(),
+      id: '',
       pathToFile: path,
       title: title,
     };
@@ -136,7 +140,7 @@ export const filesReducer = createReducer(
   }),
   on(filesActions.insertNewAudioStorageUnit, (state, { path, title }) => {
     const newAudioUnit = {
-      id: uuidv4(),
+      id: '',
       pathToFile: path,
       title: title,
     };
@@ -151,14 +155,14 @@ export const filesReducer = createReducer(
   }))
 );
 
-const junctionsReducer = createReducer(
-  initialState.junctions,
-  on(globalActions.saveRetrievedData, (state, { data }) => data.junctions),
+const toolsReducer = createReducer(
+  initialState.tools,
+  on(globalActions.saveRetrievedData, (state, { data }) => data.tools),
   on(
-    junctionsActions.insertNewCollageTool,
+    toolsActions.insertNewCollageTool,
     (state, { files, justify, align, flow }) => {
       const newCollageTool = {
-        id: uuidv4(),
+        id: '',
         type: ToolNames.COLLAGE,
         content: files,
         currentJustifyContent: justify || Defaults.justifyContent,
@@ -168,53 +172,48 @@ const junctionsReducer = createReducer(
       return [...state, { ...newCollageTool }];
     }
   ),
-  on(junctionsActions.insertNewAudioTool, (state, { files }) => {
+  on(toolsActions.insertNewAudioTool, (state, { files }) => {
     const newAudioTool = {
-      id: uuidv4(),
+      id: '',
       type: ToolNames.AUDIO,
       content: files,
     };
     return [...state, { ...newAudioTool }];
   }),
-  on(junctionsActions.insertNewSliderTool, (state, { files }) => {
+  on(toolsActions.insertNewSliderTool, (state, { files }) => {
     const newSliderTool = {
-      id: uuidv4(),
+      id: '',
       type: ToolNames.SLIDER,
       content: files,
     };
     return [...state, { ...newSliderTool }];
   }),
-  on(junctionsActions.insertNewVideoTool, (state, { files }) => {
+  on(toolsActions.insertNewVideoTool, (state, { files }) => {
     const newVideoTool = {
-      id: uuidv4(),
+      id: '',
       type: ToolNames.VIDEO,
       content: files,
     };
     return [...state, { ...newVideoTool }];
   }),
-  on(junctionsActions.insertNewTextTool, (state, { files }) => {
-    const newTextTool = {
-      id: uuidv4(),
-      type: ToolNames.TEXT,
-      content: files,
-    };
-    return [...state, { ...newTextTool }];
+  on(toolsActions.insertNewTextTool, (state, { toolDescription }) => {
+    return [...state, toolDescription];
   }),
-  on(junctionsActions.insertNewPDFTool, (state, { files }) => {
+  on(toolsActions.insertNewPDFTool, (state, { files }) => {
     const newPDFTool = {
-      id: uuidv4(),
+      id: '',
       type: ToolNames.PDF,
       content: files,
     };
     return [...state, { ...newPDFTool }];
   }),
-  on(junctionsActions.deleteTextTool, (state, { toolDescriptionId }) =>
+  on(toolsActions.deleteTextTool, (state, { toolDescriptionId }) =>
     state.filter((el) => el.id !== toolDescriptionId)
   )
 );
 
 export const reducers: ActionReducerMap<JSONDataStorage> = {
-  contentsList: contentsReducer,
+  contents: contentsReducer,
   files: filesReducer,
-  junctions: junctionsReducer,
+  tools: toolsReducer,
 };
