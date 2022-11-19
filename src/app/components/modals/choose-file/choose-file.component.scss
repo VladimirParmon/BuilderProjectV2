@@ -1,0 +1,71 @@
+@use "@angular/material" as mat;
+@use "../../../../styles.scss";
+
+.dropZone {
+  width: 450px;
+  height: 200px;
+  padding: 2rem;
+  text-align: center;
+  border: dashed 1px mat.get-color-from-palette(styles.$Builder-accent, 900);
+  position: relative;
+  margin: 0 auto;
+
+  input {
+    display: none;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+}
+
+.fileover {
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  transition: 0.4s;
+}
+
+.files-list {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 300px;
+
+  .file {
+    display: flex;
+    padding: 0.5rem;
+    justify-content: space-between;
+    align-items: center;
+    border: dashed 1px mat.get-color-from-palette(styles.$Builder-accent, 900);
+    margin-bottom: 1rem;
+    width: 100%;
+
+    .delete {
+      margin-left: 0.5rem;
+      cursor: pointer;
+      align-self: flex-end;
+    }
+
+    &-name {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    &-size {
+      font-size: 12px;
+      margin: 0;
+      margin-bottom: 0.25rem;
+    }
+
+    &-info {
+      width: 100%;
+    }
+
+    &-icon {
+      margin-right: 10px;
+    }
+  }
+}

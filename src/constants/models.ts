@@ -160,9 +160,3 @@ export enum inputTypes {
   AUDIO = '.mp3, .wav, .flac',
   PDF = '.pdf',
 }
-
-export interface imageDescription {
-  index: number;
-  src: string;
-  width: number;
-}

@@ -1,0 +1,40 @@
+<mat-dialog-content>
+  <div class="dropZone" appFileUploadDND (fileDropped)="onFileDropped($event)">
+    <input
+      type="file"
+      #fileDropRef
+      id="fileDropRef"
+      [multiple]="isMultipleAllowed()"
+      (change)="fileBrowseHandler($event.target)"
+      [accept]="getFileTypes()"
+    />
+    <mat-icon>upload_file</mat-icon>
+    <h3>Перетащите файл(ы) сюда</h3>
+    <h3>или</h3>
+    <button mat-raised-button color="warn" (click)="fileDropRef.click()">
+      Выберите файл(ы)
+    </button>
+  </div>
+
+  <div class="files-list">
+    <div class="file" *ngFor="let file of files; let i = index">
+      <mat-icon class="file-icon">description</mat-icon>
+      <div class="file-info">
+        <h4 class="file-name">{{ file?.name }}</h4>
+        <p class="file-size">{{ utilsService.formatBytes(file?.size) }}</p>
+      </div>
+      <mat-icon class="delete" (click)="deleteFile(i)">delete</mat-icon>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Отмена</button>
+  <button
+    mat-raised-button
+    (click)="submitFiles()"
+    [disabled]="files.length === 0"
+  >
+    Принять
+  </button>
+</mat-dialog-actions>

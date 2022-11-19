@@ -30,6 +30,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ConfirmActionComponent } from './components/modals/confirm-action/confirm-action.component';
 import { EnterNameComponent } from './components/modals/enter-name/enter-name.component';
+import { ChooseFileComponent } from './components/modals/choose-file/choose-file.component';
+import { FileUploadDNDDirective } from './directives/file-upload-dnd.directive';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { EnterNameComponent } from './components/modals/enter-name/enter-name.co
     TextComponent,
     ConfirmActionComponent,
     EnterNameComponent,
+    ChooseFileComponent,
+    FileUploadDNDDirective,
   ],
   imports: [
     FormsModule,
