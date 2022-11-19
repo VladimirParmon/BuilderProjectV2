@@ -12,17 +12,14 @@ export class StateService {
   isContentsMenuOpen$ = new BehaviorSubject(true);
   isGlobalEditOn$ = new BehaviorSubject(true);
   currentPageId$ = new Subject<string>();
-  private _jsonURL = 'assets/mock.json';
 
   constructor(private http: HttpClient, private store: Store) {}
 
   getData(): void {
-    //TODO: http call
-    this.http.get(this._jsonURL).subscribe((res) => {
-      const retrievedData = res as JSONDataStorage;
-      this.store.dispatch(
-        globalActions.saveRetrievedData({ data: retrievedData })
-      );
-    });
+    this.http
+      .get<JSONDataStorage>('http://127.0.0.1:3000/getTree')
+      .subscribe((data) => {
+        this.store.dispatch(globalActions.saveRetrievedData({ data }));
+      });
   }
 }
