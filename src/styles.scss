@@ -2,7 +2,7 @@
 @use "./constants/_palette" as palette;
 @include mat.core();
 
-//@import "~quill/dist/quill.snow.css";
+@import "~quill/dist/quill.snow.css";
 
 $Builder-primary: mat.define-palette(palette.$mslu);
 $Builder-accent: mat.define-palette(palette.$mslu-light);
@@ -36,7 +36,6 @@ body {
 
 * {
   box-sizing: border-box;
-  // transition: 0.4s;
 }
 
 .add-page-dialog {
@@ -77,16 +76,6 @@ app-video {
   padding-right: 15px;
 }
 
-// .hide-toolbar {
-//   .ql-container {
-//     border: none;
-//   }
-
-//   .ql-toolbar {
-//     display: none;
-//   }
-// }
-
 .custom-images {
   .mat-radio-container {
     display: none;
@@ -111,33 +100,74 @@ app-video {
   }
 }
 
-// /* Set dropdown font-families */
+//################ Quill editor #####################
 
-// [quill-editor-toolbar] .ql-font span[data-label="Aref Ruqaa"]::before {
-//   font-family: "Aref Ruqaa";
-// }
+@function str-replace($string, $search, $replace: "") {
+  $index: str-index($string, $search);
 
-// [quill-editor-toolbar] .ql-font span[data-label="Mirza"]::before {
-//   font-family: "Mirza";
-// }
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace +
+      str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
 
-// [quill-editor-toolbar] .ql-font span[data-label="Roboto"]::before {
-//   font-family: "Roboto";
-// }
+  @return $string;
+}
 
-// /* Set content font-families */
+quill-editor {
+  display: block !important; //otherwise it does not stretch 100% of the page
+}
 
-// .ql-font-mirza {
-//   font-family: "Mirza";
-// }
+.ql-editor {
+  font-family: "Times New Roman";
+}
 
-// .ql-font-aref {
-//   font-family: "Aref Ruqaa";
-// }
+.hide-toolbar {
+  .ql-container {
+    border: none;
+  }
+  .ql-toolbar {
+    display: none;
+  }
+}
 
-// .ql-font-roboto {
-//   font-family: "Roboto";
-// }
+.ql-snow .ql-picker.ql-font {
+  //the width of the font picker (default is too small)
+  width: 200px;
+}
+
+$text-editor-fonts: "Times_New_Roman", "Franklin_Gothic_Medium", "Arial", "Verdana", "Tahoma",
+  "Trebuchet_MS", "Georgia", "Garamond", "Courier_New", "Brush_Script_MT";
+
+$text-editor-sizes: "8px", "9px", "10px", "12px", "14px", "16px", "20px", "24px", "32px", "42px",
+  "54px", "68px", "84px", "98px";
+
+@each $text-editor-font in $text-editor-fonts {
+  $restored-font-name: str-replace($text-editor-font, "_", " ");
+  //Font change for the text
+  .ql-font-#{$text-editor-font} {
+    font-family: $restored-font-name;
+  }
+  //Font change for the label in the pick list
+  span[data-value="#{$text-editor-font}"] {
+    font-family: $restored-font-name;
+    &::before {
+      content: $restored-font-name !important;
+    }
+  }
+}
+
+.snackbar-center .mat-simple-snackbar {
+  justify-content: center;
+}
+
+@each $text-editor-size in $text-editor-sizes {
+  span[data-value="#{$text-editor-size}"] {
+    &::before {
+      font-size: $text-editor-size !important;
+      content: $text-editor-size !important;
+    }
+  }
+}
 
 @media screen and (max-width: 640px) {
   app-contents {
@@ -146,9 +176,6 @@ app-video {
     top: 0;
     right: 0;
     z-index: 2;
-    background-color: rgba(
-      $color: mat.get-color-from-palette($Builder-accent, 50),
-      $alpha: 0.97
-    );
+    background-color: rgba($color: mat.get-color-from-palette($Builder-accent, 50), $alpha: 0.97);
   }
 }

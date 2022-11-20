@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Lookup, RecursiveTreeNode, SinglePageInfo } from 'src/constants/models';
 import { MediaFileTypes, ToolNames } from 'src/constants/constants';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilsService {
-  constructor() {}
+  constructor(private snackBar: MatSnackBar) {}
 
   arrayToTree(array: SinglePageInfo[], nodeLookup: Lookup): RecursiveTreeNode[] {
     const arrayDeepCopy = this.arrayDeepCopy(array);
@@ -93,5 +94,12 @@ export class UtilsService {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  openSnackBar(message: string, action?: string, duration?: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+      panelClass: action ? undefined : 'snackbar-center',
+    });
   }
 }

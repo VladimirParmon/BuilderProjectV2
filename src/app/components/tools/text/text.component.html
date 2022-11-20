@@ -1,1 +1,18 @@
-<p>{{ textToDisplay }}</p>
+<form [formGroup]="quillForm" class="quill-editor">
+  <ng-container *ngIf="isGlobalEditOn$ | async">
+    <mat-icon class="quill-editor-icon" *ngIf="isToolbarHidden" (click)="isToolbarHidden = false"
+      >edit</mat-icon
+    >
+    <mat-icon class="quill-editor-icon" *ngIf="!isToolbarHidden" (click)="save()">save</mat-icon>
+  </ng-container>
+  <quill-editor
+    [readOnly]="((isGlobalEditOn$ | async) ? false : true) || isToolbarHidden"
+    formControlName="html"
+    [ngClass]="{
+      'hide-toolbar': isToolbarHidden || ((isGlobalEditOn$ | async) ? false : true)
+    }"
+    [modules]="modules"
+    placeholder="Пожалуйста, введите текст..."
+  >
+  </quill-editor>
+</form>

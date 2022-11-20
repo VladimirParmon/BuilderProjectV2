@@ -1,0 +1,22 @@
+.quill-editor-icon {
+  transition: transform 0.2s;
+  width: 26px;
+  height: 26px;
+  font-size: 26px;
+  color: #60626f;
+  cursor: pointer;
+
+  &-edit {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.quill-editor {
+  background-color: rgba($color: #ffffff, $alpha: 0.6);
+}

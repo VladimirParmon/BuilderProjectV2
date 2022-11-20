@@ -17,7 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { reducers } from 'src/redux/reducers/index.reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,6 +32,9 @@ import { ConfirmActionComponent } from './components/modals/confirm-action/confi
 import { EnterNameComponent } from './components/modals/enter-name/enter-name.component';
 import { ChooseFileComponent } from './components/modals/choose-file/choose-file.component';
 import { FileUploadDNDDirective } from './directives/file-upload-dnd.directive';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -52,6 +55,7 @@ import { FileUploadDNDDirective } from './directives/file-upload-dnd.directive';
   ],
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
@@ -67,6 +71,8 @@ import { FileUploadDNDDirective } from './directives/file-upload-dnd.directive';
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({}),
     BrowserAnimationsModule,
+    QuillModule.forRoot(),
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

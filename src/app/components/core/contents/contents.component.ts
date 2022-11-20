@@ -98,7 +98,10 @@ export class ContentsComponent implements OnDestroy {
   }
 
   toggleGlobalEdit(checkboxValue: boolean) {
-    this.isDraggable = false;
+    if (checkboxValue === false) {
+      this.isDraggable = false;
+      this.utilsService.openSnackBar('Не забудьте сохранить изменения', undefined, 1000);
+    }
     this.stateService.isGlobalEditOn$.next(checkboxValue);
   }
 
