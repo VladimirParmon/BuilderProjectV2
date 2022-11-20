@@ -20,6 +20,8 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { ConfirmActionComponent } from '../../modals/confirm-action/confirm-action.component';
 import { EnterNameComponent } from '../../modals/enter-name/enter-name.component';
 import { Router } from '@angular/router';
+import { v4 as uuidv4 } from 'uuid';
+import { contentsActions } from 'src/redux/actions/contents.actions';
 
 @Component({
   selector: 'app-contents',
@@ -158,7 +160,14 @@ export class ContentsComponent implements OnDestroy {
     );
     const dialogRef = this.dialog.open(EnterNameComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((pageName) => {
-      //if (pageName) doSmth; //TODO: add page logic
+      const newPage: SinglePageInfo = {
+        id: uuidv4(),
+        name: pageName,
+        tools: [],
+        childPages: [],
+        parentId: '',
+      };
+      this.store.dispatch(contentsActions.addNewPage({ pageInfo: newPage }));
     });
   }
 
@@ -169,7 +178,7 @@ export class ContentsComponent implements OnDestroy {
     );
     const dialogRef = this.dialog.open(ConfirmActionComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((positiveAnswer) => {
-      //if(positiveAnswer) do smth //TODO: delete page logic
+      if (positiveAnswer) this.store.dispatch(contentsActions.deletePage({ pageId: nodeId }));
     });
   }
 

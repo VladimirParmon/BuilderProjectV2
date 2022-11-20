@@ -52,5 +52,7 @@ export const contentsReducer = createReducer(
         return p;
       }
     })
-  )
+  ),
+  on(contentsActions.addNewPage, (state, { pageInfo }) => [...state, pageInfo]),
+  on(contentsActions.deletePage, (state, { pageId }) => state.filter((p) => p.id !== pageId))
 );

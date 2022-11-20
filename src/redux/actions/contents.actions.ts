@@ -2,6 +2,8 @@ import { createAction, props } from '@ngrx/store';
 import { SinglePageInfo } from 'src/constants/models';
 
 enum ContentsActions {
+  addNewPage = '[Contents/Page] Add a new empty page',
+  deletePage = '[Contents/Page] Delete a page',
   updatePageName = '[Contents/Page] Update the name of a page using its id',
   updatePageChildren = '[Contents/Children pages] Update the array of children pages ids',
   updateTools = '[Contents/Tools] Update the array of tools that a page displays',
@@ -51,6 +53,8 @@ const deleteTool = createAction(
   props<{ pageId: string; toolDescriptionId: string }>()
 );
 const addTool = createAction(ContentsActions.addTool, props<{ pageId: string; toolId: string }>());
+const addNewPage = createAction(ContentsActions.addNewPage, props<{ pageInfo: SinglePageInfo }>());
+const deletePage = createAction(ContentsActions.deletePage, props<{ pageId: string }>());
 
 export const contentsActions = {
   updatePageName,
@@ -63,4 +67,6 @@ export const contentsActions = {
   updateWholeSlice,
   deleteTool,
   addTool,
+  addNewPage,
+  deletePage,
 };
