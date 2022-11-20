@@ -9,6 +9,7 @@ import { SinglePageInfo } from 'src/constants/models';
 import { Store } from '@ngrx/store';
 import { getOnePageInfo } from 'src/redux/selectors/contents.selectors';
 import { contentsActions } from 'src/redux/actions/contents.actions';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-view',
@@ -26,7 +27,8 @@ export class ViewComponent implements OnDestroy {
     private route: ActivatedRoute,
     private store: Store,
     private stateService: StateService,
-    private router: Router
+    private router: Router,
+    private utilsService: UtilsService
   ) {
     this.router.events
       .pipe(
@@ -73,6 +75,7 @@ export class ViewComponent implements OnDestroy {
         newName: this.inputValue,
       })
     );
+    this.utilsService.openSnackBar('Новое название страницы сохранено', 'Понятно', 2000);
   }
 
   editPageName() {
