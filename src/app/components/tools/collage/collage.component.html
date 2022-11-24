@@ -1,0 +1,116 @@
+<ng-container *ngIf="toolDescription">
+  <ng-container *ngIf="isGlobalEditOn$ | async">
+    <div class="image-controls" *ngIf="areControlsVisible">
+      <div class="image-controls__selects">
+        <mat-form-field appearance="fill" *ngIf="toolDescription.currentFlow !== flow.COLUMN">
+          <mat-label>Ось Х</mat-label>
+          <mat-select [(value)]="toolDescription.currentJustifyContent">
+            <mat-option value="{{ positioning.START }}">Слева</mat-option>
+            <mat-option value="{{ positioning.CENTER }}">По центру</mat-option>
+            <mat-option value="{{ positioning.END }}">Справа</mat-option>
+            <mat-option value="{{ positioning.BETWEEN }}">Растянуть</mat-option>
+            <mat-option value="{{ positioning.EVENLY }}">Равномерно</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="toolDescription.currentFlow !== flow.COLUMN">
+          <mat-label>Ось Y</mat-label>
+          <mat-select [(value)]="toolDescription.currentAlignItems">
+            <mat-option value="{{ positioning.START }}">Сверху</mat-option>
+            <mat-option value="{{ positioning.CENTER }}">По центру</mat-option>
+            <mat-option value="{{ positioning.END }}">Снизу</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="toolDescription.currentFlow === flow.COLUMN">
+          <mat-label>Ось Х</mat-label>
+          <mat-select [(value)]="toolDescription.currentAlignItems">
+            <mat-option value="{{ positioning.START }}">Cлева</mat-option>
+            <mat-option value="{{ positioning.CENTER }}">По центру</mat-option>
+            <mat-option value="{{ positioning.END }}">Справа</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Ориентация</mat-label>
+          <mat-select [(value)]="toolDescription.currentFlow">
+            <mat-option value="{{ flow.ROW }}">Горизонтально</mat-option>
+            <mat-option value="{{ flow.COLUMN }}">Вертикально</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="image-controls__icons">
+        <mat-icon class="image-controls__icon" (click)="saveLayoutChanges()">save</mat-icon>
+        <mat-icon class="image-controls__icon" (click)="openDialogToChooseFiles()"
+          >add_box</mat-icon
+        >
+      </div>
+    </div>
+
+    <mat-icon
+      class="image-controls__icon image-controls__icon-edit"
+      (click)="areControlsVisible = true"
+      *ngIf="!areControlsVisible"
+      >edit</mat-icon
+    >
+
+    <div class="pic-controls" *ngIf="currentPicIndex !== -1 && areControlsVisible">
+      <form class="pic-size-form">
+        <mat-form-field class="pic-size-form__form-field" appearance="fill">
+          <mat-label>Ширина в пикселях:</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="currentPicWidth"
+            name="picSize"
+            (ngModelChange)="this.picSizeUpdate.next($event)"
+          />
+          <button *ngIf="currentPicWidth" matSuffix mat-icon-button aria-label="Clear">
+            <mat-icon class="image-controls__icon" (click)="deletePic()">delete</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+      <div class="pic-move">
+        <mat-icon
+          class="image-controls__icon"
+          (click)="moveImage('left')"
+          [ngClass]="{ inactive: currentPicIndex === 0 }"
+          >arrow_left</mat-icon
+        >
+        <mat-icon
+          class="image-controls__icon"
+          (click)="moveImage('right')"
+          [ngClass]="{
+            inactive: images.length === 1 || currentPicIndex === images.length - 1
+          }"
+          >arrow_right</mat-icon
+        >
+      </div>
+    </div>
+  </ng-container>
+  <mat-radio-group
+    class="custom-images"
+    [(ngModel)]="currentPicIndex"
+    [ngStyle]="{
+      'justify-content': toolDescription.currentJustifyContent,
+      'align-items': toolDescription.currentAlignItems,
+      'flex-direction': toolDescription.currentFlow
+    }"
+    [ngClass]="{
+      disabled: !areControlsVisible
+    }"
+  >
+    <ng-container *ngFor="let image of images; let i = index">
+      <mat-radio-button
+        disableRipple="true"
+        [value]="i"
+        [disabled]="!(isGlobalEditOn$ | async)"
+        (click)="setPicControls(i, image.width)"
+      >
+        <img
+          class="image"
+          [src]="image.pathToFile"
+          [ngStyle]="{ width: getPicWidth(image.width) }"
+          (click)="handleFullscreen($event)"
+        />
+      </mat-radio-button>
+    </ng-container>
+  </mat-radio-group>
+</ng-container>

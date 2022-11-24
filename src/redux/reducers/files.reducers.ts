@@ -37,5 +37,19 @@ export const filesReducer = createReducer(
   on(filesActions.deleteTextStorageUnit, (state, { id }) => ({
     ...state,
     text: state.text.filter((u) => u.id !== id),
+  })),
+  on(filesActions.updateImageWidth, (state, { imageDescriptionId, newWidth }) => ({
+    ...state,
+    images: state.images.map((image) =>
+      image.id === imageDescriptionId ? { ...image, width: newWidth } : image
+    ),
+  })),
+  on(filesActions.deleteImage, (state, { imageDescriptionId }) => ({
+    ...state,
+    images: state.images.filter((i) => i.id !== imageDescriptionId),
+  })),
+  on(filesActions.deleteMultipleImages, (state, { imageDescriptionIds }) => ({
+    ...state,
+    images: state.images.filter((i) => !imageDescriptionIds.includes(i.id)),
   }))
 );

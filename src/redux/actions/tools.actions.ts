@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { FlexboxFlowOptions, FlexboxPositioningOptions } from 'src/constants/constants';
 import {
   TextToolDescription,
   CollageToolDescription,
@@ -15,7 +16,9 @@ enum ToolsActions {
   insertNewVideoTool = '[Tools/Video] Insert a new video tool description',
   insertNewPDFTool = '[Tools/PDF] Insert a new PDF tool description',
   insertNewTextTool = '[Tools/Text] Insert a new text tool description',
-  deleteTextTool = '[Tools/Text] Delete a text tool description using its id',
+  deleteTool = '[Tools/Text] Delete a tool description using its id',
+  updateToolContents = '[Tool/Collage] Update a collage tool contents (ids of file descriptions or text)',
+  updateCollageToolLayout = '[Tool/Collage] Update layout settings (justify, align, flow)',
 }
 
 const insertNewCollageTool = createAction(
@@ -44,9 +47,19 @@ const insertNewTextTool = createAction(
   ToolsActions.insertNewTextTool,
   props<{ textToolDescription: TextToolDescription }>()
 );
-const deleteTextTool = createAction(
-  ToolsActions.deleteTextTool,
-  props<{ toolDescriptionId: string }>()
+const deleteTool = createAction(ToolsActions.deleteTool, props<{ toolDescriptionId: string }>());
+const updateToolContents = createAction(
+  ToolsActions.updateToolContents,
+  props<{ toolDescriptionId: string; newContents: string[] }>()
+);
+const updateCollageToolLayout = createAction(
+  ToolsActions.updateCollageToolLayout,
+  props<{
+    collageToolId: string;
+    newJustifyContent: FlexboxPositioningOptions;
+    newAlignItems: FlexboxPositioningOptions;
+    newFlow: FlexboxFlowOptions;
+  }>()
 );
 
 export const toolsActions = {
@@ -56,5 +69,7 @@ export const toolsActions = {
   insertNewSliderTool,
   insertNewPDFTool,
   insertNewTextTool,
-  deleteTextTool,
+  deleteTool,
+  updateToolContents,
+  updateCollageToolLayout,
 };

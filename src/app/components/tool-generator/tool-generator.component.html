@@ -1,9 +1,4 @@
-<div
-  *ngIf="toolDescription"
-  [ngSwitch]="toolDescription.type"
-  class="block"
-  appFullscreen
->
+<div *ngIf="toolDescription" [ngSwitch]="toolDescription.type" class="block" appFullscreen>
   <mat-icon
     *ngIf="isGlobalEditOn$ | async"
     color="accent"
@@ -11,8 +6,10 @@
     (click)="openDeleteDialog()"
     >delete</mat-icon
   >
-  <app-text
-    *ngSwitchCase="names.TEXT"
-    [toolContent]="toolDescription.content"
-  ></app-text>
+  <app-text *ngSwitchCase="names.TEXT" [toolContent]="toolDescription.content"></app-text>
+  <app-collage
+    *ngSwitchCase="names.COLLAGE"
+    [toolDescriptionId]="toolDescription.id"
+    (notify)="getNotification()"
+  ></app-collage>
 </div>

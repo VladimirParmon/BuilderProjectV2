@@ -36,10 +36,10 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
   @Input() toolDescriptionId: string = '';
   @Input() pageId: string = '';
   names = ToolNames;
-  destroy$: Subject<boolean> = new Subject<boolean>();
   toolDescription: ToolDescription | null = null;
 
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private stateService: StateService,
@@ -65,24 +65,38 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
   delete() {
     if (this.toolDescription) {
       const toolDescriptionId = this.toolDescriptionId;
+      const pageId = this.pageId;
+
+      this.store.dispatch(contentsActions.deleteTool({ pageId, toolDescriptionId }));
+      this.store.dispatch(toolsActions.deleteTool({ toolDescriptionId }));
+
       const toolType = this.toolDescription.type;
-      switch (toolType) {
-        case ToolNames.TEXT:
-          this.deleteTextTool(toolDescriptionId);
-          break;
+      if (toolType === ToolNames.TEXT) {
+        this.deleteTextToolStorageUnit();
+      } else {
+        const imageDescriptionIds = this.toolDescription.content;
+        if (this.utilsService.isNonEmptyArrayOfStrings(imageDescriptionIds)) {
+          switch (toolType) {
+            case ToolNames.COLLAGE:
+              this.deleteAllCollageImages(imageDescriptionIds);
+              break;
+          }
+        }
       }
     }
   }
 
-  deleteTextTool(toolDescriptionId: string) {
-    this.store.dispatch(toolsActions.deleteTextTool({ toolDescriptionId }));
-    this.store.dispatch(contentsActions.deleteTool({ pageId: this.pageId, toolDescriptionId }));
+  deleteTextToolStorageUnit() {
     if (this.toolDescription) {
       const toolId = this.toolDescription.content;
       if (this.utilsService.isString(toolId)) {
         this.store.dispatch(filesActions.deleteTextStorageUnit({ id: toolId }));
       }
     }
+  }
+
+  deleteAllCollageImages(imageDescriptionIds: string[]) {
+    this.store.dispatch(filesActions.deleteMultipleImages({ imageDescriptionIds }));
   }
 
   openDeleteDialog() {
@@ -94,5 +108,9 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((positiveAnswer) => {
       if (positiveAnswer) this.delete();
     });
+  }
+
+  getNotification() {
+    this.delete();
   }
 }

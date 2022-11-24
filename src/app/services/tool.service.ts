@@ -7,12 +7,13 @@ import { toolsActions } from 'src/redux/actions/tools.actions';
 import { v4 as uuidv4 } from 'uuid';
 import { ToolNames } from 'src/constants/constants';
 import { Defaults } from './defaults';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToolService {
-  constructor(private store: Store) {}
+  constructor(private store: Store, private utilsService: UtilsService) {}
 
   createNewTextTool(pageId: string) {
     const textDescriptionId: m.TextDescriptionId = uuidv4();
@@ -37,7 +38,7 @@ export class ToolService {
     const audioToolDescriptionId = uuidv4();
     const filesDescriptions: m.AudioFileDescription[] = fileNames.map((name) => ({
       id: uuidv4(),
-      pathToFile: name,
+      pathToFile: this.utilsService.getTempFilesPath(name),
     }));
     const fileDescriptionIds = filesDescriptions.map((d) => d.id);
 
@@ -56,7 +57,7 @@ export class ToolService {
     const fileDescriptionId = uuidv4();
     const fileDescription: m.VideoFileDescription = {
       id: fileDescriptionId,
-      pathToFile: fileName,
+      pathToFile: this.utilsService.getTempFilesPath(fileName),
     };
     const videoToolDescription: m.VideoToolDescription = {
       id: videoToolDescriptionId,
@@ -72,7 +73,7 @@ export class ToolService {
     const PDFToolDescriptionId = uuidv4();
     const filesDescriptions: m.PDFFileDescription[] = fileNames.map((name) => ({
       id: uuidv4(),
-      pathToFile: name,
+      pathToFile: this.utilsService.getTempFilesPath(name),
     }));
     const fileDescriptionIds = filesDescriptions.map((d) => d.id);
 
@@ -86,14 +87,19 @@ export class ToolService {
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: PDFToolDescriptionId }));
   }
 
-  createNewCollageTool(pageId: string, fileNames: string[]) {
-    const collageToolDescriptionId = uuidv4();
+  createImageDescriptions(fileNames: string[]) {
     const filesDescriptions: m.ImageFileDescription[] = fileNames.map((name) => ({
       id: uuidv4(),
-      pathToFile: name,
+      pathToFile: this.utilsService.getTempFilesPath(name),
       width: Defaults.defaultImageWidth,
     }));
     const fileDescriptionIds: m.FileDescriptionId[] = filesDescriptions.map((d) => d.id);
+    return { filesDescriptions, fileDescriptionIds };
+  }
+
+  createNewCollageTool(pageId: string, fileNames: string[]) {
+    const collageToolDescriptionId = uuidv4();
+    const { filesDescriptions, fileDescriptionIds } = this.createImageDescriptions(fileNames);
 
     const collageToolDescription: m.CollageToolDescription = {
       id: collageToolDescriptionId,
@@ -103,6 +109,7 @@ export class ToolService {
       currentAlignItems: Defaults.alignItems,
       currentFlow: Defaults.flow,
     };
+
     this.store.dispatch(filesActions.insertNewImageFilesDescriptions({ filesDescriptions }));
     this.store.dispatch(toolsActions.insertNewCollageTool({ collageToolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: collageToolDescriptionId }));
@@ -110,12 +117,7 @@ export class ToolService {
 
   createNewSliderTool(pageId: string, fileNames: string[]) {
     const sliderToolDescriptionId = uuidv4();
-    const filesDescriptions: m.ImageFileDescription[] = fileNames.map((name) => ({
-      id: uuidv4(),
-      pathToFile: name,
-      width: Defaults.defaultImageWidth,
-    }));
-    const fileDescriptionIds: m.FileDescriptionId[] = filesDescriptions.map((d) => d.id);
+    const { filesDescriptions, fileDescriptionIds } = this.createImageDescriptions(fileNames);
 
     const sliderToolDescription: m.SliderToolDescription = {
       id: sliderToolDescriptionId,

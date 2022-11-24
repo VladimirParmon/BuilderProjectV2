@@ -33,8 +33,11 @@ import { EnterNameComponent } from './components/modals/enter-name/enter-name.co
 import { ChooseFileComponent } from './components/modals/choose-file/choose-file.component';
 import { FileUploadDNDDirective } from './directives/file-upload-dnd.directive';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { QuillModule } from 'ngx-quill';
+import { CollageComponent } from './components/tools/collage/collage.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +55,7 @@ import { QuillModule } from 'ngx-quill';
     EnterNameComponent,
     ChooseFileComponent,
     FileUploadDNDDirective,
+    CollageComponent,
   ],
   imports: [
     FormsModule,
@@ -73,6 +77,8 @@ import { QuillModule } from 'ngx-quill';
     BrowserAnimationsModule,
     QuillModule.forRoot(),
     MatSnackBarModule,
+    MatSelectModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

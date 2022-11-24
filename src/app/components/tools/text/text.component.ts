@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import Quill from 'quill';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
@@ -17,7 +17,7 @@ import { filesActions } from 'src/redux/actions/files.actions';
   templateUrl: './text.component.html',
   styleUrls: ['./text.component.scss'],
 })
-export class TextComponent implements OnInit {
+export class TextComponent implements OnInit, OnDestroy {
   @Input() toolContent: ToolDescriptionContent | null = null;
   textFileId: string | null = null;
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -73,6 +73,11 @@ export class TextComponent implements OnInit {
         });
     }
     this.registerFontsAndSizes();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   registerFontsAndSizes() {

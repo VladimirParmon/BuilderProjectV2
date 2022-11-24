@@ -15,6 +15,9 @@ enum FileActions {
   insertPDF = '[Files/PDF] Insert a new PDF to the files storage',
   insertAudio = '[Files/Audio] Insert a new audio to the files storage',
   deleteText = '[Files/Text] Delete a text storage unit',
+  updateImageWidth = '[Files/Image] Update the width of an image',
+  deleteImage = '[File/Image] Delete an image file description from store',
+  deleteMultipleImages = '[File/Image] Delete multiple image file descriptions from store',
 }
 
 const updateTextStorageUnit = createAction(
@@ -42,6 +45,15 @@ const insertNewAudioFilesDescriptions = createAction(
   props<{ filesDescriptions: AudioFileDescription[] }>()
 );
 const deleteTextStorageUnit = createAction(FileActions.deleteText, props<{ id: string }>());
+const updateImageWidth = createAction(
+  FileActions.updateImageWidth,
+  props<{ imageDescriptionId: string; newWidth: number }>()
+);
+const deleteImage = createAction(FileActions.deleteImage, props<{ imageDescriptionId: string }>());
+const deleteMultipleImages = createAction(
+  FileActions.deleteMultipleImages,
+  props<{ imageDescriptionIds: string[] }>()
+);
 
 export const filesActions = {
   updateTextStorageUnit,
@@ -51,4 +63,7 @@ export const filesActions = {
   insertNewPDFFilesDescriptions,
   deleteTextStorageUnit,
   insertNewVideoFileDescription,
+  updateImageWidth,
+  deleteImage,
+  deleteMultipleImages,
 };

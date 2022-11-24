@@ -24,7 +24,10 @@ export const toolsReducer = createReducer(
   on(toolsActions.insertNewTextTool, (state, { textToolDescription }) => {
     return [...state, textToolDescription];
   }),
-  on(toolsActions.deleteTextTool, (state, { toolDescriptionId }) =>
+  on(toolsActions.deleteTool, (state, { toolDescriptionId }) =>
     state.filter((el) => el.id !== toolDescriptionId)
+  ),
+  on(toolsActions.updateToolContents, (state, { toolDescriptionId, newContents }) =>
+    state.map((el) => (el.id === toolDescriptionId ? { ...el, content: newContents } : el))
   )
 );

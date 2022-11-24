@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { Lookup, RecursiveTreeNode, SinglePageInfo } from 'src/constants/models';
+import {
+  CollageToolDescription,
+  ImageFileDescription,
+  Lookup,
+  RecursiveTreeNode,
+  SinglePageInfo,
+  ToolDescription,
+} from 'src/constants/models';
 import { MediaFileTypes, ToolNames } from 'src/constants/constants';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -71,7 +78,7 @@ export class UtilsService {
       case ToolNames.VIDEO:
         return MediaFileTypes.VIDEOS;
       default:
-        return null;
+        return MediaFileTypes.IMAGES;
     }
   }
 
@@ -83,6 +90,37 @@ export class UtilsService {
 
   isString(value: unknown): value is string {
     return typeof value === 'string' ? true : false;
+  }
+
+  isImageFileDescription(value: unknown): value is ImageFileDescription {
+    if (!value) return false;
+    const x = value as ImageFileDescription;
+    if (x.id && x.pathToFile && x.width) return true;
+    return false;
+  }
+
+  isImageFileDescriptionArray(array: unknown[]): array is ImageFileDescription[] {
+    let x = array as ImageFileDescription[];
+    const typeIsOk: boolean = x.reduce((acc, next) => {
+      if (!this.isImageFileDescription(acc) && !this.isImageFileDescription(next)) return false;
+      return true;
+    }, false);
+    return typeIsOk;
+  }
+
+  propertyCheck<X extends {}, Y extends PropertyKey>(
+    obj: X,
+    prop: Y
+  ): obj is X & Record<Y, unknown> {
+    return obj.hasOwnProperty(prop);
+  }
+
+  isCollageToolDescription(object: ToolDescription): object is CollageToolDescription {
+    return (
+      this.propertyCheck(object, 'currentJustifyContent') &&
+      this.propertyCheck(object, 'currentAlignItems') &&
+      this.propertyCheck(object, 'currentFlow')
+    );
   }
 
   formatBytes(bytes: any, decimals?: any) {
@@ -101,5 +139,13 @@ export class UtilsService {
       duration: duration,
       panelClass: action ? undefined : 'snackbar-center',
     });
+  }
+
+  getTempFilesPath(fileName: string) {
+    return 'assets/tempFiles/' + fileName;
+  }
+
+  isDefined<T>(arg: T | null | undefined): arg is T extends null | undefined ? never : T {
+    return arg !== null && arg !== undefined;
   }
 }
