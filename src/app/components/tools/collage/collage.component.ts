@@ -206,4 +206,13 @@ export class CollageComponent implements OnDestroy, OnInit {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
   }
+
+  showInfo() {
+    this.utilsService.openSnackBar(
+      `Ручное сохранение не требуется, все изменения компонент сохраняет автоматически.
+      При удалении компонента удаляются и все связанные с ним изображения.`,
+      'Понятно',
+      10000
+    );
+  }
 }
