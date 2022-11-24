@@ -1,5 +1,5 @@
 <ng-container *ngIf="toolDescription">
-  <ng-container *ngIf="isGlobalEditOn$ | async">
+  <ng-container *ngIf="isGlobalEditOn">
     <div class="image-controls" *ngIf="areControlsVisible">
       <div class="image-controls__selects">
         <mat-form-field appearance="fill" *ngIf="toolDescription.currentFlow !== flow.COLUMN">
@@ -110,7 +110,7 @@
       <mat-radio-button
         disableRipple="true"
         [value]="i"
-        [disabled]="!(isGlobalEditOn$ | async)"
+        [disabled]="!isGlobalEditOn"
         (click)="setPicControls(i, image.width)"
       >
         <img

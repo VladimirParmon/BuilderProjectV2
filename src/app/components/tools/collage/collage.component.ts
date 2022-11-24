@@ -17,6 +17,7 @@ import { ChooseFileComponent } from '../../modals/choose-file/choose-file.compon
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { ToolService } from 'src/app/services/tool.service';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
+import { FullscreenService } from 'src/app/services/fullscreen.service';
 
 @Component({
   selector: 'app-collage',
@@ -27,7 +28,7 @@ export class CollageComponent implements OnDestroy, OnInit {
   @Input() toolDescriptionId: string | null = null;
   @Output('notify') deleteTheToolSinceItsEmpty = new EventEmitter<string>();
 
-  isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
+  isGlobalEditOn: boolean = true;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   toolDescription: CollageToolDescription | null = null;
@@ -45,6 +46,7 @@ export class CollageComponent implements OnDestroy, OnInit {
     private utilsService: UtilsService,
     private stateService: StateService,
     private toolService: ToolService,
+    private fullscreenService: FullscreenService,
     private dialog: MatDialog
   ) {
     this.picSizeUpdate
@@ -75,6 +77,13 @@ export class CollageComponent implements OnDestroy, OnInit {
         )
         .subscribe();
     }
+    this.stateService.isGlobalEditOn$
+      .asObservable()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state) => {
+        this.isGlobalEditOn = state;
+        if (state === false) this.currentPicIndex = -1;
+      });
   }
 
   async fetchPics(arrayOfIds: string[]) {
@@ -180,6 +189,7 @@ export class CollageComponent implements OnDestroy, OnInit {
   }
 
   setPicControls(index: number, imageWidth: number) {
+    if (!this.isGlobalEditOn) return;
     if (this.currentPicIndex === index) {
       //Timeout automatically launches angular change detection
       setTimeout(() => (this.currentPicIndex = -1), 0);
@@ -194,12 +204,12 @@ export class CollageComponent implements OnDestroy, OnInit {
   }
 
   handleFullscreen(event: MouseEvent) {
-    // if (this.globalEdit) return;
-    // if (!this.fullscreenService.isFullScreen) {
-    //   this.fullscreenService.openFullscreen(event.target);
-    // } else {
-    //   this.fullscreenService.closeFullscreen();
-    // }
+    if (this.isGlobalEditOn) return;
+    if (!this.fullscreenService.isFullScreen) {
+      this.fullscreenService.openFullscreen(event.target);
+    } else {
+      this.fullscreenService.closeFullscreen();
+    }
   }
 
   ngOnDestroy(): void {
