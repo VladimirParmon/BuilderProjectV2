@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 
 @Component({
@@ -7,20 +7,11 @@ import { StateService } from 'src/app/services/state.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnDestroy {
-  isMenuOpen: boolean = false;
-  constructor(public stateService: StateService) {
-    this.subscription = this.stateService.isContentsMenuOpen$.subscribe(
-      (data) => (this.isMenuOpen = data)
-    );
-  }
-  subscription: Subscription;
+export class HeaderComponent {
+  isContentsMenuOpen$: BehaviorSubject<boolean> = this.stateService.isContentsMenuOpen$;
+  constructor(public stateService: StateService) {}
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  toggleMenu() {
-    this.stateService.isContentsMenuOpen$.next(!this.isMenuOpen);
+  toggleMenu(state: boolean) {
+    this.stateService.isContentsMenuOpen$.next(!state);
   }
 }

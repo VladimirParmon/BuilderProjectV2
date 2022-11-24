@@ -4,10 +4,11 @@
     <span>Генератор ЭУМК</span>
     <span class="spacer"></span>
     <button
+      *ngrxLet="isContentsMenuOpen$ as g"
       mat-icon-button
       class="menu-icon"
       aria-label="Contents menu button"
-      (click)="toggleMenu()"
+      (click)="toggleMenu(g)"
     >
       <mat-icon>menu</mat-icon>
     </button>
