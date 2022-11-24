@@ -4,7 +4,10 @@
       <div class="image-controls__selects">
         <mat-form-field appearance="fill" *ngIf="toolDescription.currentFlow !== flow.COLUMN">
           <mat-label>Ось Х</mat-label>
-          <mat-select [(value)]="toolDescription.currentJustifyContent">
+          <mat-select
+            [(value)]="toolDescription.currentJustifyContent"
+            (valueChange)="saveLayoutChanges()"
+          >
             <mat-option value="{{ positioning.START }}">Слева</mat-option>
             <mat-option value="{{ positioning.CENTER }}">По центру</mat-option>
             <mat-option value="{{ positioning.END }}">Справа</mat-option>
@@ -14,7 +17,10 @@
         </mat-form-field>
         <mat-form-field appearance="fill" *ngIf="toolDescription.currentFlow !== flow.COLUMN">
           <mat-label>Ось Y</mat-label>
-          <mat-select [(value)]="toolDescription.currentAlignItems">
+          <mat-select
+            [(value)]="toolDescription.currentAlignItems"
+            (valueChange)="saveLayoutChanges()"
+          >
             <mat-option value="{{ positioning.START }}">Сверху</mat-option>
             <mat-option value="{{ positioning.CENTER }}">По центру</mat-option>
             <mat-option value="{{ positioning.END }}">Снизу</mat-option>
@@ -22,7 +28,10 @@
         </mat-form-field>
         <mat-form-field appearance="fill" *ngIf="toolDescription.currentFlow === flow.COLUMN">
           <mat-label>Ось Х</mat-label>
-          <mat-select [(value)]="toolDescription.currentAlignItems">
+          <mat-select
+            [(value)]="toolDescription.currentAlignItems"
+            (valueChange)="saveLayoutChanges()"
+          >
             <mat-option value="{{ positioning.START }}">Cлева</mat-option>
             <mat-option value="{{ positioning.CENTER }}">По центру</mat-option>
             <mat-option value="{{ positioning.END }}">Справа</mat-option>
@@ -30,7 +39,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Ориентация</mat-label>
-          <mat-select [(value)]="toolDescription.currentFlow">
+          <mat-select [(value)]="toolDescription.currentFlow" (valueChange)="saveLayoutChanges()">
             <mat-option value="{{ flow.ROW }}">Горизонтально</mat-option>
             <mat-option value="{{ flow.COLUMN }}">Вертикально</mat-option>
           </mat-select>

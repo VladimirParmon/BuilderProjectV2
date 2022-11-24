@@ -29,5 +29,19 @@ export const toolsReducer = createReducer(
   ),
   on(toolsActions.updateToolContents, (state, { toolDescriptionId, newContents }) =>
     state.map((el) => (el.id === toolDescriptionId ? { ...el, content: newContents } : el))
+  ),
+  on(
+    toolsActions.updateCollageToolLayout,
+    (state, { collageToolId, newJustifyContent, newAlignItems, newFlow }) =>
+      state.map((el) =>
+        el.id === collageToolId
+          ? {
+              ...el,
+              currentJustifyContent: newJustifyContent,
+              currentAlignItems: newAlignItems,
+              currentFlow: newFlow,
+            }
+          : el
+      )
   )
 );
