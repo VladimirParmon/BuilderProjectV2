@@ -35,6 +35,7 @@ import { FileUploadDNDDirective } from './directives/file-upload-dnd.directive';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
+import { LetModule } from '@ngrx/component';
 
 import { QuillModule } from 'ngx-quill';
 import { CollageComponent } from './components/tools/collage/collage.component';
@@ -79,6 +80,7 @@ import { CollageComponent } from './components/tools/collage/collage.component';
     MatSnackBarModule,
     MatSelectModule,
     MatRadioModule,
+    LetModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
