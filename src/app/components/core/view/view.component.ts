@@ -54,7 +54,7 @@ export class ViewComponent implements OnDestroy {
 
   @HostListener('document:keydown.enter')
   onEnter() {
-    this.savePageName();
+    if (this.isEditorOn) this.savePageName();
   }
 
   ngOnDestroy(): void {
