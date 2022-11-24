@@ -75,7 +75,7 @@ export class ToolbarComponent implements OnDestroy {
     );
     const dialogRef = this.dialog.open(ChooseFileComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((fileNames: string[]) => {
-      if (this.currentPageId)
+      if (this.currentPageId && fileNames)
         switch (toolName) {
           case ToolNames.VIDEO:
             this.toolService.createNewVideoTool(this.currentPageId, fileNames[0]);
