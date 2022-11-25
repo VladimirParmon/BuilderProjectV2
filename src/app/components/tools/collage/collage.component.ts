@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, of, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { FlexboxFlowOptions, FlexboxPositioningOptions, ToolNames } from 'src/constants/constants';
@@ -77,6 +77,11 @@ export class CollageComponent implements OnDestroy, OnInit {
         )
         .subscribe();
     }
+
+    this.isGlobalEditOnSub();
+  }
+
+  isGlobalEditOnSub() {
     this.stateService.isGlobalEditOn$
       .asObservable()
       .pipe(takeUntil(this.destroy$))
