@@ -1,4 +1,4 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -115,7 +115,18 @@ export class PDFComponent implements OnInit, OnDestroy {
     });
   }
 
-  drop(event: CdkDragDrop<string[]>) {}
+  drop(event: CdkDragDrop<string[]>) {
+    if (this.PDFFilesIds && this.toolDescriptionId) {
+      const toolDescriptionId = this.toolDescriptionId;
+      const array = this.utilsService.arrayDeepCopy(this.PDFFilesIds);
+      const from = event.previousIndex;
+      const to = event.currentIndex;
+      moveItemInArray(array, from, to);
+      this.store.dispatch(
+        toolsActions.updatePDFToolContents({ toolDescriptionId, newContents: array })
+      );
+    }
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
