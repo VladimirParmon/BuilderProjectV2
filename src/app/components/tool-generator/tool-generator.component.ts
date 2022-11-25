@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ToolDescription } from 'src/constants/models';
+import { FileDescriptionId, ToolDescription } from 'src/constants/models';
 import { ModalWindowsText, ToolNames } from 'src/constants/constants';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
@@ -74,11 +74,14 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
       if (toolType === ToolNames.TEXT) {
         this.deleteTextToolStorageUnit();
       } else {
-        const imageDescriptionIds = this.toolDescription.content;
-        if (this.utilsService.isNonEmptyArrayOfStrings(imageDescriptionIds)) {
+        const fileDescriptionIds = this.toolDescription.content;
+        if (this.utilsService.isNonEmptyArrayOfStrings(fileDescriptionIds)) {
           switch (toolType) {
             case ToolNames.COLLAGE:
-              this.deleteAllCollageImages(imageDescriptionIds);
+              this.deleteAllCollageImages(fileDescriptionIds);
+              break;
+            case ToolNames.PDF:
+              this.deleteAllRelatedPDFs(fileDescriptionIds);
               break;
           }
         }
@@ -99,6 +102,10 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     this.store.dispatch(filesActions.deleteMultipleImages({ imageDescriptionIds }));
   }
 
+  deleteAllRelatedPDFs(fileDescriptionIds: string[]) {
+    this.store.dispatch(filesActions.deleteMultiplePDFs({ fileDescriptionIds }));
+  }
+
   openDeleteDialog() {
     const dialogConfig = this.utilsService.createMatDialogConfig(
       ['delete-page-dialog'], //TODO: change this
@@ -112,5 +119,13 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
   getNotification() {
     this.delete();
+  }
+
+  getToolContentsClone() {
+    if (this.toolDescription) {
+      const x = this.toolDescription.content as FileDescriptionId[];
+      return this.utilsService.arrayDeepCopy(x);
+    }
+    return [];
   }
 }

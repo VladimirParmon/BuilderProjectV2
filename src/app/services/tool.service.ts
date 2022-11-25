@@ -69,19 +69,25 @@ export class ToolService {
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: videoToolDescriptionId }));
   }
 
-  createNewPDFTool(pageId: string, fileNames: string[]) {
-    const PDFToolDescriptionId = uuidv4();
+  createPDFDescriptions(fileNames: string[]) {
     const filesDescriptions: m.PDFFileDescription[] = fileNames.map((name) => ({
       id: uuidv4(),
       pathToFile: this.utilsService.getTempFilesPath(name),
     }));
     const fileDescriptionIds = filesDescriptions.map((d) => d.id);
+    return { filesDescriptions, fileDescriptionIds };
+  }
+
+  createNewPDFTool(pageId: string, fileNames: string[]) {
+    const PDFToolDescriptionId = uuidv4();
+    const { filesDescriptions, fileDescriptionIds } = this.createPDFDescriptions(fileNames);
 
     const PDFToolDescription: m.PDFToolDescription = {
       id: PDFToolDescriptionId,
       type: ToolNames.PDF,
       content: fileDescriptionIds,
     };
+
     this.store.dispatch(filesActions.insertNewPDFFilesDescriptions({ filesDescriptions }));
     this.store.dispatch(toolsActions.insertNewPDFTool({ PDFToolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: PDFToolDescriptionId }));

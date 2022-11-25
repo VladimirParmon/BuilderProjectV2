@@ -12,4 +12,9 @@
     [toolDescriptionId]="toolDescription.id"
     (notify)="getNotification()"
   ></app-collage>
+  <app-pdf
+    *ngSwitchCase="names.PDF"
+    [toolDescriptionId]="toolDescription.id"
+    (notify)="getNotification()"
+  ></app-pdf>
 </div>

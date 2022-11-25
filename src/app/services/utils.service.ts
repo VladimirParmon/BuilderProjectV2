@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import {
+  BasicFileDescription,
   CollageToolDescription,
   ImageFileDescription,
   Lookup,
@@ -15,6 +16,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class UtilsService {
+  pathToTempFolder = 'assets/tempFiles/';
+
   constructor(private snackBar: MatSnackBar) {}
 
   arrayToTree(array: SinglePageInfo[], nodeLookup: Lookup): RecursiveTreeNode[] {
@@ -108,11 +111,17 @@ export class UtilsService {
     return typeIsOk;
   }
 
-  propertyCheck<X extends {}, Y extends PropertyKey>(
-    obj: X,
-    prop: Y
-  ): obj is X & Record<Y, unknown> {
+  propertyCheck<X extends {}, Y extends PropertyKey>(obj: X, prop: Y): obj is X & Record<Y, any> {
+    if (!obj) return false;
     return obj.hasOwnProperty(prop);
+  }
+
+  isBasicToolDescription(object: any): object is BasicFileDescription {
+    return (
+      this.propertyCheck(object, 'id') &&
+      this.propertyCheck(object, 'type') &&
+      this.propertyCheck(object, 'content')
+    );
   }
 
   isCollageToolDescription(object: ToolDescription): object is CollageToolDescription {
@@ -142,10 +151,24 @@ export class UtilsService {
   }
 
   getTempFilesPath(fileName: string) {
-    return 'assets/tempFiles/' + fileName;
+    return this.pathToTempFolder + fileName;
+  }
+
+  getFileName(filePath: string) {
+    return filePath.replace(this.pathToTempFolder, '');
   }
 
   isDefined<T>(arg: T | null | undefined): arg is T extends null | undefined ? never : T {
     return arg !== null && arg !== undefined;
+  }
+
+  isBasicFileDescription(object: {}): object is BasicFileDescription {
+    return this.propertyCheck(object, 'id') && this.propertyCheck(object, 'pathToFile');
+  }
+
+  isBasicFileDescriptionArray(array: any[]): array is BasicFileDescription[] {
+    return array.reduce((acc, next) => {
+      return this.isBasicFileDescription(next);
+    }, false);
   }
 }

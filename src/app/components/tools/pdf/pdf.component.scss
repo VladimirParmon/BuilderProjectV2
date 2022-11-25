@@ -1,0 +1,74 @@
+@use "@angular/material" as mat;
+@use "src/styles.scss";
+
+.pdf-container {
+  display: flex;
+  align-items: flex-end;
+  max-width: 100%;
+
+  span {
+    font-size: 1rem;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  &__icon {
+    transition: transform 0.2s;
+    width: 26px;
+    height: 26px;
+    font-size: 26px;
+    color: #60626f;
+    cursor: pointer;
+
+    &-edit {
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  img {
+    height: 25px;
+    width: 25px;
+    margin-right: 5px;
+  }
+}
+
+.pdf-unit {
+  display: flex;
+  align-items: center;
+  min-width: fit-content;
+  max-width: 450px;
+  height: 35px;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0);
+  &:not(:last-of-type) {
+    margin-bottom: 10px;
+  }
+}
+
+.custom-placeholder {
+  border: 1px solid mat.get-color-from-palette(styles.$Builder-accent, 500);
+  min-height: 35px;
+  width: 500px;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.pdf-outer-container {
+  margin-bottom: 30px;
+}
+
+.hover {
+  &:hover {
+    box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 5px 2px rgba(0, 0, 0, 0.12);
+  }
+  cursor: grab;
+}
+
+a {
+  color: black;
+}

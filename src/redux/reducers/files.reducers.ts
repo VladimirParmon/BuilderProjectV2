@@ -31,7 +31,7 @@ export const filesReducer = createReducer(
   on(filesActions.insertNewPDFFilesDescriptions, (state, { filesDescriptions }) => {
     return {
       ...state,
-      PDFs: [...state.images, ...filesDescriptions],
+      PDFs: [...state.PDFs, ...filesDescriptions],
     };
   }),
   on(filesActions.deleteTextStorageUnit, (state, { id }) => ({
@@ -51,5 +51,13 @@ export const filesReducer = createReducer(
   on(filesActions.deleteMultipleImages, (state, { imageDescriptionIds }) => ({
     ...state,
     images: state.images.filter((i) => !imageDescriptionIds.includes(i.id)),
+  })),
+  on(filesActions.deletePDF, (state, { fileDescriptionId }) => ({
+    ...state,
+    PDFs: state.PDFs.filter((p) => fileDescriptionId !== p.id),
+  })),
+  on(filesActions.deleteMultiplePDFs, (state, { fileDescriptionIds }) => ({
+    ...state,
+    PDFs: state.PDFs.filter((p) => !fileDescriptionIds.includes(p.id)),
   }))
 );

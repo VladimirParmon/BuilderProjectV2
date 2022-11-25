@@ -1,0 +1,25 @@
+<mat-icon
+  class="pdf-container__icon"
+  (click)="openDialogToChooseFiles()"
+  *ngIf="isGlobalEditOn$ | async"
+  >note_add</mat-icon
+>
+<div cdkDropList (cdkDropListDropped)="drop($event)" class="pdf-outer-container">
+  <ng-container *ngFor="let pdf of PDFFiles; let i = index">
+    <div
+      class="pdf-unit"
+      [ngClass]="{ hover: isGlobalEditOn$ | async }"
+      cdkDrag
+      [cdkDragDisabled]="!(isGlobalEditOn$ | async)"
+    >
+      <div class="custom-placeholder" *cdkDragPlaceholder></div>
+      <a [href]="pdf.pathToFile" target="_blank" class="pdf-container">
+        <img src="assets/img/pdf.svg" />
+        <span>{{ getName(pdf.pathToFile) }}</span>
+      </a>
+      <mat-icon class="pdf-container__icon" (click)="deletePDF(i)" *ngIf="isGlobalEditOn$ | async"
+        >close</mat-icon
+      >
+    </div>
+  </ng-container>
+</div>

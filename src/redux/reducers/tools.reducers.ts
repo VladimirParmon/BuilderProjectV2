@@ -2,6 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { globalActions } from 'src/redux/actions/global.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { initialState } from 'src/redux/';
+import { FileDescriptionId } from 'src/constants/models';
 
 export const toolsReducer = createReducer(
   initialState.tools,
@@ -27,8 +28,11 @@ export const toolsReducer = createReducer(
   on(toolsActions.deleteTool, (state, { toolDescriptionId }) =>
     state.filter((el) => el.id !== toolDescriptionId)
   ),
-  on(toolsActions.updateToolContents, (state, { toolDescriptionId, newContents }) =>
-    state.map((el) => (el.id === toolDescriptionId ? { ...el, content: newContents } : el))
+  on(
+    toolsActions.updateToolContents,
+    toolsActions.updatePDFToolContents,
+    (state, { toolDescriptionId, newContents }) =>
+      state.map((el) => (el.id === toolDescriptionId ? { ...el, content: newContents } : el))
   ),
   on(
     toolsActions.updateCollageToolLayout,
@@ -43,5 +47,21 @@ export const toolsReducer = createReducer(
             }
           : el
       )
+  ),
+  on(toolsActions.addNewContentsToPDF, (state, { toolDescriptionId, fileDescriptionIds }) =>
+    state.map((t) => {
+      if (t.id !== toolDescriptionId) return t;
+      const oldContents = t.content as FileDescriptionId[];
+      const newContents = [...oldContents, ...fileDescriptionIds];
+      return { ...t, content: newContents };
+    })
+  ),
+  on(toolsActions.deleteFileFromPDFTool, (state, { toolDescriptionId, fileDescriptionId }) =>
+    state.map((t) => {
+      if (t.id !== toolDescriptionId) return t;
+      const oldContents = t.content as FileDescriptionId[];
+      const newContents = oldContents.filter((c) => c !== fileDescriptionId);
+      return { ...t, content: newContents };
+    })
   )
 );

@@ -19,6 +19,9 @@ enum ToolsActions {
   deleteTool = '[Tools/Text] Delete a tool description using its id',
   updateToolContents = '[Tool/Collage] Update a collage tool contents (ids of file descriptions or text)',
   updateCollageToolLayout = '[Tool/Collage] Update layout settings (justify, align, flow)',
+  updatePDFToolContents = '[Tools/PDF] Update PDF tool contents array (ids of file descriptions)',
+  addNewContentsToPDF = '[Tools/PDF] Add new PDF ids to array of contents',
+  deleteFileFromPDFTool = '[Tools/PDF] Delete a file from PDF tool contents array',
 }
 
 const insertNewCollageTool = createAction(
@@ -61,6 +64,18 @@ const updateCollageToolLayout = createAction(
     newFlow: FlexboxFlowOptions;
   }>()
 );
+const updatePDFToolContents = createAction(
+  ToolsActions.updatePDFToolContents,
+  props<{ toolDescriptionId: string; newContents: string[] }>()
+);
+const addNewContentsToPDF = createAction(
+  ToolsActions.addNewContentsToPDF,
+  props<{ toolDescriptionId: string; fileDescriptionIds: string[] }>()
+);
+const deleteFileFromPDFTool = createAction(
+  ToolsActions.deleteFileFromPDFTool,
+  props<{ toolDescriptionId: string; fileDescriptionId: string }>()
+);
 
 export const toolsActions = {
   insertNewCollageTool,
@@ -72,4 +87,7 @@ export const toolsActions = {
   deleteTool,
   updateToolContents,
   updateCollageToolLayout,
+  updatePDFToolContents,
+  addNewContentsToPDF,
+  deleteFileFromPDFTool,
 };
