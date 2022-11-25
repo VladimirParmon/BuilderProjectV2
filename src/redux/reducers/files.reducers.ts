@@ -34,6 +34,12 @@ export const filesReducer = createReducer(
       PDFs: [...state.PDFs, ...filesDescriptions],
     };
   }),
+  on(filesActions.insertNewVideoFileDescription, (state, { fileDescription }) => {
+    return {
+      ...state,
+      videos: [...state.videos, fileDescription],
+    };
+  }),
   on(filesActions.deleteTextStorageUnit, (state, { id }) => ({
     ...state,
     text: state.text.filter((u) => u.id !== id),
@@ -59,5 +65,9 @@ export const filesReducer = createReducer(
   on(filesActions.deleteMultiplePDFs, (state, { fileDescriptionIds }) => ({
     ...state,
     PDFs: state.PDFs.filter((p) => !fileDescriptionIds.includes(p.id)),
+  })),
+  on(filesActions.deleteVideo, (state, { fileDescriptionId }) => ({
+    ...state,
+    videos: state.videos.filter((v) => fileDescriptionId !== v.id),
   }))
 );

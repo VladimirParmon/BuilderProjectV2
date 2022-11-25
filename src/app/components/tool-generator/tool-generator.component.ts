@@ -73,6 +73,8 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
       const toolType = this.toolDescription.type;
       if (toolType === ToolNames.TEXT) {
         this.deleteTextToolStorageUnit();
+      } else if (toolType === ToolNames.VIDEO) {
+        this.deleteRelatedVideoStorageUnit();
       } else {
         const fileDescriptionIds = this.toolDescription.content;
         if (this.utilsService.isNonEmptyArrayOfStrings(fileDescriptionIds)) {
@@ -91,9 +93,18 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
   deleteTextToolStorageUnit() {
     if (this.toolDescription) {
-      const toolId = this.toolDescription.content;
-      if (this.utilsService.isString(toolId)) {
-        this.store.dispatch(filesActions.deleteTextStorageUnit({ id: toolId }));
+      const storageUnitDescriptionId = this.toolDescription.content;
+      if (this.utilsService.isString(storageUnitDescriptionId)) {
+        this.store.dispatch(filesActions.deleteTextStorageUnit({ id: storageUnitDescriptionId }));
+      }
+    }
+  }
+
+  deleteRelatedVideoStorageUnit() {
+    if (this.toolDescription) {
+      const fileDescriptionId = this.toolDescription.content;
+      if (this.utilsService.isString(fileDescriptionId)) {
+        this.store.dispatch(filesActions.deleteVideo({ fileDescriptionId }));
       }
     }
   }

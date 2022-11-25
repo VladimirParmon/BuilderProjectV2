@@ -40,6 +40,7 @@ import { LetModule } from '@ngrx/component';
 import { QuillModule } from 'ngx-quill';
 import { CollageComponent } from './components/tools/collage/collage.component';
 import { PDFComponent } from './components/tools/pdf/pdf.component';
+import { VideoComponent } from './components/tools/video/video.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { PDFComponent } from './components/tools/pdf/pdf.component';
     FileUploadDNDDirective,
     CollageComponent,
     PDFComponent,
+    VideoComponent,
   ],
   imports: [
     FormsModule,
