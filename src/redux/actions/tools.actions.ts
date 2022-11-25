@@ -22,6 +22,8 @@ enum ToolsActions {
   updatePDFToolContents = '[Tools/PDF] Update PDF tool contents array (ids of file descriptions)',
   addNewContentsToPDF = '[Tools/PDF] Add new PDF ids to array of contents',
   deleteFileFromPDFTool = '[Tools/PDF] Delete a file from PDF tool contents array',
+  insertNewImagesInCollage = '[Tools/Collage] Insert new image ids into contents array',
+  deleteImagesFromCollage = '[Tools/Collage] Delete image ids from contents array',
 }
 
 const insertNewCollageTool = createAction(
@@ -76,6 +78,14 @@ const deleteFileFromPDFTool = createAction(
   ToolsActions.deleteFileFromPDFTool,
   props<{ toolDescriptionId: string; fileDescriptionId: string }>()
 );
+const insertNewImagesInCollage = createAction(
+  ToolsActions.insertNewImagesInCollage,
+  props<{ toolDescriptionId: string; fileDescriptionIds: string[] }>()
+);
+const deleteImageFromCollage = createAction(
+  ToolsActions.deleteImagesFromCollage,
+  props<{ toolDescriptionId: string; fileDescriptionId: string }>()
+);
 
 export const toolsActions = {
   insertNewCollageTool,
@@ -90,4 +100,6 @@ export const toolsActions = {
   updatePDFToolContents,
   addNewContentsToPDF,
   deleteFileFromPDFTool,
+  insertNewImagesInCollage,
+  deleteImageFromCollage,
 };

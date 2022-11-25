@@ -51,7 +51,7 @@ const updateImageWidth = createAction(
   FileActions.updateImageWidth,
   props<{ imageDescriptionId: string; newWidth: number }>()
 );
-const deleteImage = createAction(FileActions.deleteImage, props<{ imageDescriptionId: string }>());
+const deleteImage = createAction(FileActions.deleteImage, props<{ fileDescriptionId: string }>());
 const deleteMultipleImages = createAction(
   FileActions.deleteMultipleImages,
   props<{ imageDescriptionIds: string[] }>()

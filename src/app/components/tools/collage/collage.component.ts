@@ -133,18 +133,15 @@ export class CollageComponent implements OnDestroy, OnInit {
 
   addImages(fileNames: string[]) {
     if (this.toolDescription) {
-      const collageToolDescriptionId = this.toolDescription.id;
+      const toolDescriptionId = this.toolDescription.id;
       const { filesDescriptions, fileDescriptionIds } =
         this.toolService.createImageDescriptions(fileNames);
 
-      const oldContents = this.toolDescription.content as FileDescriptionId[];
-      const newContents = [...oldContents, ...fileDescriptionIds];
-
       this.store.dispatch(filesActions.insertNewImageFilesDescriptions({ filesDescriptions }));
       this.store.dispatch(
-        toolsActions.updateToolContents({
-          toolDescriptionId: collageToolDescriptionId,
-          newContents,
+        toolsActions.insertNewImagesInCollage({
+          toolDescriptionId,
+          fileDescriptionIds,
         })
       );
     }
@@ -159,19 +156,16 @@ export class CollageComponent implements OnDestroy, OnInit {
 
   deletePic() {
     if (this.toolDescription) {
-      const collageToolDescriptionId = this.toolDescription.id;
-      const imageDescriptionId = this.images[this.currentPicIndex].id;
-
-      const oldContents = this.toolDescription.content as string[];
-      const newContents = oldContents.filter((id) => id !== imageDescriptionId) || [];
+      const toolDescriptionId = this.toolDescription.id;
+      const fileDescriptionId = this.images[this.currentPicIndex].id;
 
       this.store.dispatch(
-        toolsActions.updateToolContents({
-          toolDescriptionId: collageToolDescriptionId,
-          newContents,
+        toolsActions.deleteImageFromCollage({
+          toolDescriptionId,
+          fileDescriptionId,
         })
       );
-      this.store.dispatch(filesActions.deleteImage({ imageDescriptionId }));
+      this.store.dispatch(filesActions.deleteImage({ fileDescriptionId }));
 
       this.currentPicIndex = -1;
     }

@@ -48,20 +48,26 @@ export const toolsReducer = createReducer(
           : el
       )
   ),
-  on(toolsActions.addNewContentsToPDF, (state, { toolDescriptionId, fileDescriptionIds }) =>
-    state.map((t) => {
-      if (t.id !== toolDescriptionId) return t;
-      const oldContents = t.content as FileDescriptionId[];
-      const newContents = [...oldContents, ...fileDescriptionIds];
-      return { ...t, content: newContents };
-    })
+  on(
+    toolsActions.addNewContentsToPDF,
+    toolsActions.insertNewImagesInCollage,
+    (state, { toolDescriptionId, fileDescriptionIds }) =>
+      state.map((t) => {
+        if (t.id !== toolDescriptionId) return t;
+        const oldContents = t.content as FileDescriptionId[];
+        const newContents = [...oldContents, ...fileDescriptionIds];
+        return { ...t, content: newContents };
+      })
   ),
-  on(toolsActions.deleteFileFromPDFTool, (state, { toolDescriptionId, fileDescriptionId }) =>
-    state.map((t) => {
-      if (t.id !== toolDescriptionId) return t;
-      const oldContents = t.content as FileDescriptionId[];
-      const newContents = oldContents.filter((c) => c !== fileDescriptionId);
-      return { ...t, content: newContents };
-    })
+  on(
+    toolsActions.deleteImageFromCollage,
+    toolsActions.deleteFileFromPDFTool,
+    (state, { toolDescriptionId, fileDescriptionId }) =>
+      state.map((t) => {
+        if (t.id !== toolDescriptionId) return t;
+        const oldContents = t.content as FileDescriptionId[];
+        const newContents = oldContents.filter((c) => c !== fileDescriptionId);
+        return { ...t, content: newContents };
+      })
   )
 );

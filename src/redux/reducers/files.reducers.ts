@@ -44,9 +44,9 @@ export const filesReducer = createReducer(
       image.id === imageDescriptionId ? { ...image, width: newWidth } : image
     ),
   })),
-  on(filesActions.deleteImage, (state, { imageDescriptionId }) => ({
+  on(filesActions.deleteImage, (state, { fileDescriptionId }) => ({
     ...state,
-    images: state.images.filter((i) => i.id !== imageDescriptionId),
+    images: state.images.filter((i) => i.id !== fileDescriptionId),
   })),
   on(filesActions.deleteMultipleImages, (state, { imageDescriptionIds }) => ({
     ...state,
