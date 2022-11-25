@@ -1,34 +1,27 @@
 import { createReducer, on } from '@ngrx/store';
-import { globalActions } from 'src/redux/actions/global.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { initialState } from 'src/redux/';
 import { FileDescriptionId } from 'src/constants/models';
 
 export const toolsReducer = createReducer(
   initialState.tools,
-  on(globalActions.saveRetrievedData, (state, { data }) => data.tools),
-  on(toolsActions.insertNewCollageTool, (state, { collageToolDescription }) => {
-    return [...state, collageToolDescription];
-  }),
-  on(toolsActions.insertNewAudioTool, (state, { audioToolDescription }) => {
-    return [...state, audioToolDescription];
-  }),
-  on(toolsActions.insertNewPDFTool, (state, { PDFToolDescription }) => {
-    return [...state, PDFToolDescription];
-  }),
-  on(toolsActions.insertNewSliderTool, (state, { sliderToolDescription }) => {
-    return [...state, sliderToolDescription];
-  }),
-  on(toolsActions.insertNewVideoTool, (state, { videoToolDescription }) => {
-    return [...state, videoToolDescription];
-  }),
-  on(toolsActions.insertNewTextTool, (state, { textToolDescription }) => {
-    return [...state, textToolDescription];
-  }),
+  on(
+    toolsActions.insertNewCollageTool,
+    toolsActions.insertNewAudioTool,
+    toolsActions.insertNewPDFTool,
+    toolsActions.insertNewSliderTool,
+    toolsActions.insertNewVideoTool,
+    toolsActions.insertNewTextTool,
+    (state, { toolDescription }) => {
+      return [...state, toolDescription];
+    }
+  ),
+  //TODO: separate actions for each tool for transparency
   on(toolsActions.deleteTool, (state, { toolDescriptionId }) =>
     state.filter((el) => el.id !== toolDescriptionId)
   ),
   on(
+    //TODO: naming here is wrong
     toolsActions.updateToolContents,
     toolsActions.updatePDFToolContents,
     (state, { toolDescriptionId, newContents }) =>

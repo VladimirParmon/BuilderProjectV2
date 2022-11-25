@@ -10,7 +10,6 @@ enum ContentsActions {
   changePageParent = '[Contents/Page] Change parentId of a page',
   removeChildPage = '[Contents/Page] Remove a child from the children pages array',
   addChildPage = '[Contents/Page] Add a child to the children pages array',
-  updateWholeChildrenArray = '[Contents/Page] Insert newly formed array as a part of DND operation',
   updateWholeSlice = '[Contents/Whole] Update the whole contents array',
   deleteTool = '[Contents/Tools] Delete a tool id from array of page tool ids',
   addTool = '[Contents/Tools] Add a new tool id to array of tool ids',
@@ -40,10 +39,6 @@ const addChildPage = createAction(
   ContentsActions.addChildPage,
   props<{ targetPageId: string; pageToAddId: string }>()
 );
-const updateWholeChildrenArray = createAction(
-  ContentsActions.updateWholeChildrenArray,
-  props<{ targetPageId: string; newArray: string[] }>()
-);
 const updateWholeSlice = createAction(
   ContentsActions.updateWholeSlice,
   props<{ newArray: SinglePageInfo[] }>()
@@ -63,7 +58,6 @@ export const contentsActions = {
   changePageParent,
   removeChildPage,
   addChildPage,
-  updateWholeChildrenArray,
   updateWholeSlice,
   deleteTool,
   addTool,

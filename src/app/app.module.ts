@@ -41,6 +41,7 @@ import { QuillModule } from 'ngx-quill';
 import { CollageComponent } from './components/tools/collage/collage.component';
 import { PDFComponent } from './components/tools/pdf/pdf.component';
 import { VideoComponent } from './components/tools/video/video.component';
+import { metaReducers } from 'src/redux/reducers/index.reducers';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,7 @@ import { VideoComponent } from './components/tools/video/video.component';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({}),
     BrowserAnimationsModule,
     QuillModule.forRoot(),

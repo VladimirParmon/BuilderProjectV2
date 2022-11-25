@@ -23,14 +23,14 @@ export class ToolService {
       id: textDescriptionId,
       text: '',
     };
-    const textToolDescription: m.TextToolDescription = {
+    const toolDescription: m.TextToolDescription = {
       id: textToolDescriptionId,
       type: ToolNames.TEXT,
       content: textDescriptionId,
     };
 
     this.store.dispatch(filesActions.insertNewTextStorageUnit({ textDescription }));
-    this.store.dispatch(toolsActions.insertNewTextTool({ textToolDescription }));
+    this.store.dispatch(toolsActions.insertNewTextTool({ toolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: textToolDescriptionId }));
   }
 
@@ -42,13 +42,13 @@ export class ToolService {
     }));
     const fileDescriptionIds = filesDescriptions.map((d) => d.id);
 
-    const audioToolDescription: m.AudioToolDescription = {
+    const toolDescription: m.AudioToolDescription = {
       id: audioToolDescriptionId,
       type: ToolNames.AUDIO,
       content: fileDescriptionIds,
     };
     this.store.dispatch(filesActions.insertNewAudioFilesDescriptions({ filesDescriptions }));
-    this.store.dispatch(toolsActions.insertNewAudioTool({ audioToolDescription }));
+    this.store.dispatch(toolsActions.insertNewAudioTool({ toolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: audioToolDescriptionId }));
   }
 
@@ -59,13 +59,13 @@ export class ToolService {
       id: fileDescriptionId,
       pathToFile: this.utilsService.getTempFilesPath(fileName),
     };
-    const videoToolDescription: m.VideoToolDescription = {
+    const toolDescription: m.VideoToolDescription = {
       id: videoToolDescriptionId,
       type: ToolNames.VIDEO,
       content: fileDescriptionId,
     };
     this.store.dispatch(filesActions.insertNewVideoFileDescription({ fileDescription }));
-    this.store.dispatch(toolsActions.insertNewVideoTool({ videoToolDescription }));
+    this.store.dispatch(toolsActions.insertNewVideoTool({ toolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: videoToolDescriptionId }));
   }
 
@@ -82,14 +82,14 @@ export class ToolService {
     const PDFToolDescriptionId = uuidv4();
     const { filesDescriptions, fileDescriptionIds } = this.createPDFDescriptions(fileNames);
 
-    const PDFToolDescription: m.PDFToolDescription = {
+    const toolDescription: m.PDFToolDescription = {
       id: PDFToolDescriptionId,
       type: ToolNames.PDF,
       content: fileDescriptionIds,
     };
 
     this.store.dispatch(filesActions.insertNewPDFFilesDescriptions({ filesDescriptions }));
-    this.store.dispatch(toolsActions.insertNewPDFTool({ PDFToolDescription }));
+    this.store.dispatch(toolsActions.insertNewPDFTool({ toolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: PDFToolDescriptionId }));
   }
 
@@ -107,7 +107,7 @@ export class ToolService {
     const collageToolDescriptionId = uuidv4();
     const { filesDescriptions, fileDescriptionIds } = this.createImageDescriptions(fileNames);
 
-    const collageToolDescription: m.CollageToolDescription = {
+    const toolDescription: m.CollageToolDescription = {
       id: collageToolDescriptionId,
       type: ToolNames.COLLAGE,
       content: fileDescriptionIds,
@@ -117,7 +117,7 @@ export class ToolService {
     };
 
     this.store.dispatch(filesActions.insertNewImageFilesDescriptions({ filesDescriptions }));
-    this.store.dispatch(toolsActions.insertNewCollageTool({ collageToolDescription }));
+    this.store.dispatch(toolsActions.insertNewCollageTool({ toolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: collageToolDescriptionId }));
   }
 
@@ -125,13 +125,13 @@ export class ToolService {
     const sliderToolDescriptionId = uuidv4();
     const { filesDescriptions, fileDescriptionIds } = this.createImageDescriptions(fileNames);
 
-    const sliderToolDescription: m.SliderToolDescription = {
+    const toolDescription: m.SliderToolDescription = {
       id: sliderToolDescriptionId,
       type: ToolNames.SLIDER,
       content: fileDescriptionIds,
     };
     this.store.dispatch(filesActions.insertNewImageFilesDescriptions({ filesDescriptions }));
-    this.store.dispatch(toolsActions.insertNewSliderTool({ sliderToolDescription }));
+    this.store.dispatch(toolsActions.insertNewSliderTool({ toolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: sliderToolDescriptionId }));
   }
 }

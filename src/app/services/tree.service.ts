@@ -201,9 +201,9 @@ export class TreeService {
       );
     }
     this.store.dispatch(
-      contentsActions.updateWholeChildrenArray({
-        targetPageId: newParentNodeId,
-        newArray: finalArrayThatGoesToTheStore,
+      contentsActions.updatePageChildren({
+        pageId: newParentNodeId,
+        newChildrenIds: finalArrayThatGoesToTheStore,
       })
     );
     this.store.dispatch(

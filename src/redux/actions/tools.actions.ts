@@ -29,28 +29,28 @@ enum ToolsActions {
 const insertNewCollageTool = createAction(
   ToolsActions.insertNewCollageTool,
   props<{
-    collageToolDescription: CollageToolDescription;
+    toolDescription: CollageToolDescription;
   }>()
 );
 const insertNewAudioTool = createAction(
   ToolsActions.insertNewAudioTool,
-  props<{ audioToolDescription: AudioToolDescription }>()
+  props<{ toolDescription: AudioToolDescription }>()
 );
 const insertNewVideoTool = createAction(
   ToolsActions.insertNewVideoTool,
-  props<{ videoToolDescription: VideoToolDescription }>()
+  props<{ toolDescription: VideoToolDescription }>()
 );
 const insertNewSliderTool = createAction(
   ToolsActions.insertNewSliderTool,
-  props<{ sliderToolDescription: SliderToolDescription }>()
+  props<{ toolDescription: SliderToolDescription }>()
 );
 const insertNewPDFTool = createAction(
   ToolsActions.insertNewPDFTool,
-  props<{ PDFToolDescription: PDFToolDescription }>()
+  props<{ toolDescription: PDFToolDescription }>()
 );
 const insertNewTextTool = createAction(
   ToolsActions.insertNewTextTool,
-  props<{ textToolDescription: TextToolDescription }>()
+  props<{ toolDescription: TextToolDescription }>()
 );
 const deleteTool = createAction(ToolsActions.deleteTool, props<{ toolDescriptionId: string }>());
 const updateToolContents = createAction(
