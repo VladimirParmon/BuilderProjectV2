@@ -109,7 +109,8 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
   openDeleteDialog() {
     const dialogConfig = this.utilsService.createMatDialogConfig(
       ['delete-page-dialog'], //TODO: change this
-      ModalWindowsText.DELETE_TOOL
+      ModalWindowsText.DELETE_TOOL,
+      15
     );
     const dialogRef = this.dialog.open(ConfirmActionComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((positiveAnswer) => {

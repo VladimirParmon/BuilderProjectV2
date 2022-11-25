@@ -11,7 +11,7 @@ export enum ModalWindowsText {
   CREATE_NEW_PAGE = 'Пожалуйста, введите имя новой страницы',
   DELETE_PAGE = 'Удалить страницу',
   GENERATE_SITE = 'Пожалуйста, дайте проекту имя',
-  DELETE_TOOL = 'tekst dlya tula',
+  DELETE_TOOL = 'Вы точно хотите удалить этот блок?',
 }
 
 export enum ActionCases {
