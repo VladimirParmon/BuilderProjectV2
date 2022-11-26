@@ -85,6 +85,9 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
             case ToolNames.PDF:
               this.deleteAllRelatedPDFs(fileDescriptionIds);
               break;
+            case ToolNames.AUDIO:
+              this.deleteAllRelatedAudios(fileDescriptionIds);
+              break;
           }
         }
       }
@@ -115,6 +118,10 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
   deleteAllRelatedPDFs(fileDescriptionIds: string[]) {
     this.store.dispatch(filesActions.deleteMultiplePDFs({ fileDescriptionIds }));
+  }
+
+  deleteAllRelatedAudios(fileDescriptionIds: string[]) {
+    this.store.dispatch(filesActions.deleteMultipleAudios({ fileDescriptionIds }));
   }
 
   openDeleteDialog() {

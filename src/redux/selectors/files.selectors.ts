@@ -24,6 +24,6 @@ export const getMultipleFiles = (props: { ids: string[]; type: ToolNames }) => {
     const shelf = data[fileType] as Array<
       TextDescription | ImageFileDescription | BasicFileDescription
     >;
-    return props.ids.map((id) => shelf.find((el) => el.id === id));
+    return props.ids.map((id) => shelf.find((el) => el.id === id)).filter((r) => r);
   });
 };

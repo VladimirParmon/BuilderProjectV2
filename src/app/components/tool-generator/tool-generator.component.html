@@ -18,5 +18,9 @@
     (notify)="getNotification()"
   ></app-pdf>
   <app-video *ngSwitchCase="names.VIDEO" [fileDescriptionId]="toolDescription.content"></app-video>
-  <app-audio *ngSwitchCase="names.AUDIO" [toolDescriptionId]="toolDescription.id"></app-audio>
+  <app-audio
+    *ngSwitchCase="names.AUDIO"
+    [toolDescriptionId]="toolDescription.id"
+    (notify)="getNotification()"
+  ></app-audio>
 </div>
