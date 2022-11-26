@@ -1,0 +1,25 @@
+<mat-icon
+  class="audio-container__icon"
+  (click)="openDialogToChooseFiles()"
+  *ngIf="isGlobalEditOn$ | async"
+  >note_add</mat-icon
+>
+<div cdkDropList (cdkDropListDropped)="drop($event)" class="audio-outer-container">
+  <ng-container *ngFor="let audio of audioFiles; let i = index">
+    <div
+      class="audio-unit"
+      [ngClass]="{ hover: isGlobalEditOn$ | async }"
+      cdkDrag
+      [cdkDragDisabled]="!(isGlobalEditOn$ | async)"
+    >
+      <div class="custom-placeholder" *cdkDragPlaceholder></div>
+      <span class="audio-label">
+        {{ getName(audio.pathToFile) }}
+        <mat-icon class="audio-unit__icon" (click)="deleteAudio(i)" *ngIf="isGlobalEditOn$ | async"
+          >close</mat-icon
+        >
+      </span>
+      <audio controls [src]="audio.pathToFile" class="audio"></audio>
+    </div>
+  </ng-container>
+</div>

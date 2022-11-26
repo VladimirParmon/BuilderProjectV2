@@ -13,14 +13,15 @@ enum FileActions {
   insertImages = '[Files/Image] Insert new images to the files storage',
   insertVideo = '[Files/Video] Insert a new video to the files storage',
   insertPDF = '[Files/PDF] Insert new PDFs to the files storage',
-  insertAudio = '[Files/Audio] Insert a new audio to the files storage',
+  insertAudio = '[Files/Audio] Insert new audios to the files storage',
   deleteText = '[Files/Text] Delete a text storage unit',
   updateImageWidth = '[Files/Image] Update the width of an image',
   deleteImage = '[Files/Image] Delete an image file description from store',
   deleteMultipleImages = '[Files/Image] Delete multiple image file descriptions from store',
   deletePDF = '[Files/PDF] Delete a PDF file description from store',
   deleteMultiplePDFs = '[Files/PDF] Mass delete PDF files (usually, when the related tool is deleted)',
-  deleteVideo = '[Files/Video] Delete a video description file',
+  deleteVideo = '[Files/Video] Delete a video description',
+  deleteAudio = '[Files/Audio] Delete an audio description',
 }
 
 const updateTextStorageUnit = createAction(
@@ -63,6 +64,7 @@ const deleteMultiplePDFs = createAction(
   props<{ fileDescriptionIds: string[] }>()
 );
 const deleteVideo = createAction(FileActions.deleteVideo, props<{ fileDescriptionId: string }>());
+const deleteAudio = createAction(FileActions.deleteAudio, props<{ fileDescriptionId: string }>());
 
 export const filesActions = {
   updateTextStorageUnit,
@@ -78,4 +80,5 @@ export const filesActions = {
   deletePDF,
   deleteMultiplePDFs,
   deleteVideo,
+  deleteAudio,
 };

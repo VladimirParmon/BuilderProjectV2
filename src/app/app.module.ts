@@ -42,6 +42,7 @@ import { CollageComponent } from './components/tools/collage/collage.component';
 import { PDFComponent } from './components/tools/pdf/pdf.component';
 import { VideoComponent } from './components/tools/video/video.component';
 import { metaReducers } from 'src/redux/reducers/index.reducers';
+import { AudioComponent } from './components/tools/audio/audio.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { metaReducers } from 'src/redux/reducers/index.reducers';
     CollageComponent,
     PDFComponent,
     VideoComponent,
+    AudioComponent,
   ],
   imports: [
     FormsModule,

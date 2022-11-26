@@ -24,6 +24,7 @@ export const toolsReducer = createReducer(
     //TODO: naming here is wrong
     toolsActions.updateToolContents,
     toolsActions.updatePDFToolContents,
+    toolsActions.updateAudioToolContents,
     (state, { toolDescriptionId, newContents }) =>
       state.map((el) => (el.id === toolDescriptionId ? { ...el, content: newContents } : el))
   ),
@@ -55,6 +56,7 @@ export const toolsReducer = createReducer(
   on(
     toolsActions.deleteImageFromCollage,
     toolsActions.deleteFileFromPDFTool,
+    toolsActions.deleteFileFromAudioTool,
     (state, { toolDescriptionId, fileDescriptionId }) =>
       state.map((t) => {
         if (t.id !== toolDescriptionId) return t;

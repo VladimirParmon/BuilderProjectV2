@@ -34,13 +34,18 @@ export class ToolService {
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: textToolDescriptionId }));
   }
 
-  createNewAudioTool(pageId: string, fileNames: string[]) {
-    const audioToolDescriptionId = uuidv4();
+  createAudioDescriptions(fileNames: string[]) {
     const filesDescriptions: m.AudioFileDescription[] = fileNames.map((name) => ({
       id: uuidv4(),
       pathToFile: this.utilsService.getTempFilesPath(name),
     }));
     const fileDescriptionIds = filesDescriptions.map((d) => d.id);
+    return { filesDescriptions, fileDescriptionIds };
+  }
+
+  createNewAudioTool(pageId: string, fileNames: string[]) {
+    const audioToolDescriptionId = uuidv4();
+    const { filesDescriptions, fileDescriptionIds } = this.createAudioDescriptions(fileNames);
 
     const toolDescription: m.AudioToolDescription = {
       id: audioToolDescriptionId,

@@ -7,5 +7,8 @@ export const audiosReducer = createReducer(
   on(filesActions.insertNewAudioFilesDescriptions, (state, { filesDescriptions }) => [
     ...state,
     ...filesDescriptions,
-  ])
+  ]),
+  on(filesActions.deleteAudio, (state, { fileDescriptionId }) =>
+    state.filter((a) => a.id !== fileDescriptionId)
+  )
 );
