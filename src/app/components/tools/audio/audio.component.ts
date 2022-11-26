@@ -73,9 +73,9 @@ export class AudioComponent implements OnInit, OnDestroy {
 
   getName(filePath: string) {
     const strippedName = this.utilsService.getFileName(filePath);
-    const noMP3Extension = strippedName.replace(/.mp3/i, '');
-    if (strippedName.length > 50) return noMP3Extension.slice(0, 50) + '...';
-    return noMP3Extension;
+    const noExtension = this.utilsService.removeFileExtension(strippedName, ToolNames.AUDIO);
+    if (strippedName.length > 50) return noExtension.slice(0, 50) + '...';
+    return noExtension;
   }
 
   addAudio(fileNames: string[]) {

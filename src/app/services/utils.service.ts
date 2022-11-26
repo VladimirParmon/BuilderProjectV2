@@ -9,7 +9,7 @@ import {
   SinglePageInfo,
   ToolDescription,
 } from 'src/constants/models';
-import { MediaFileTypes, ToolNames } from 'src/constants/constants';
+import { inputTypes, MediaFileTypes, ToolNames } from 'src/constants/constants';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -170,5 +170,20 @@ export class UtilsService {
     return array.reduce((acc, next) => {
       return this.isBasicFileDescription(next);
     }, false);
+  }
+
+  removeFileExtension(fileName: string, toolType: ToolNames) {
+    let extensionsArray: inputTypes | null = null;
+    switch (toolType) {
+      case ToolNames.AUDIO:
+        extensionsArray = inputTypes.AUDIO;
+        break;
+    }
+    if (extensionsArray) {
+      const expressionString = extensionsArray.split(',').join('\\b|\\b');
+      return fileName.replace(new RegExp(expressionString, 'gi'), '').trim().replace(/ +/g, ' ');
+    } else {
+      return fileName;
+    }
   }
 }
