@@ -38,6 +38,8 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
   names = ToolNames;
   toolDescription: ToolDescription | null = null;
 
+  hasAlreadyBeenManuallyDeleted = false;
+
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -62,33 +64,37 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  delete() {
-    if (this.toolDescription) {
-      const toolDescriptionId = this.toolDescriptionId;
-      const pageId = this.pageId;
+  delete(manuallyDeleted?: boolean) {
+    if (!this.toolDescription || this.hasAlreadyBeenManuallyDeleted) return;
+    if (manuallyDeleted) {
+      this.hasAlreadyBeenManuallyDeleted = true;
+    } else {
+      this.utilsService.openSnackBar('Пустой блок был автоматически удален', 3000);
+    }
+    const toolDescriptionId = this.toolDescriptionId;
+    const pageId = this.pageId;
 
-      this.store.dispatch(contentsActions.deleteTool({ pageId, toolDescriptionId }));
-      this.store.dispatch(toolsActions.deleteTool({ toolDescriptionId }));
+    this.store.dispatch(contentsActions.deleteTool({ pageId, toolDescriptionId }));
+    this.store.dispatch(toolsActions.deleteTool({ toolDescriptionId }));
 
-      const toolType = this.toolDescription.type;
-      if (toolType === ToolNames.TEXT) {
-        this.deleteTextToolStorageUnit();
-      } else if (toolType === ToolNames.VIDEO) {
-        this.deleteRelatedVideoStorageUnit();
-      } else {
-        const fileDescriptionIds = this.toolDescription.content;
-        if (this.utilsService.isNonEmptyArrayOfStrings(fileDescriptionIds)) {
-          switch (toolType) {
-            case ToolNames.COLLAGE:
-              this.deleteAllCollageImages(fileDescriptionIds);
-              break;
-            case ToolNames.PDF:
-              this.deleteAllRelatedPDFs(fileDescriptionIds);
-              break;
-            case ToolNames.AUDIO:
-              this.deleteAllRelatedAudios(fileDescriptionIds);
-              break;
-          }
+    const toolType = this.toolDescription.type;
+    if (toolType === ToolNames.TEXT) {
+      this.deleteTextToolStorageUnit();
+    } else if (toolType === ToolNames.VIDEO) {
+      this.deleteRelatedVideoStorageUnit();
+    } else {
+      const fileDescriptionIds = this.toolDescription.content;
+      if (this.utilsService.isNonEmptyArrayOfStrings(fileDescriptionIds)) {
+        switch (toolType) {
+          case ToolNames.COLLAGE:
+            this.deleteAllCollageImages(fileDescriptionIds);
+            break;
+          case ToolNames.PDF:
+            this.deleteAllRelatedPDFs(fileDescriptionIds);
+            break;
+          case ToolNames.AUDIO:
+            this.deleteAllRelatedAudios(fileDescriptionIds);
+            break;
         }
       }
     }
@@ -132,7 +138,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     );
     const dialogRef = this.dialog.open(ConfirmActionComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((positiveAnswer) => {
-      if (positiveAnswer) this.delete();
+      if (positiveAnswer) this.delete(true);
     });
   }
 

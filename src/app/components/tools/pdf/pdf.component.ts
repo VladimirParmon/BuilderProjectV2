@@ -62,10 +62,10 @@ export class PDFComponent implements OnInit, OnDestroy {
       .select(getMultipleFiles({ ids, type: ToolNames.PDF }))
       .pipe(takeUntil(this.destroy$))
       .subscribe((files) => {
-        const isNotEmpty = files.length > 0;
-        if (isNotEmpty) {
+        if (files) {
           if (this.utilsService.isBasicFileDescriptionArray(files)) this.PDFFiles = files;
         } else {
+          this.destroy$.next(true);
           this.deleteTheToolSinceItsEmpty.emit('this tool is empty, please delete it');
         }
       });

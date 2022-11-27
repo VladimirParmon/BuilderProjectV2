@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil } from 'rxjs';
+import { EMPTY, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { FlexboxFlowOptions, FlexboxPositioningOptions, ToolNames } from 'src/constants/constants';
@@ -72,7 +72,11 @@ export class CollageComponent implements OnDestroy, OnInit {
           }),
           switchMap((fetchedDescription) => {
             const arrayOfIds = fetchedDescription.content as string[];
-            return this.fetchPics(arrayOfIds);
+            if (this.utilsService.isNonEmptyArrayOfStrings(arrayOfIds)) {
+              return this.fetchPics(arrayOfIds);
+            } else {
+              return EMPTY;
+            }
           })
         )
         .subscribe();
@@ -96,12 +100,10 @@ export class CollageComponent implements OnDestroy, OnInit {
       .select(getMultipleFiles({ ids: arrayOfIds, type: ToolNames.COLLAGE }))
       .pipe(takeUntil(this.destroy$))
       .subscribe((pics) => {
-        const isNotEmpty = pics.length > 0;
-        if (isNotEmpty) {
-          if (this.utilsService.isImageFileDescriptionArray(pics)) {
-            this.images = [...pics];
-          }
+        if (pics) {
+          if (this.utilsService.isImageFileDescriptionArray(pics)) this.images = [...pics];
         } else {
+          this.destroy$.next(true);
           this.deleteTheToolSinceItsEmpty.emit('this tool is empty, please delete it');
         }
       });
@@ -220,8 +222,8 @@ export class CollageComponent implements OnDestroy, OnInit {
     this.utilsService.openSnackBar(
       `Ручное сохранение не требуется, все изменения компонент сохраняет автоматически.
       При удалении компонента удаляются и все связанные с ним изображения.`,
-      'Понятно',
-      10000
+      10000,
+      'Понятно'
     );
   }
 }
