@@ -143,7 +143,7 @@ export class UtilsService {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  openSnackBar(message: string, action?: string, duration?: number) {
+  openSnackBar(message: string, duration?: number, action?: string) {
     this.snackBar.open(message, action, {
       duration: duration,
       panelClass: action ? undefined : 'snackbar-center',

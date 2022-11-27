@@ -75,7 +75,7 @@ export class ViewComponent implements OnDestroy {
         newName: this.inputValue,
       })
     );
-    this.utilsService.openSnackBar('Новое название страницы сохранено', 'Понятно', 2000);
+    this.utilsService.openSnackBar('Новое название страницы сохранено', 2000, 'Понятно');
   }
 
   editPageName() {

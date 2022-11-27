@@ -96,7 +96,7 @@ export class TextComponent implements OnInit, OnDestroy {
       this.store.dispatch(
         filesActions.updateTextStorageUnit({ id: this.textFileId, newText: text })
       );
-      this.utilsService.openSnackBar('Текстовое поле успешно сохранено', 'Понятно', 2000);
+      this.utilsService.openSnackBar('Текстовое поле успешно сохранено', 2000, 'Понятно');
     }
   }
 }
