@@ -1,26 +1,36 @@
-<div *ngIf="toolDescription" [ngSwitch]="toolDescription.type" class="block" appFullscreen>
-  <mat-icon
-    *ngIf="isGlobalEditOn$ | async"
-    color="accent"
-    class="tool-icon"
-    (click)="openDeleteDialog()"
-    >delete</mat-icon
-  >
-  <app-text *ngSwitchCase="names.TEXT" [toolContent]="toolDescription.content"></app-text>
-  <app-collage
-    *ngSwitchCase="names.COLLAGE"
-    [toolDescriptionId]="toolDescription.id"
-    (notify)="getNotification()"
-  ></app-collage>
-  <app-pdf
-    *ngSwitchCase="names.PDF"
-    [toolDescriptionId]="toolDescription.id"
-    (notify)="getNotification()"
-  ></app-pdf>
-  <app-video *ngSwitchCase="names.VIDEO" [fileDescriptionId]="toolDescription.content"></app-video>
-  <app-audio
-    *ngSwitchCase="names.AUDIO"
-    [toolDescriptionId]="toolDescription.id"
-    (notify)="getNotification()"
-  ></app-audio>
+<div class="tool-generator">
+  <div *ngIf="toolDescription" [ngSwitch]="toolDescription.type" class="block" appFullscreen>
+    <mat-icon
+      *ngIf="isGlobalEditOn$ | async"
+      color="accent"
+      class="tool-icon"
+      (click)="openDeleteDialog()"
+      >delete</mat-icon
+    >
+    <app-text *ngSwitchCase="names.TEXT" [toolContent]="toolDescription.content"></app-text>
+    <app-collage
+      *ngSwitchCase="names.COLLAGE"
+      [toolDescriptionId]="toolDescription.id"
+      (notify)="getNotification()"
+    ></app-collage>
+    <app-pdf
+      *ngSwitchCase="names.PDF"
+      [toolDescriptionId]="toolDescription.id"
+      (notify)="getNotification()"
+    ></app-pdf>
+    <app-video
+      *ngSwitchCase="names.VIDEO"
+      [fileDescriptionId]="toolDescription.content"
+    ></app-video>
+    <app-audio
+      *ngSwitchCase="names.AUDIO"
+      [toolDescriptionId]="toolDescription.id"
+      (notify)="getNotification()"
+    ></app-audio>
+    <app-slider
+      *ngSwitchCase="names.SLIDER"
+      [toolDescriptionId]="toolDescription.id"
+      (notify)="getNotification()"
+    ></app-slider>
+  </div>
 </div>

@@ -25,18 +25,50 @@ $bg-light: #ffffff;
 
 $header-height: 60px;
 
-html,
-body {
+html {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100%;
 }
 
 * {
   box-sizing: border-box;
 }
+
+//################### Global blocks ####################
+
+app-contents {
+  flex: 1 0 auto;
+}
+
+app-view {
+  flex: 0 1 auto;
+  min-width: 300px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+app-view,
+app-text,
+app-collage,
+app-pdf,
+app-video,
+app-audio,
+app-slider {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+app-slider {
+  flex: 0 1 auto;
+  min-width: 300px;
+}
+
+//################# Custom modal windows ##################
 
 .add-page-dialog {
   .mat-dialog-content {
@@ -58,24 +90,11 @@ body {
   }
 }
 
-app-view,
-app-text,
-app-collage,
-app-pdf,
-app-video,
-app-audio,
-app-slider {
-  width: 100%;
-  margin-bottom: 40px;
+.snackbar-center .mat-simple-snackbar {
+  justify-content: center;
 }
 
-app-collage,
-app-audio,
-app-pdf,
-app-video {
-  padding-left: 15px;
-  padding-right: 15px;
-}
+//################ Collage clickable images #################
 
 .custom-images {
   .mat-radio-container {
@@ -157,10 +176,6 @@ $text-editor-sizes: "8px", "9px", "10px", "12px", "14px", "16px", "20px", "24px"
   }
 }
 
-.snackbar-center .mat-simple-snackbar {
-  justify-content: center;
-}
-
 @each $text-editor-size in $text-editor-sizes {
   span[data-value="#{$text-editor-size}"] {
     &::before {
@@ -169,6 +184,8 @@ $text-editor-sizes: "8px", "9px", "10px", "12px", "14px", "16px", "20px", "24px"
     }
   }
 }
+
+//################# Adaptive contents menu ############
 
 @media screen and (max-width: 640px) {
   app-contents {

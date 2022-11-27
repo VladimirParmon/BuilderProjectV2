@@ -4,7 +4,7 @@
       "id": "somePageId",
       "name": "somePageName",
       "childPages": ["somePageId2", "somePageId3"],
-      "tools": ["someToolDescriptionId"],
+      "tools": ["someToolDescriptionId", "someSliderTool"],
       "parentId": ""
     },
     {
@@ -36,7 +36,20 @@
         "text": "my awesome text about gnomes"
       }
     ],
-    "images": [],
+    "images": [
+      {
+        "id": "sliderImage1",
+        "pathToFile": "assets/tempFiles/saladin06__sized.jpg"
+      },
+      {
+        "id": "sliderImage2",
+        "pathToFile": "assets/tempFiles/1200x1200bb.jpg"
+      },
+      {
+        "id": "sliderImage3",
+        "pathToFile": "assets/tempFiles/FGz-lK3_8_A.jpg"
+      }
+    ],
     "videos": [],
     "PDFs": [],
     "audios": []
@@ -46,6 +59,11 @@
       "id": "someToolDescriptionId",
       "type": "text",
       "content": "someTextId"
+    },
+    {
+      "id": "someSliderTool",
+      "type": "slider",
+      "content": ["sliderImage1", "sliderImage2", "sliderImage3"]
     }
   ]
 }

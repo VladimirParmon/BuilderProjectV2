@@ -36,6 +36,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { LetModule } from '@ngrx/component';
+import { GalleryModule } from 'ng-gallery';
 
 import { QuillModule } from 'ngx-quill';
 import { CollageComponent } from './components/tools/collage/collage.component';
@@ -90,6 +91,7 @@ import { SliderComponent } from './components/tools/slider/slider.component';
     MatSelectModule,
     MatRadioModule,
     LetModule,
+    GalleryModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
