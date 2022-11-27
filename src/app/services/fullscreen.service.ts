@@ -1,16 +1,13 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { HostListener, Inject, Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FullscreenService {
-  isFullScreen: boolean = false;
   constructor(@Inject(DOCUMENT) private document: any) {}
 
   openFullscreen(elem: any /*HTMLElement*/) {
-    if (this.isFullScreen) return;
-
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
     } else if (elem.mozRequestFullScreen) {
@@ -26,7 +23,6 @@ export class FullscreenService {
   }
 
   closeFullscreen() {
-    if (!this.isFullScreen) return;
     if (this.document.exitFullscreen) {
       this.document.exitFullscreen();
     } else if (this.document.mozCancelFullScreen) {

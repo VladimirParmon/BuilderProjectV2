@@ -129,7 +129,7 @@ export class CollageComponent implements OnDestroy, OnInit {
     );
     const dialogRef = this.dialog.open(ChooseFileComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((fileNames: string[]) => {
-      this.addImages(fileNames);
+      if (fileNames) this.addImages(fileNames);
     });
   }
 
@@ -202,15 +202,6 @@ export class CollageComponent implements OnDestroy, OnInit {
 
   getPicWidth(width: number) {
     return width + 'px';
-  }
-
-  handleFullscreen(event: MouseEvent) {
-    if (this.isGlobalEditOn) return;
-    if (!this.fullscreenService.isFullScreen) {
-      this.fullscreenService.openFullscreen(event.target);
-    } else {
-      this.fullscreenService.closeFullscreen();
-    }
   }
 
   ngOnDestroy(): void {

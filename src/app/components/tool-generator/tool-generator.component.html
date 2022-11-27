@@ -1,5 +1,5 @@
 <div class="tool-generator">
-  <div *ngIf="toolDescription" [ngSwitch]="toolDescription.type" class="block" appFullscreen>
+  <div *ngIf="toolDescription" [ngSwitch]="toolDescription.type" class="block">
     <mat-icon
       *ngIf="isGlobalEditOn$ | async"
       color="accent"

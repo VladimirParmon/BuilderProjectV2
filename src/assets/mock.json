@@ -4,7 +4,7 @@
       "id": "somePageId",
       "name": "somePageName",
       "childPages": ["somePageId2", "somePageId3"],
-      "tools": ["someToolDescriptionId", "someSliderTool"],
+      "tools": ["someToolDescriptionId", "someSliderTool", "someCollageTool"],
       "parentId": ""
     },
     {
@@ -51,6 +51,11 @@
         "id": "sliderImage3",
         "pathToFile": "assets/tempFiles/FGz-lK3_8_A.jpg",
         "width": 200
+      },
+      {
+        "id": "collageImage1",
+        "pathToFile": "assets/tempFiles/saladin06__sized.jpg",
+        "width": 200
       }
     ],
     "videos": [],
@@ -67,6 +72,14 @@
       "id": "someSliderTool",
       "type": "slider",
       "content": ["sliderImage1", "sliderImage2", "sliderImage3"]
+    },
+    {
+      "id": "someCollageTool",
+      "type": "collage",
+      "content": ["collageImage1"],
+      "currentJustifyContent": "center",
+      "currentAlignItems": "center",
+      "currentFlow": "row"
     }
   ]
 }
