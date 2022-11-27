@@ -39,15 +39,18 @@
     "images": [
       {
         "id": "sliderImage1",
-        "pathToFile": "assets/tempFiles/saladin06__sized.jpg"
+        "pathToFile": "assets/tempFiles/saladin06__sized.jpg",
+        "width": 200
       },
       {
         "id": "sliderImage2",
-        "pathToFile": "assets/tempFiles/1200x1200bb.jpg"
+        "pathToFile": "assets/tempFiles/1200x1200bb.jpg",
+        "width": 200
       },
       {
         "id": "sliderImage3",
-        "pathToFile": "assets/tempFiles/FGz-lK3_8_A.jpg"
+        "pathToFile": "assets/tempFiles/FGz-lK3_8_A.jpg",
+        "width": 200
       }
     ],
     "videos": [],
