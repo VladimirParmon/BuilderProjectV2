@@ -43,6 +43,7 @@ import { PDFComponent } from './components/tools/pdf/pdf.component';
 import { VideoComponent } from './components/tools/video/video.component';
 import { metaReducers } from 'src/redux/reducers/index.reducers';
 import { AudioComponent } from './components/tools/audio/audio.component';
+import { SliderComponent } from './components/tools/slider/slider.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { AudioComponent } from './components/tools/audio/audio.component';
     PDFComponent,
     VideoComponent,
     AudioComponent,
+    SliderComponent,
   ],
   imports: [
     FormsModule,
