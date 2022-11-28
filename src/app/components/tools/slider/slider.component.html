@@ -7,9 +7,10 @@
     loadingStrategy="lazy"
     [loop]="false"
     thumbPosition="left"
-    [itemTemplate]="itemTemp"
     [ngClass]="{ slider_fullscreen: (currentlyInFullscreen$ | async) }"
   ></gallery>
+
+  <!-- [itemTemplate]="itemTemp" -->
 
   <div class="fullscreen-buttons">
     <mat-icon
