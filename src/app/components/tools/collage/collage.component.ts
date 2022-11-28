@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { EMPTY, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, EMPTY, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { FlexboxFlowOptions, FlexboxPositioningOptions, ToolNames } from 'src/constants/constants';
@@ -30,6 +30,7 @@ export class CollageComponent implements OnDestroy, OnInit {
 
   isGlobalEditOn: boolean = true;
   destroy$: Subject<boolean> = new Subject<boolean>();
+  currentlyInFullscreen$: BehaviorSubject<boolean> = this.stateService.currentlyInFullscreen$;
 
   toolDescription: CollageToolDescription | null = null;
   images: ImageFileDescription[] = [];
@@ -46,7 +47,6 @@ export class CollageComponent implements OnDestroy, OnInit {
     private utilsService: UtilsService,
     private stateService: StateService,
     private toolService: ToolService,
-    private fullscreenService: FullscreenService,
     private dialog: MatDialog
   ) {
     this.picSizeUpdate

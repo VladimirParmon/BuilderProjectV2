@@ -94,6 +94,16 @@ app-slider {
   justify-content: center;
 }
 
+//###################### NG-slider ########################
+
+.slider_fullscreen {
+  height: 100vh;
+
+  .g-active-item {
+    --g-item-height: auto !important;
+  }
+}
+
 //################ Collage clickable images #################
 
 .custom-images {

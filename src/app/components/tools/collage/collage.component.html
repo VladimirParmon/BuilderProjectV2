@@ -118,8 +118,10 @@
           class="image"
           [src]="image.pathToFile"
           [ngStyle]="{ width: getPicWidth(image.width) }"
+          appFsListener
           appFullscreen
           [isGlobalEditOn]="isGlobalEditOn"
+          [currentlyInFullscreen]="currentlyInFullscreen$ | async"
         />
       </mat-radio-button>
     </ng-container>

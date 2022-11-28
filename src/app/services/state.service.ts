@@ -12,6 +12,7 @@ export class StateService {
   isContentsMenuOpen$ = new BehaviorSubject(true);
   isGlobalEditOn$ = new BehaviorSubject(true);
   currentPageId$ = new Subject<string>();
+  currentlyInFullscreen$ = new BehaviorSubject(false);
 
   constructor(private http: HttpClient, private store: Store) {}
 

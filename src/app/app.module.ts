@@ -46,6 +46,7 @@ import { metaReducers } from 'src/redux/reducers/index.reducers';
 import { AudioComponent } from './components/tools/audio/audio.component';
 import { SliderComponent } from './components/tools/slider/slider.component';
 import { FullscreenDirective } from './directives/fullscreen.directive';
+import { FsListenerDirective } from './directives/fs-listener.directive';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { FullscreenDirective } from './directives/fullscreen.directive';
     AudioComponent,
     SliderComponent,
     FullscreenDirective,
+    FsListenerDirective,
   ],
   imports: [
     FormsModule,

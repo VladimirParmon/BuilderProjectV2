@@ -1,9 +1,44 @@
-<gallery
-  [items]="images"
-  [counter]="false"
-  [dots]="true"
-  [dotsSize]="22"
-  loadingStrategy="lazy"
-  [loop]="false"
-  thumbPosition="left"
-></gallery>
+<div #refElementSlider class="slider-container" appFsListener>
+  <gallery
+    [items]="images"
+    [counter]="false"
+    [dots]="true"
+    [dotsSize]="22"
+    loadingStrategy="lazy"
+    [loop]="false"
+    thumbPosition="left"
+    [itemTemplate]="itemTemp"
+    [ngClass]="{ slider_fullscreen: (currentlyInFullscreen$ | async) }"
+  ></gallery>
+
+  <div class="fullscreen-buttons">
+    <mat-icon
+      class="fs-icon"
+      *ngIf="!(currentlyInFullscreen$ | async)"
+      appFullscreen
+      [isGlobalEditOn]="isGlobalEditOn$ | async"
+      [elementToGoFull]="refElementSlider"
+      [currentlyInFullscreen]="currentlyInFullscreen$ | async"
+      >fullscreen</mat-icon
+    >
+    <mat-icon
+      class="fs-icon"
+      *ngIf="currentlyInFullscreen$ | async"
+      appFullscreen
+      [isGlobalEditOn]="isGlobalEditOn$ | async"
+      [elementToGoFull]="refElementSlider"
+      [currentlyInFullscreen]="currentlyInFullscreen$ | async"
+      >fullscreen_exit</mat-icon
+    >
+  </div>
+</div>
+
+<ng-template #itemTemp>
+  <div
+    class="fullscreen-zone"
+    appFullscreen
+    [isGlobalEditOn]="isGlobalEditOn$ | async"
+    [elementToGoFull]="refElementSlider"
+    [currentlyInFullscreen]="currentlyInFullscreen$ | async"
+  ></div>
+</ng-template>

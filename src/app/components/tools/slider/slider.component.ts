@@ -1,7 +1,7 @@
 import { GalleryItem, ImageItem } from 'ng-gallery';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { EMPTY, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, EMPTY, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ToolNames } from 'src/constants/constants';
@@ -25,7 +25,8 @@ export class SliderComponent implements OnInit, OnDestroy {
   @Input() toolDescriptionId: string | null = null;
   @Output('notify') deleteTheToolSinceItsEmpty = new EventEmitter<string>();
 
-  isGlobalEditOn: boolean = true;
+  isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
+  currentlyInFullscreen$: BehaviorSubject<boolean> = this.stateService.currentlyInFullscreen$;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   images: GalleryItem[] = [];
