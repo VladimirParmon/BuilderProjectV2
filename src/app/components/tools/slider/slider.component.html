@@ -1,5 +1,6 @@
-<div #refElementSlider class="slider-container" appFsListener>
+<div #refElementSlider class="slider-container" appFsListener *ngIf="toolDescriptionId">
   <gallery
+    [id]="toolDescriptionId"
     [items]="images"
     [counter]="false"
     [dots]="true"
@@ -8,9 +9,8 @@
     [loop]="false"
     thumbPosition="left"
     [ngClass]="{ slider_fullscreen: (currentlyInFullscreen$ | async) }"
+    (indexChange)="indexChangeHandler($event)"
   ></gallery>
-
-  <!-- [itemTemplate]="itemTemp" -->
 
   <div class="fullscreen-buttons">
     <mat-icon
@@ -34,7 +34,34 @@
   </div>
 </div>
 
-<ng-template #itemTemp>
+<div
+  cdkDropList
+  (cdkDropListDropped)="drop($event)"
+  cdkDropListOrientation="horizontal"
+  class="drop-list"
+  *ngIf="isGlobalEditOn$ | async"
+>
+  <div
+    class="drag-item"
+    *ngFor="let image of images; let i = index"
+    cdkDrag
+    [ngClass]="{ 'drag-item__selected': i === currentIndex }"
+  >
+    <mat-icon class="delete-icon" [@animate]="i === newInsertionIndexForAnimation">delete</mat-icon>
+    <img [src]="image.data.src" (click)="setImage(i)" />
+    <div *cdkDragPreview>
+      <img [src]="image.data.src" />
+    </div>
+    <div *cdkDragPlaceholder>
+      <img [src]="image.data.src" />
+    </div>
+  </div>
+</div>
+
+<!--Touch zone to open fullscreen by clicking on the image;
+  this feature is most likely superfluous and should be deleted-->
+<!-- [itemTemplate]="itemTemp" -->
+<!-- <ng-template #itemTemp>
   <div
     class="fullscreen-zone"
     appFullscreen
@@ -42,4 +69,4 @@
     [elementToGoFull]="refElementSlider"
     [currentlyInFullscreen]="currentlyInFullscreen$ | async"
   ></div>
-</ng-template>
+</ng-template> -->

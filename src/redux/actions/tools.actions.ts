@@ -26,6 +26,7 @@ enum ToolsActions {
   deleteImagesFromCollage = '[Tools/Collage] Delete image ids from contents array',
   deleteFileFromAudioTool = '[Tools/Audio] Delete audio id from contents array',
   updateAudioToolContents = '[Tools/Audio] Update audio tool contents array',
+  updateSliderToolContents = '[Tools/Slider] Update the array of image ids in slider tool',
 }
 
 const insertNewCollageTool = createAction(
@@ -96,6 +97,10 @@ const updateAudioToolContents = createAction(
   ToolsActions.updateAudioToolContents,
   props<{ toolDescriptionId: string; newContents: string[] }>()
 );
+const updateSliderToolContents = createAction(
+  ToolsActions.updateSliderToolContents,
+  props<{ toolDescriptionId: string; newContents: string[] }>()
+);
 
 export const toolsActions = {
   insertNewCollageTool,
@@ -114,4 +119,5 @@ export const toolsActions = {
   deleteImageFromCollage,
   deleteFileFromAudioTool,
   updateAudioToolContents,
+  updateSliderToolContents,
 };

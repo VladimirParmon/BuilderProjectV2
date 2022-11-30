@@ -25,6 +25,7 @@ export const toolsReducer = createReducer(
     toolsActions.updateToolContents,
     toolsActions.updatePDFToolContents,
     toolsActions.updateAudioToolContents,
+    toolsActions.updateSliderToolContents,
     (state, { toolDescriptionId, newContents }) =>
       state.map((el) => (el.id === toolDescriptionId ? { ...el, content: newContents } : el))
   ),
