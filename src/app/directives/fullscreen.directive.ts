@@ -8,10 +8,11 @@ export class FullscreenDirective {
   @Input() isGlobalEditOn: boolean | null = true;
   @Input() elementToGoFull: Element | null = null;
   @Input() currentlyInFullscreen: boolean | null = null;
+  @Input() ignoreTheClick: boolean | null = null;
 
   @HostListener('click', ['$event'])
   decideOnFullscreen(event: MouseEvent) {
-    if (this.isGlobalEditOn) return;
+    if (this.ignoreTheClick) return;
     if (this.elementToGoFull) {
       this.handle(this.elementToGoFull);
     } else {
