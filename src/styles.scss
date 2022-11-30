@@ -147,6 +147,10 @@ quill-editor {
   display: block !important; //otherwise it does not stretch 100% of the page
 }
 
+.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  z-index: 10;
+}
+
 .ql-editor {
   font-family: "Times New Roman";
 }
