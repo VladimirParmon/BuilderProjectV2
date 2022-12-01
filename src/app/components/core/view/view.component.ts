@@ -4,7 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 
 import { filter, takeUntil } from 'rxjs/operators';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SinglePageInfo } from 'src/constants/models';
 import { Store } from '@ngrx/store';
 import { getOnePageInfo } from 'src/redux/selectors/contents.selectors';
@@ -63,7 +63,13 @@ export class ViewComponent implements OnDestroy {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    //TODO: implement page DND
+    if (this.pageData) {
+      const pageId = this.pageData.id;
+      const array = this.utilsService.arrayDeepCopy(this.pageData.tools);
+      moveItemInArray(array, event.previousIndex, event.currentIndex);
+
+      this.store.dispatch(contentsActions.updateTools({ pageId, newToolsIds: array }));
+    }
   }
 
   savePageName() {

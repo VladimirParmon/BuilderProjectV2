@@ -1,15 +1,7 @@
-<div
-  *ngIf="pageData"
-  class="view"
-  cdkDropList
-  (cdkDropListDropped)="drop($event)"
->
+<div *ngIf="pageData" class="view" cdkDropList (cdkDropListDropped)="drop($event)">
   <h1 align="center" *ngIf="!isEditorOn || !(isGlobalEditOn$ | async)">
     {{ pageData.name }}
-    <mat-icon
-      class="view-icon"
-      (click)="editPageName()"
-      *ngIf="isGlobalEditOn$ | async"
+    <mat-icon class="view-icon" (click)="editPageName()" *ngIf="isGlobalEditOn$ | async"
       >edit</mat-icon
     >
   </h1>
@@ -25,9 +17,7 @@
           required
           minlength="3"
         />
-        <mat-error *ngIf="title.invalid"
-          >Поле должно содержать как минимум 3 символа</mat-error
-        >
+        <mat-error *ngIf="title.invalid">Поле должно содержать как минимум 3 символа</mat-error>
       </mat-form-field>
       <mat-icon
         class="view-icon"
@@ -39,9 +29,31 @@
     </form>
   </ng-container>
 
-  <app-tool-generator
-    *ngFor="let toolDescription of pageData.tools"
-    [toolDescriptionId]="toolDescription"
-    [pageId]="pageData.id"
-  ></app-tool-generator>
+  <div class="view__drag-container" cdkDropList (cdkDropListDropped)="drop($event)">
+    <div
+      class="view__drag-item"
+      cdkDrag
+      [cdkDragDisabled]="!(isGlobalEditOn$ | async)"
+      *ngFor="let toolDescription of pageData.tools"
+    >
+      <div class="handle" cdkDragHandle *ngIf="isGlobalEditOn$ | async">
+        <svg width="24px" fill="#ccc" viewBox="0 0 24 24">
+          <path
+            d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"
+          ></path>
+        </svg>
+      </div>
+      <div *cdkDragPreview>
+        <mat-icon class="preview-icon">view_compact</mat-icon>
+      </div>
+      <div *cdkDragPlaceholder>
+        <span>Переместить блок сюда ↓</span>
+      </div>
+
+      <app-tool-generator
+        [toolDescriptionId]="toolDescription"
+        [pageId]="pageData.id"
+      ></app-tool-generator>
+    </div>
+  </div>
 </div>
