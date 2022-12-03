@@ -5,6 +5,7 @@ import {
   BasicFileDescription,
   ImageFileDescription,
   MultimediaFilesCategories,
+  StorageUnitTypes,
   TextDescription,
 } from 'src/constants/models';
 import { selectFilesState } from './index.selectors';
@@ -12,9 +13,7 @@ import { selectFilesState } from './index.selectors';
 export const getSingleFile = (props: { id: string; type: ToolNames }) => {
   const fileType = UtilsService.getFileTypeFromToolType(props.type) as MediaFileTypes;
   return createSelector(selectFilesState, (data: MultimediaFilesCategories) =>
-    (data[fileType] as Array<TextDescription | ImageFileDescription | BasicFileDescription>).find(
-      (el) => el.id === props.id
-    )
+    (data[fileType] as Array<StorageUnitTypes>).find((el) => el.id === props.id)
   );
 };
 

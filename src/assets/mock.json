@@ -4,7 +4,7 @@
       "id": "somePageId",
       "name": "somePageName",
       "childPages": ["somePageId2", "somePageId3"],
-      "tools": ["someToolDescriptionId", "someSliderTool", "someCollageTool"],
+      "tools": ["someChartTool", "someToolDescriptionId", "someSliderTool", "someCollageTool"],
       "parentId": ""
     },
     {
@@ -60,7 +60,14 @@
     ],
     "videos": [],
     "PDFs": [],
-    "audios": []
+    "audios": [],
+    "charts": [
+      {
+        "id": "chartToolContentId",
+        "chartType": "bar_vertical",
+        "chartData": "{\"view\": [700, 500],\"colorScheme\": {\"domain\": [\"#5AA454\", \"#A10A28\", \"#C7B42C\", \"#AAAAAA\"]},\"gradient\": false,\"xAxis\": true,\"yAxis\": true,\"legend\": true,\"showXAxisLabel\": true,\"showYAxisLabel\": true,\"xAxisLabel\": \"My X label\",\"yAxisLabel\": \"My Y label\",\"results\": [{\"name\": \"Germany\",\"value\": 40632,\"extra\": {\"code\": \"de\"}},{\"name\": \"United States\",\"value\": 50000,\"extra\": {\"code\": \"us\"}},{\"name\": \"France\",\"value\": 36745,\"extra\": {\"code\": \"fr\"}}]}"
+      }
+    ]
   },
   "tools": [
     {
@@ -80,6 +87,11 @@
       "currentJustifyContent": "center",
       "currentAlignItems": "center",
       "currentFlow": "row"
+    },
+    {
+      "id": "someChartTool",
+      "type": "chart",
+      "content": "chartToolContentId"
     }
   ]
 }

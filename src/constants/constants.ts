@@ -42,6 +42,7 @@ export enum ToolNames {
   PDF = 'PDF',
   SLIDER = 'slider',
   COLLAGE = 'collage',
+  CHART = 'chart',
 }
 
 export enum MediaFileTypes {
@@ -50,6 +51,12 @@ export enum MediaFileTypes {
   VIDEOS = 'videos',
   PDFs = 'PDFs',
   AUDIOS = 'audios',
+  CHARTS = 'charts',
+}
+
+export enum ChartTypes {
+  BAR_VERTICAL = 'bar_vertical',
+  PIE = 'pie',
 }
 
 export enum ExpandButtonInnerText {
@@ -82,6 +89,10 @@ export const toolsList: ToolbarToolListOption[] = [
   {
     name: ToolNames.SLIDER,
     icon: 'auto_awesome_motion',
+  },
+  {
+    name: ToolNames.CHART,
+    icon: 'area_chart',
   },
   // {
   //   name: ToolNames.PRESENTATION,

@@ -9,6 +9,7 @@ export const initialState: JSONDataStorage = {
     [MediaFileTypes.VIDEOS]: [],
     [MediaFileTypes.PDFs]: [],
     [MediaFileTypes.AUDIOS]: [],
+    [MediaFileTypes.CHARTS]: [],
   },
   tools: [],
 };
