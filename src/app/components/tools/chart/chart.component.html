@@ -1,0 +1,6 @@
+<div class="chart-container" *ngIf="chartDescription" [ngSwitch]="chartDescription.chartType">
+  <app-bar-vertical
+    *ngSwitchCase="chartTypes.BAR_VERTICAL"
+    [chartDataJSONString]="chartDescription.chartData"
+  ></app-bar-vertical>
+</div>

@@ -47,6 +47,9 @@ import { AudioComponent } from './components/tools/audio/audio.component';
 import { SliderComponent } from './components/tools/slider/slider.component';
 import { FullscreenDirective } from './directives/fullscreen.directive';
 import { FsListenerDirective } from './directives/fs-listener.directive';
+import { ChartComponent } from './components/tools/chart/chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BarVerticalComponent } from './components/tools/chart/bar-vertical/bar-vertical.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +74,8 @@ import { FsListenerDirective } from './directives/fs-listener.directive';
     SliderComponent,
     FullscreenDirective,
     FsListenerDirective,
+    ChartComponent,
+    BarVerticalComponent,
   ],
   imports: [
     FormsModule,
@@ -96,6 +101,7 @@ import { FsListenerDirective } from './directives/fs-listener.directive';
     MatRadioModule,
     LetModule,
     GalleryModule,
+    NgxChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
