@@ -14,6 +14,7 @@ App provides:
 - two tipes of tools for image display (carousel and collage)
 - a recursive contents tree to orginize pages
 - full drag and drop support of all elements of the app
+- interactive graphs
 
 App can display:
 - text
@@ -33,6 +34,7 @@ App can display:
 - два способа представления изображений (карусель и коллаж)
 - рекурсивное дерево-содержание
 - полная поддержка упорядочивания любых элементов перетаскиванием
+- интерактивные графики
 
 Приложение умеет работать с:
 - текстом
