@@ -4,7 +4,13 @@
       "id": "somePageId",
       "name": "somePageName",
       "childPages": ["somePageId2", "somePageId3"],
-      "tools": ["someChartTool", "someToolDescriptionId", "someSliderTool", "someCollageTool"],
+      "tools": [
+        "someChartTool",
+        "someChartTool2Pie",
+        "someToolDescriptionId",
+        "someSliderTool",
+        "someCollageTool"
+      ],
       "parentId": ""
     },
     {
@@ -65,7 +71,12 @@
       {
         "id": "chartToolContentId",
         "chartType": "bar_vertical",
-        "chartData": "{\"view\": [700, 500],\"colorScheme\": {\"domain\": [\"#5AA454\", \"#A10A28\", \"#C7B42C\", \"#AAAAAA\"]},\"gradient\": false,\"xAxis\": true,\"yAxis\": true,\"legend\": true,\"showXAxisLabel\": true,\"showYAxisLabel\": true,\"xAxisLabel\": \"My X label\",\"yAxisLabel\": \"My Y label\",\"results\": [{\"name\": \"Germany\",\"value\": 40632,\"extra\": {\"code\": \"de\"}},{\"name\": \"United States\",\"value\": 50000,\"extra\": {\"code\": \"us\"}},{\"name\": \"France\",\"value\": 36745,\"extra\": {\"code\": \"fr\"}}]}"
+        "chartData": "{\"view\": [700, 500],\"colorScheme\": {\"domain\": [\"#d7eaf3\", \"#77b5d9\", \"#14397d\", \"#AAAAAA\"]},\"gradient\": false,\"xAxis\": true,\"yAxis\": true,\"legend\": true,\"showXAxisLabel\": false,\"showYAxisLabel\": true,\"xAxisLabel\": \"My X label\",\"yAxisLabel\": \"My important Y label data\",\"results\": [{\"name\": \"Germany\",\"value\": 40632,\"extra\": {\"code\": \"de\"}},{\"name\": \"United States\",\"value\": 50000,\"extra\": {\"code\": \"us\"}},{\"name\": \"France\",\"value\": 36745,\"extra\": {\"code\": \"fr\"}}]}"
+      },
+      {
+        "id": "chartToolContentId2Pie",
+        "chartType": "pie",
+        "chartData": "{\"view\":[700,500],\"colorScheme\":{\"domain\":[\"#d7eaf3\",\"#77b5d9\",\"#14397d\",\"#AAAAAA\"]},\"gradient\":false,\"showLegend\":true,\"showLabels\":true,\"isDoughnut\":false,\"legendpPosition\":\"bottom\",\"results\":[{\"name\":\"Germany\",\"value\":40632,\"extra\":{\"code\":\"de\"}},{\"name\":\"UnitedStates\",\"value\":50000,\"extra\":{\"code\":\"us\"}},{\"name\":\"France\",\"value\":36745,\"extra\":{\"code\":\"fr\"}}]}"
       }
     ]
   },
@@ -92,6 +103,11 @@
       "id": "someChartTool",
       "type": "chart",
       "content": "chartToolContentId"
+    },
+    {
+      "id": "someChartTool2Pie",
+      "type": "chart",
+      "content": "chartToolContentId2Pie"
     }
   ]
 }

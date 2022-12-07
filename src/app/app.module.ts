@@ -50,6 +50,7 @@ import { FsListenerDirective } from './directives/fs-listener.directive';
 import { ChartComponent } from './components/tools/chart/chart.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BarVerticalComponent } from './components/tools/chart/bar-vertical/bar-vertical.component';
+import { PieComponent } from './components/tools/chart/pie/pie.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { BarVerticalComponent } from './components/tools/chart/bar-vertical/bar-
     FsListenerDirective,
     ChartComponent,
     BarVerticalComponent,
+    PieComponent,
   ],
   imports: [
     FormsModule,

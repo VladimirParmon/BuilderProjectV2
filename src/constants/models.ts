@@ -1,4 +1,4 @@
-import { Color } from '@swimlane/ngx-charts';
+import { Color, LegendPosition } from '@swimlane/ngx-charts';
 import {
   ActionCases,
   ChartTypes,
@@ -87,6 +87,17 @@ interface NonCompoundChartResults {
   name: string;
   value: number;
   extra: any;
+}
+
+export interface PieChartData {
+  view: [number, number];
+  colorScheme: string | Color;
+  gradient: boolean;
+  showLegend: boolean;
+  showLabels: boolean;
+  isDoughnut: boolean;
+  legendPosition: LegendPosition;
+  results: NonCompoundChartResults[];
 }
 
 export interface TextDescription {
