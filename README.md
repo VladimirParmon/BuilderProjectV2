@@ -23,6 +23,8 @@ App can display:
 - pdf
 - audios
 
+[**Contact me**](https://vladimirparmon.github.io/curriculum-vitae/index.html)
+
 <br>
 
 **RU**: Добро пожаловать в генератор электронных методических комплексов 2.0
@@ -42,3 +44,5 @@ App can display:
 - видео
 - PDF файлами
 - аудио
+
+[**Связаться со мной**](https://vladimirparmon.github.io/curriculum-vitae/index.html)
