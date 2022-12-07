@@ -1,5 +1,7 @@
-![Снимок](https://user-images.githubusercontent.com/86885133/205130319-c9ff0d74-6661-4fe9-890a-e700587d8ff3.JPG)
-![2](https://user-images.githubusercontent.com/86885133/205130316-9159304e-6810-4aec-9869-321fe4deb541.JPG)
+![2](https://user-images.githubusercontent.com/86885133/206270989-59b9ced2-2baf-4bd7-a675-e61069fb1416.JPG)
+![4](https://user-images.githubusercontent.com/86885133/206270982-3169978f-276d-4f84-a143-5f958a6995e6.JPG)
+![1](https://user-images.githubusercontent.com/86885133/206270986-f660665c-9079-4aa1-9889-5a01cbcdb55c.JPG)
+![3](https://user-images.githubusercontent.com/86885133/206270990-791d1478-52aa-40db-a082-f1fd8c43de09.JPG)
 ![3](https://user-images.githubusercontent.com/86885133/205130321-10f44f03-c86a-47bb-b18d-62492f58ec50.JPG)
 ![4](https://user-images.githubusercontent.com/86885133/205130313-d29df370-1feb-4be9-b7db-2b3b8ac815b8.JPG)
 
