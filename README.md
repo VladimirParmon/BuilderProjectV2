@@ -1,3 +1,4 @@
+# [Cвязаться для участия в проекте](https://vladimirparmon.github.io/curriculum-vitae/index.html)
 ![2](https://user-images.githubusercontent.com/86885133/206270989-59b9ced2-2baf-4bd7-a675-e61069fb1416.JPG)
 ![4](https://user-images.githubusercontent.com/86885133/206270982-3169978f-276d-4f84-a143-5f958a6995e6.JPG)
 ![1](https://user-images.githubusercontent.com/86885133/206270986-f660665c-9079-4aa1-9889-5a01cbcdb55c.JPG)
