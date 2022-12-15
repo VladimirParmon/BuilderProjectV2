@@ -1,0 +1,26 @@
+<mat-dialog-content class="choose-chart__content">
+  <h2 mat-dialog-title>Пожалуйста, выберите график</h2>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Тип графика</mat-label>
+    <mat-select [(value)]="selectedChart">
+      <mat-option [value]="ChartTypes.BAR_VERTICAL"> Классический </mat-option>
+      <mat-option [value]="ChartTypes.PIE"> Радиальный </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div [ngSwitch]="selectedChart">
+    <app-bar-vertical
+      *ngSwitchCase="ChartTypes.BAR_VERTICAL"
+      [chartDataJSONString]="barVerticalExample"
+    ></app-bar-vertical>
+    <app-pie *ngSwitchCase="ChartTypes.PIE" [chartDataJSONString]="pieExample"></app-pie>
+  </div>
+
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button [mat-dialog-close]>Отмена</button>
+    <button mat-raised-button (click)="confirmChoice()" [disabled]="!selectedChart">
+      Подтвердить
+    </button>
+  </mat-dialog-actions>
+</mat-dialog-content>

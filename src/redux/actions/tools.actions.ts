@@ -7,6 +7,7 @@ import {
   PDFToolDescription,
   SliderToolDescription,
   VideoToolDescription,
+  ChartToolDescription,
 } from 'src/constants/models';
 
 enum ToolsActions {
@@ -27,6 +28,7 @@ enum ToolsActions {
   deleteFileFromAudioTool = '[Tools/Audio] Delete audio id from contents array',
   updateAudioToolContents = '[Tools/Audio] Update audio tool contents array',
   updateSliderToolContents = '[Tools/Slider] Update the array of image ids in slider tool',
+  insertNewChartTool = '[Tools/Chart] Insert a new chart tool description',
 }
 
 const insertNewCollageTool = createAction(
@@ -101,6 +103,10 @@ const updateSliderToolContents = createAction(
   ToolsActions.updateSliderToolContents,
   props<{ toolDescriptionId: string; newContents: string[] }>()
 );
+const insertNewChartTool = createAction(
+  ToolsActions.insertNewChartTool,
+  props<{ toolDescription: ChartToolDescription }>()
+);
 
 export const toolsActions = {
   insertNewCollageTool,
@@ -120,4 +126,5 @@ export const toolsActions = {
   deleteFileFromAudioTool,
   updateAudioToolContents,
   updateSliderToolContents,
+  insertNewChartTool,
 };

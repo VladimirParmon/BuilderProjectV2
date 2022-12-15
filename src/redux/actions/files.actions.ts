@@ -5,6 +5,7 @@ import {
   AudioFileDescription,
   PDFFileDescription,
   VideoFileDescription,
+  ChartDescription,
 } from 'src/constants/models';
 
 enum FileActions {
@@ -23,6 +24,7 @@ enum FileActions {
   deleteVideo = '[Files/Video] Delete a video description',
   deleteAudio = '[Files/Audio] Delete an audio description',
   deleteMultipleAudios = '[Files/Audios] Delete multiple audio file descriptions from store',
+  insertNewChart = '[Files/Charts] Insert a new chart storage unit',
 }
 
 const updateTextStorageUnit = createAction(
@@ -70,6 +72,10 @@ const deleteMultipleAudios = createAction(
   FileActions.deleteMultipleAudios,
   props<{ fileDescriptionIds: string[] }>()
 );
+const insertNewChartDescription = createAction(
+  FileActions.insertNewChart,
+  props<{ chartStorageUnitDescription: ChartDescription }>()
+);
 
 export const filesActions = {
   updateTextStorageUnit,
@@ -87,4 +93,5 @@ export const filesActions = {
   deleteVideo,
   deleteAudio,
   deleteMultipleAudios,
+  insertNewChartDescription,
 };

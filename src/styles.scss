@@ -91,6 +91,16 @@ app-slider {
   }
 }
 
+.choose-chart-dialog {
+  .mat-dialog-content {
+    padding: 1rem;
+    margin: 0;
+    min-width: 500px;
+    min-height: fit-content;
+    overflow: hidden;
+  }
+}
+
 .snackbar-center .mat-simple-snackbar {
   justify-content: center;
 }

@@ -59,6 +59,79 @@ export enum ChartTypes {
   PIE = 'pie',
 }
 
+export const barVerticalExample = JSON.stringify({
+  view: [600, 300],
+  colorScheme: {
+    domain: ['#d7eaf3', '#77b5d9', '#14397d', '#AAAAAA'],
+  },
+  gradient: false,
+  xAxis: true,
+  yAxis: true,
+  legend: true,
+  showXAxisLabel: false,
+  showYAxisLabel: true,
+  xAxisLabel: 'My X label',
+  yAxisLabel: 'My important Y label data',
+  results: [
+    {
+      name: 'Germany',
+      value: 40632,
+      extra: {
+        code: 'de',
+      },
+    },
+    {
+      name: 'United States',
+      value: 50000,
+      extra: {
+        code: 'us',
+      },
+    },
+    {
+      name: 'France',
+      value: 36745,
+      extra: {
+        code: 'fr',
+      },
+    },
+  ],
+});
+
+export const pieChartExample = JSON.stringify({
+  view: [400, 300],
+  colorScheme: {
+    domain: ['#d7eaf3', '#77b5d9', '#14397d', '#AAAAAA'],
+  },
+  gradient: false,
+  showLegend: true,
+  showLabels: true,
+  isDoughnut: false,
+  legendPosition: 'bottom',
+  results: [
+    {
+      name: 'Germany',
+      value: 40632,
+      extra: {
+        code: 'de',
+      },
+    },
+    {
+      name: 'UnitedStates',
+      value: 50000,
+      extra: {
+        code: 'us',
+      },
+    },
+    {
+      name: 'France',
+      value: 36745,
+      extra: {
+        code: 'fr',
+      },
+    },
+  ],
+});
+
 export enum ExpandButtonInnerText {
   OPEN = 'Свернуть',
   CLOSE = 'Развернуть',

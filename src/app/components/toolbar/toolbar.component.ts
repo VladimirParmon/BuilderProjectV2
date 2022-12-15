@@ -7,7 +7,8 @@ import { ToolService } from 'src/app/services/tool.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ToolbarToolListOption } from 'src/constants/models';
 import { ChooseFileComponent } from '../modals/choose-file/choose-file.component';
-import { toolsList, ToolNames } from 'src/constants/constants';
+import { toolsList, ToolNames, ChartTypes } from 'src/constants/constants';
+import { ChooseChartComponent } from '../modals/choose-chart/choose-chart.component';
 
 @Component({
   selector: 'app-toolbar',
@@ -64,7 +65,24 @@ export class ToolbarComponent implements OnDestroy {
       case ToolNames.SLIDER:
         this.openNewDialog(ToolNames.SLIDER);
         break;
+      case ToolNames.CHART:
+        this.openChartSelector();
+        break;
     }
+  }
+
+  openChartSelector() {
+    const dialogConfig = this.utilsService.createMatDialogConfig(
+      ['choose-chart-dialog'],
+      undefined,
+      5
+    );
+    const dialogRef = this.dialog.open(ChooseChartComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((chartType: ChartTypes) => {
+      if (this.currentPageId && chartType) {
+        this.toolService.createNewChartTool(this.currentPageId, chartType);
+      }
+    });
   }
 
   openNewDialog(toolName: ToolNames) {
