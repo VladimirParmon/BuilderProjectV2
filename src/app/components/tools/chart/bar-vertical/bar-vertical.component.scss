@@ -1,8 +1,9 @@
 .container {
   position: relative;
   display: flex;
+
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
   max-width: 100%;
 }
 
@@ -27,5 +28,21 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+
+  &__values {
+    align-self: center;
+    max-width: 400px;
+
+    &_items input {
+      width: 100%;
+    }
+  }
+}
+
+.icon {
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.05);
   }
 }

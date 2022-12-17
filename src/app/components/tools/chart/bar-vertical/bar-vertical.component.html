@@ -41,22 +41,81 @@
         />
       </mat-form-field>
     </div>
+
     <div class="controls__inputs">
       <mat-form-field>
         <mat-label>Название оси Х</mat-label>
-        <input matInput [value]="chartData.xAxisLabel" />
+        <input
+          matInput
+          [(ngModel)]="chartData.xAxisLabel"
+          (ngModelChange)="this.inputDebounce.next($event)"
+        />
       </mat-form-field>
       <mat-form-field>
         <mat-label>Название оси Y</mat-label>
-        <input matInput [value]="chartData.yAxisLabel" />
+        <input
+          matInput
+          [(ngModel)]="chartData.yAxisLabel"
+          (ngModelChange)="this.inputDebounce.next($event)"
+        />
       </mat-form-field>
     </div>
+
+    <table class="controls__values">
+      <thead class="controls__values_headings">
+        <th></th>
+        <th>Название</th>
+        <th>Значение</th>
+      </thead>
+      <tbody cdkDropList [cdkDropListData]="chartData.results" (cdkDropListDropped)="drop($event)">
+        <tr *ngFor="let entry of chartData.results" class="controls__values_items" cdkDrag>
+          <td cdkDragHandle>
+            <mat-icon class="icon">drag_handle</mat-icon>
+          </td>
+          <td>
+            <mat-form-field>
+              <input
+                matInput
+                [(ngModel)]="entry.name"
+                (ngModelChange)="this.inputDebounce.next($event)"
+              />
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field>
+              <input
+                matInput
+                [(ngModel)]="entry.value"
+                (ngModelChange)="this.inputDebounce.next($event)"
+              />
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-icon color="primary" class="icon" (click)="deleteEntry(entry.name)"
+              >delete</mat-icon
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-icon class="icon" (click)="addEntry()">add_more</mat-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
     <div class="controls__checkboxes">
       <div class="controls__axes">
-        <mat-checkbox>Ось Х</mat-checkbox>
-        <mat-checkbox>Ось Y</mat-checkbox>
+        <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.showXAxisLabel"
+          >Ось Х</mat-checkbox
+        >
+        <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.showYAxisLabel"
+          >Ось Y</mat-checkbox
+        >
       </div>
-      <mat-checkbox>Градиент</mat-checkbox>
+      <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.gradient"
+        >Градиент</mat-checkbox
+      >
     </div>
   </div>
 </div>

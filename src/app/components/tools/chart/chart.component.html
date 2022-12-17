@@ -2,6 +2,7 @@
   <app-bar-vertical
     *ngSwitchCase="chartTypes.BAR_VERTICAL"
     [chartDataJSONString]="chartDescription.chartData"
+    (dispatch-changes)="handleChanges($event)"
   ></app-bar-vertical>
   <app-pie
     *ngSwitchCase="chartTypes.PIE"

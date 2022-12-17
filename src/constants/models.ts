@@ -83,10 +83,10 @@ export interface BarChartData {
   results: NonCompoundChartResults[];
 }
 
-interface NonCompoundChartResults {
+export interface NonCompoundChartResults {
   name: string;
   value: number;
-  extra: any;
+  extra?: any;
 }
 
 export interface PieChartData {

@@ -7,5 +7,8 @@ export const chartsReducer = createReducer(
   on(filesActions.insertNewChartDescription, (state, { chartStorageUnitDescription }) => [
     ...state,
     chartStorageUnitDescription,
-  ])
+  ]),
+  on(filesActions.updateChart, (state, { fileDescriptionId, newData }) =>
+    state.map((d) => (d.id === fileDescriptionId ? { ...d, chartData: newData } : d))
+  )
 );
