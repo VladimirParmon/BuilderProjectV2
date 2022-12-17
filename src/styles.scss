@@ -222,3 +222,9 @@ $text-editor-sizes: "8px", "9px", "10px", "12px", "14px", "16px", "20px", "24px"
     background-color: rgba($color: mat.get-color-from-palette($Builder-accent, 50), $alpha: 0.97);
   }
 }
+
+//######################## Charts ########################
+
+app-bar-vertical {
+  max-width: 100%;
+}

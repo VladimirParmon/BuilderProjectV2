@@ -1,15 +1,62 @@
-<ngx-charts-bar-vertical
-  *ngIf="chartData"
-  [view]="chartData.view"
-  [scheme]="chartData.colorScheme"
-  [results]="chartData.results"
-  [gradient]="chartData.gradient"
-  [xAxis]="chartData.xAxis"
-  [yAxis]="chartData.yAxis"
-  [legend]="chartData.legend"
-  [showXAxisLabel]="chartData.showXAxisLabel"
-  [showYAxisLabel]="chartData.showYAxisLabel"
-  [xAxisLabel]="chartData.xAxisLabel"
-  [yAxisLabel]="chartData.yAxisLabel"
->
-</ngx-charts-bar-vertical>
+<div class="container" *ngIf="chartData">
+  <div
+    class="chart-wrapper"
+    #containerRef
+    [style.width.px]="chartData.view[0]"
+    [style.height.px]="chartData.view[1]"
+  >
+    <ngx-charts-bar-vertical
+      [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
+      [scheme]="chartData.colorScheme"
+      [results]="chartData.results"
+      [gradient]="chartData.gradient"
+      [xAxis]="chartData.xAxis"
+      [yAxis]="chartData.yAxis"
+      [showXAxisLabel]="chartData.showXAxisLabel"
+      [showYAxisLabel]="chartData.showYAxisLabel"
+      [xAxisLabel]="chartData.xAxisLabel"
+      [yAxisLabel]="chartData.yAxisLabel"
+    >
+    </ngx-charts-bar-vertical>
+  </div>
+
+  <div *ngIf="(isGlobalEditOn$ | async) && !isExample" class="controls">
+    <div class="controls__size">
+      <mat-form-field>
+        <mat-label>Ширина в px</mat-label>
+        <input
+          matInput
+          (change)="handleSizeChange($event, true)"
+          type="number"
+          [value]="chartData.view[0]"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Высота в px</mat-label>
+        <input
+          matInput
+          (change)="handleSizeChange($event, false)"
+          type="number"
+          [value]="chartData.view[1]"
+        />
+      </mat-form-field>
+    </div>
+    <div class="controls__inputs">
+      <mat-form-field>
+        <mat-label>Название оси Х</mat-label>
+        <input matInput [value]="chartData.xAxisLabel" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Название оси Y</mat-label>
+        <input matInput [value]="chartData.yAxisLabel" />
+      </mat-form-field>
+    </div>
+    <div class="controls__checkboxes">
+      <div class="controls__axes">
+        <mat-checkbox>Ось Х</mat-checkbox>
+        <mat-checkbox>Ось Y</mat-checkbox>
+      </div>
+      <mat-checkbox>Градиент</mat-checkbox>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { StateService } from 'src/app/services/state.service';
 import { JSONString, PieChartData } from 'src/constants/models';
 
 @Component({
@@ -8,9 +10,10 @@ import { JSONString, PieChartData } from 'src/constants/models';
 })
 export class PieComponent implements OnInit {
   @Input() chartDataJSONString: JSONString = '';
+  isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   chartData: PieChartData | null = null;
 
-  constructor() {}
+  constructor(private stateService: StateService) {}
 
   ngOnInit(): void {
     if (this.chartDataJSONString) {

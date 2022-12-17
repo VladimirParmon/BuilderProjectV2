@@ -1,8 +1,7 @@
 import { ChartDescription } from 'src/constants/models';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, filter, Subject, takeUntil, switchMap } from 'rxjs';
-import { StateService } from 'src/app/services/state.service';
+import { filter, Subject, takeUntil, switchMap } from 'rxjs';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ChartTypes, ToolNames } from 'src/constants/constants';
 import { getSingleFile } from 'src/redux/selectors/files.selectors';
@@ -15,18 +14,13 @@ import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 })
 export class ChartComponent implements OnInit, OnDestroy {
   @Input() toolDescriptionId: string | null = null;
-  isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   chartTypes = ChartTypes;
 
   chartDescription: ChartDescription | null = null;
 
-  constructor(
-    private stateService: StateService,
-    private store: Store,
-    private utilsService: UtilsService
-  ) {}
+  constructor(private store: Store, private utilsService: UtilsService) {}
 
   ngOnInit(): void {
     if (this.toolDescriptionId) {

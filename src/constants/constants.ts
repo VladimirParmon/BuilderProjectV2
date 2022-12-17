@@ -60,7 +60,7 @@ export enum ChartTypes {
 }
 
 export const barVerticalExample = JSON.stringify({
-  view: [600, 300],
+  view: [400, 350],
   colorScheme: {
     domain: ['#d7eaf3', '#77b5d9', '#14397d', '#AAAAAA'],
   },
@@ -68,7 +68,7 @@ export const barVerticalExample = JSON.stringify({
   xAxis: true,
   yAxis: true,
   legend: true,
-  showXAxisLabel: false,
+  showXAxisLabel: true,
   showYAxisLabel: true,
   xAxisLabel: 'My X label',
   yAxisLabel: 'My important Y label data',
@@ -76,23 +76,14 @@ export const barVerticalExample = JSON.stringify({
     {
       name: 'Germany',
       value: 40632,
-      extra: {
-        code: 'de',
-      },
     },
     {
       name: 'United States',
       value: 50000,
-      extra: {
-        code: 'us',
-      },
     },
     {
       name: 'France',
       value: 36745,
-      extra: {
-        code: 'fr',
-      },
     },
   ],
 });

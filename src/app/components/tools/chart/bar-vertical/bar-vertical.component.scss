@@ -1,0 +1,31 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 100%;
+}
+
+.chart-wrapper {
+  position: relative;
+  max-width: 100%;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__size,
+  &__axes,
+  &__inputs {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
