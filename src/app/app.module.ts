@@ -54,6 +54,7 @@ import { PieComponent } from './components/tools/chart/pie/pie.component';
 import { ChooseChartComponent } from './components/modals/choose-chart/choose-chart.component';
 import { ItemsListComponent } from './components/tools/chart/items-list/items-list.component';
 import { ChartSizeComponent } from './components/tools/chart/chart-size/chart-size.component';
+import { CustomLegendComponent } from './components/tools/chart/custom-legend/custom-legend.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { ChartSizeComponent } from './components/tools/chart/chart-size/chart-si
     ChooseChartComponent,
     ItemsListComponent,
     ChartSizeComponent,
+    CustomLegendComponent,
   ],
   imports: [
     FormsModule,

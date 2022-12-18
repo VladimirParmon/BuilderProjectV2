@@ -1,0 +1,26 @@
+@use "@angular/material" as mat;
+@use "/src/styles.scss";
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  width: fit-content;
+  max-width: 300px;
+  gap: 15px;
+  padding: 10px;
+  background-color: mat.get-color-from-palette(styles.$Builder-accent, 100);
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__color-cube {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+  }
+}
