@@ -21,30 +21,11 @@
   </div>
 
   <div *ngIf="(isGlobalEditOn$ | async) && !isExample" class="controls">
-    <div class="controls__size">
-      <mat-form-field>
-        <mat-label>Ширина в px</mat-label>
-        <input
-          min="150"
-          max="2000"
-          matInput
-          (change)="handleSizeChange($event, true)"
-          type="number"
-          [value]="chartData.view[0]"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Высота в px</mat-label>
-        <input
-          min="150"
-          max="2000"
-          matInput
-          (change)="handleSizeChange($event, false)"
-          type="number"
-          [value]="chartData.view[1]"
-        />
-      </mat-form-field>
-    </div>
+    <app-chart-size
+      [width]="chartData.view[0]"
+      [height]="chartData.view[1]"
+      (handle-size-change)="handleSizeChange($event)"
+    ></app-chart-size>
 
     <div class="controls__inputs">
       <mat-form-field>
@@ -65,48 +46,14 @@
       </mat-form-field>
     </div>
 
-    <table class="controls__values">
-      <thead class="controls__values_headings">
-        <th></th>
-        <th>Название</th>
-        <th>Значение</th>
-      </thead>
-      <tbody cdkDropList [cdkDropListData]="chartData.results" (cdkDropListDropped)="drop($event)">
-        <tr *ngFor="let entry of chartData.results" class="controls__values_items" cdkDrag>
-          <td cdkDragHandle>
-            <mat-icon class="icon">drag_handle</mat-icon>
-          </td>
-          <td>
-            <mat-form-field>
-              <input
-                matInput
-                [(ngModel)]="entry.name"
-                (ngModelChange)="inputDebounce.next($event)"
-              />
-            </mat-form-field>
-          </td>
-          <td>
-            <mat-form-field>
-              <input
-                matInput
-                [(ngModel)]="entry.value"
-                (ngModelChange)="inputDebounce.next($event)"
-              />
-            </mat-form-field>
-          </td>
-          <td>
-            <mat-icon color="primary" class="icon" (click)="deleteEntry(entry.name)"
-              >delete</mat-icon
-            >
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <mat-icon class="icon" (click)="addEntry()">add_more</mat-icon>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <app-items-list
+      class="controls__values"
+      [chartResults]="chartData.results"
+      [debounce$]="inputDebounce"
+      (dispatch-changes)="dispatchToParent($event)"
+      (add-entry)="addEntry()"
+      (delete-entry)="deleteEntry($event)"
+    ></app-items-list>
 
     <div class="controls__checkboxes">
       <div class="controls__axes">

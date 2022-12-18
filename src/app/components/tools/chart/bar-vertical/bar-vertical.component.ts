@@ -1,4 +1,3 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   Component,
   EventEmitter,
@@ -29,7 +28,7 @@ export class BarVerticalComponent implements OnInit, OnChanges, OnDestroy {
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   chartData: BarChartData | null = null;
 
-  inputDebounce = new Subject();
+  inputDebounce = new Subject<unknown>();
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private stateService: StateService, private utilsService: UtilsService) {
@@ -52,7 +51,7 @@ export class BarVerticalComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  handleSizeChange(event: Event, isWidth: boolean) {
+  handleSizeChange({ event, isWidth }: { event: Event; isWidth: boolean }) {
     const input = event.target as HTMLInputElement;
     let value = Number(input.value);
     value = value >= Defaults.minGraphSize ? value : Defaults.minGraphSize;
@@ -64,16 +63,6 @@ export class BarVerticalComponent implements OnInit, OnChanges, OnDestroy {
       this.chartData = { ...this.chartData, view: newSizes };
     }
     this.inputDebounce.next(true);
-  }
-
-  drop(event: CdkDragDrop<NonCompoundChartResults[]>) {
-    if (this.chartData) {
-      const from = event.previousIndex;
-      const to = event.currentIndex;
-      const array = this.utilsService.arrayDeepCopy(this.chartData.results);
-      moveItemInArray(array, from, to);
-      this.dispatchToParent(array);
-    }
   }
 
   deleteEntry(entryName: string) {

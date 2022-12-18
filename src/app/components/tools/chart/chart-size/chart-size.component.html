@@ -1,0 +1,24 @@
+<div class="controls__size">
+  <mat-form-field>
+    <mat-label>Ширина в px</mat-label>
+    <input
+      min="150"
+      max="2000"
+      matInput
+      (change)="handleSizeChange.emit({ event: $event, isWidth: true })"
+      type="number"
+      [value]="width"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Высота в px</mat-label>
+    <input
+      min="150"
+      max="2000"
+      matInput
+      (change)="handleSizeChange.emit({ event: $event, isWidth: false })"
+      type="number"
+      [value]="height"
+    />
+  </mat-form-field>
+</div>

@@ -52,6 +52,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BarVerticalComponent } from './components/tools/chart/bar-vertical/bar-vertical.component';
 import { PieComponent } from './components/tools/chart/pie/pie.component';
 import { ChooseChartComponent } from './components/modals/choose-chart/choose-chart.component';
+import { ItemsListComponent } from './components/tools/chart/items-list/items-list.component';
+import { ChartSizeComponent } from './components/tools/chart/chart-size/chart-size.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +82,8 @@ import { ChooseChartComponent } from './components/modals/choose-chart/choose-ch
     BarVerticalComponent,
     PieComponent,
     ChooseChartComponent,
+    ItemsListComponent,
+    ChartSizeComponent,
   ],
   imports: [
     FormsModule,

@@ -1,0 +1,32 @@
+<table *ngIf="chartResults">
+  <thead>
+    <th></th>
+    <th>Название</th>
+    <th>Значение</th>
+  </thead>
+  <tbody cdkDropList [cdkDropListData]="chartResults" (cdkDropListDropped)="drop($event)">
+    <tr *ngFor="let entry of chartResults" class="controls__values_items" cdkDrag>
+      <td cdkDragHandle>
+        <mat-icon class="icon">drag_handle</mat-icon>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput [(ngModel)]="entry.name" (ngModelChange)="inputDebounce()" />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput [(ngModel)]="entry.value" (ngModelChange)="inputDebounce()" />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-icon color="primary" class="icon" (click)="deleteEntry(entry.name)">delete</mat-icon>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <mat-icon class="icon" (click)="addEntry()">add_more</mat-icon>
+      </td>
+    </tr>
+  </tbody>
+</table>
