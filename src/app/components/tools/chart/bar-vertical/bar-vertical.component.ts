@@ -11,9 +11,9 @@ import {
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { BarChartData, JSONString, NonCompoundChartResults } from 'src/constants/models';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Defaults } from 'src/app/services/defaults';
+import { BarChartData, JSONString } from 'src/constants/models';
+import { debounceTime } from 'rxjs/operators';
+import { _addEntry, _deleteEntry, _dispatchToParent, _handleSizeChange } from '../common';
 
 @Component({
   selector: 'app-bar-vertical',
@@ -29,11 +29,16 @@ export class BarVerticalComponent implements OnInit, OnChanges, OnDestroy {
   chartData: BarChartData | null = null;
 
   inputDebounce = new Subject<unknown>();
-  destroy$: Subject<boolean> = new Subject<boolean>();
+  destroy$ = new Subject<boolean>();
 
-  constructor(private stateService: StateService, private utilsService: UtilsService) {
+  handleSizeChange = _handleSizeChange;
+  addEntry = _addEntry;
+  deleteEntry = _deleteEntry;
+  dispatchToParent = _dispatchToParent;
+
+  constructor(private stateService: StateService, public utilsService: UtilsService) {
     this.inputDebounce
-      .pipe(debounceTime(500), distinctUntilChanged())
+      .pipe(debounceTime(200))
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.dispatchToParent();
@@ -49,48 +54,6 @@ export class BarVerticalComponent implements OnInit, OnChanges, OnDestroy {
     if (this.chartDataJSONString) {
       this.chartData = JSON.parse(this.chartDataJSONString);
     }
-  }
-
-  handleSizeChange({ event, isWidth }: { event: Event; isWidth: boolean }) {
-    const input = event.target as HTMLInputElement;
-    let value = Number(input.value);
-    value = value >= Defaults.minGraphSize ? value : Defaults.minGraphSize;
-    value = value <= Defaults.maxGraphSize ? value : Defaults.maxGraphSize;
-    if (this.chartData) {
-      const oldWidth = this.chartData.view[0];
-      const oldHeight = this.chartData.view[1];
-      const newSizes: [number, number] = isWidth ? [value, oldHeight] : [oldWidth, value];
-      this.chartData = { ...this.chartData, view: newSizes };
-    }
-    this.inputDebounce.next(true);
-  }
-
-  deleteEntry(entryName: string) {
-    if (this.chartData) {
-      const array = this.utilsService
-        .arrayDeepCopy(this.chartData.results)
-        .filter((e) => e.name !== entryName);
-      this.dispatchToParent(array);
-    }
-  }
-
-  addEntry() {
-    if (this.chartData) {
-      const array = this.utilsService.arrayDeepCopy(this.chartData.results);
-      array.push({
-        name: `Новое поле ${array.length + 1}`,
-        value: 0,
-      });
-      this.dispatchToParent(array);
-    }
-  }
-
-  dispatchToParent(array?: NonCompoundChartResults[]) {
-    const newData = JSON.stringify({
-      ...this.chartData,
-      results: array || this.chartData?.results,
-    });
-    this.dispatch.emit(newData);
   }
 
   ngOnDestroy(): void {

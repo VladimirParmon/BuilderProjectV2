@@ -96,8 +96,10 @@ export interface PieChartData {
   showLegend: boolean;
   showLabels: boolean;
   isDoughnut: boolean;
+  explodeSlices: boolean;
   legendPosition: LegendPosition;
   results: NonCompoundChartResults[];
+  arcWidth: number;
 }
 
 export interface TextDescription {

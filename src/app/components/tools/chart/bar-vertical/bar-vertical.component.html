@@ -20,6 +20,12 @@
     </ngx-charts-bar-vertical>
   </div>
 
+  <app-custom-legend
+    *ngIf="chartData.legend"
+    [chartResults]="chartData.results"
+    [style.align-self]="'center'"
+  ></app-custom-legend>
+
   <div *ngIf="(isGlobalEditOn$ | async) && !isExample" class="controls">
     <app-chart-size
       [width]="chartData.view[0]"
@@ -49,7 +55,7 @@
     <app-items-list
       class="controls__values"
       [chartResults]="chartData.results"
-      [debounce$]="inputDebounce"
+      (debounce)="inputDebounce.next($event)"
       (dispatch-changes)="dispatchToParent($event)"
       (add-entry)="addEntry()"
       (delete-entry)="deleteEntry($event)"
@@ -64,6 +70,9 @@
           >Ось Y</mat-checkbox
         >
       </div>
+      <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.legend"
+        >Показывать легенду</mat-checkbox
+      >
       <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.gradient"
         >Градиент</mat-checkbox
       >

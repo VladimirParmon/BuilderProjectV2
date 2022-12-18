@@ -1,0 +1,35 @@
+.container {
+  position: relative;
+  display: flex;
+
+  flex-direction: column;
+  gap: 20px;
+  max-width: 100%;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__values {
+    align-self: center;
+    max-width: 400px;
+  }
+}
+
+.chart-wrapper {
+  position: relative;
+  align-self: center;
+  max-width: 100%;
+}
+
+.withBorder {
+  border: 1px dotted grey;
+}

@@ -16,7 +16,12 @@
       </td>
       <td>
         <mat-form-field>
-          <input matInput [(ngModel)]="entry.value" (ngModelChange)="inputDebounce()" />
+          <input
+            matInput
+            [(ngModel)]="entry.value"
+            (ngModelChange)="inputDebounce()"
+            type="number"
+          />
         </mat-form-field>
       </td>
       <td>

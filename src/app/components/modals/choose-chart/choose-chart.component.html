@@ -15,13 +15,17 @@
       [chartDataJSONString]="barVerticalExample"
       [isExample]="true"
     ></app-bar-vertical>
-    <app-pie *ngSwitchCase="ChartTypes.PIE" [chartDataJSONString]="pieExample"></app-pie>
+    <app-pie
+      *ngSwitchCase="ChartTypes.PIE"
+      [chartDataJSONString]="pieExample"
+      [isExample]="true"
+    ></app-pie>
   </div>
-
-  <mat-dialog-actions align="end">
-    <button mat-stroked-button [mat-dialog-close]>Отмена</button>
-    <button mat-raised-button (click)="confirmChoice()" [disabled]="!selectedChart">
-      Подтвердить
-    </button>
-  </mat-dialog-actions>
 </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button [mat-dialog-close]>Отмена</button>
+  <button mat-raised-button (click)="confirmChoice()" [disabled]="!selectedChart">
+    Подтвердить
+  </button>
+</mat-dialog-actions>

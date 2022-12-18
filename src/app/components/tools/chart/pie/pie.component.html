@@ -1,12 +1,82 @@
-<ngx-charts-pie-chart
-  *ngIf="chartData"
-  [view]="chartData.view"
-  [scheme]="chartData.colorScheme"
-  [results]="chartData.results"
-  [gradient]="chartData.gradient"
-  [legend]="chartData.showLegend"
-  [legendPosition]="chartData.legendPosition"
-  [labels]="chartData.showLabels"
-  [doughnut]="chartData.isDoughnut"
->
-</ngx-charts-pie-chart>
+<div class="container" *ngIf="chartData">
+  <div
+    class="chart-wrapper"
+    #containerRef
+    [style.width.px]="chartData.view[0]"
+    [style.height.px]="chartData.view[1]"
+    [ngClass]="{ withBorder: (isGlobalEditOn$ | async) && !isExample }"
+  >
+    <ngx-charts-pie-chart
+      [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
+      [scheme]="chartData.colorScheme"
+      [results]="chartData.results"
+      [gradient]="chartData.gradient"
+      [legend]="false"
+      [legendPosition]="chartData.legendPosition"
+      [labels]="chartData.showLabels"
+      [doughnut]="chartData.isDoughnut"
+      [explodeSlices]="chartData.explodeSlices"
+      [arcWidth]="chartData.arcWidth"
+      [maxLabelLength]="20"
+    >
+    </ngx-charts-pie-chart>
+  </div>
+
+  <app-custom-legend
+    *ngIf="chartData.showLegend"
+    [chartResults]="chartData.results"
+    [style.align-self]="'center'"
+  ></app-custom-legend>
+
+  <div *ngIf="(isGlobalEditOn$ | async) && !isExample" class="controls">
+    <app-chart-size
+      [width]="chartData.view[0]"
+      [height]="chartData.view[1]"
+      [heightMustNotPrevail]="true"
+      (handle-size-change)="handleSizeChange($event)"
+    ></app-chart-size>
+
+    <app-items-list
+      class="controls__values"
+      [chartResults]="chartData.results"
+      (debounce)="inputDebounce.next($event)"
+      (dispatch-changes)="dispatchToParent($event)"
+      (add-entry)="addEntry()"
+      (delete-entry)="deleteEntry($event)"
+    ></app-items-list>
+
+    <div class="controls__checkboxes">
+      <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.showLegend"
+        >Показывать легенду</mat-checkbox
+      >
+      <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.showLabels"
+        >Показывать подписи</mat-checkbox
+      >
+      <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.gradient"
+        >Градиент</mat-checkbox
+      >
+      <mat-checkbox
+        (ngModelChange)="dispatchToParent()"
+        [(ngModel)]="chartData.isDoughnut"
+        [disabled]="chartData.explodeSlices"
+        >Колечком</mat-checkbox
+      >
+      <mat-form-field *ngIf="chartData.isDoughnut" [style.max-width.px]="150">
+        <mat-label>Толщина колечка</mat-label>
+        <mat-select [(ngModel)]="chartData.arcWidth" (change)="dispatchToParent()">
+          <mat-option value="0.25"> Очень тонкое </mat-option>
+          <mat-option value="0.35"> Тонкое </mat-option>
+          <mat-option value="0.45"> Среднее </mat-option>
+          <mat-option value="0.55"> Толстое </mat-option>
+          <mat-option value="0.65"> Очень толстое </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-checkbox
+        (ngModelChange)="dispatchToParent()"
+        [(ngModel)]="chartData.explodeSlices"
+        [disabled]="chartData.isDoughnut"
+        >Соразмерные секторы</mat-checkbox
+      >
+    </div>
+  </div>
+</div>

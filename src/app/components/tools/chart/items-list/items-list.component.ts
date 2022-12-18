@@ -11,7 +11,7 @@ import { NonCompoundChartResults } from 'src/constants/models';
 })
 export class ItemsListComponent {
   @Input() chartResults: NonCompoundChartResults[] | null = null;
-  @Input() debounce$: Subject<unknown> | null = null;
+  @Output('debounce') debounce = new EventEmitter();
   @Output('dispatch-changes') dispatchEmitter = new EventEmitter<NonCompoundChartResults[]>();
   @Output('delete-entry') deleteEmitter = new EventEmitter<string>();
   @Output('add-entry') addEmitter = new EventEmitter();
@@ -29,7 +29,7 @@ export class ItemsListComponent {
   }
 
   inputDebounce() {
-    if (this.debounce$) this.debounce$.next(true);
+    this.debounce.emit(true);
   }
 
   addEntry() {

@@ -59,10 +59,22 @@ export enum ChartTypes {
   PIE = 'pie',
 }
 
+export const standardChartColors = [
+  '#d7eaf3',
+  '#77b5d9',
+  '#14397d',
+  '#AAAAAA',
+  '#7A7978',
+  '#87CBAC',
+  '#90FFDC',
+  '#8DE4FF',
+  '#8AC4FF',
+];
+
 export const barVerticalExample = JSON.stringify({
   view: [400, 350],
   colorScheme: {
-    domain: ['#d7eaf3', '#77b5d9', '#14397d', '#AAAAAA'],
+    domain: standardChartColors,
   },
   gradient: false,
   xAxis: true,
@@ -91,34 +103,27 @@ export const barVerticalExample = JSON.stringify({
 export const pieChartExample = JSON.stringify({
   view: [400, 300],
   colorScheme: {
-    domain: ['#d7eaf3', '#77b5d9', '#14397d', '#AAAAAA'],
+    domain: standardChartColors,
   },
   gradient: false,
   showLegend: true,
   showLabels: true,
   isDoughnut: false,
-  legendPosition: 'bottom',
+  explodeSlices: false,
+  arcWidth: 0.25,
+  legendPosition: 'below',
   results: [
     {
       name: 'Germany',
       value: 40632,
-      extra: {
-        code: 'de',
-      },
     },
     {
       name: 'UnitedStates',
       value: 50000,
-      extra: {
-        code: 'us',
-      },
     },
     {
       name: 'France',
       value: 36745,
-      extra: {
-        code: 'fr',
-      },
     },
   ],
 });
