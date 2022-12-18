@@ -13,6 +13,7 @@
   <mat-form-field>
     <mat-label>Макс. высота в px</mat-label>
     <input
+      [disabled]="equalSides"
       min="150"
       max="2000"
       matInput

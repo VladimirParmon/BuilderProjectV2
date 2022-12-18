@@ -101,7 +101,7 @@ export const barVerticalExample = JSON.stringify({
 });
 
 export const pieChartExample = JSON.stringify({
-  view: [400, 300],
+  view: [400, 400],
   colorScheme: {
     domain: standardChartColors,
   },
@@ -118,7 +118,7 @@ export const pieChartExample = JSON.stringify({
       value: 40632,
     },
     {
-      name: 'UnitedStates',
+      name: 'United States',
       value: 50000,
     },
     {

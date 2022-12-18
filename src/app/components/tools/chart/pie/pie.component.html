@@ -3,8 +3,7 @@
     class="chart-wrapper"
     #containerRef
     [style.width.px]="chartData.view[0]"
-    [style.height.px]="chartData.view[1]"
-    [ngClass]="{ withBorder: (isGlobalEditOn$ | async) && !isExample }"
+    [style.height.px]="containerRef.offsetWidth"
   >
     <ngx-charts-pie-chart
       [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
@@ -32,7 +31,7 @@
     <app-chart-size
       [width]="chartData.view[0]"
       [height]="chartData.view[1]"
-      [heightMustNotPrevail]="true"
+      [equalSides]="true"
       (handle-size-change)="handleSizeChange($event)"
     ></app-chart-size>
 
