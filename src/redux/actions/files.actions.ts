@@ -27,6 +27,7 @@ enum FileActions {
   deleteMultipleAudios = '[Files/Audios] Delete multiple audio file descriptions from store',
   insertNewChart = '[Files/Charts] Insert a new chart storage unit',
   updateChart = '[Files/Charts] Update chart data',
+  deleteChart = '[Files/Charts] Delete chart data',
 }
 
 const updateTextStorageUnit = createAction(
@@ -82,6 +83,7 @@ const updateChart = createAction(
   FileActions.updateChart,
   props<{ fileDescriptionId: string; newData: JSONString }>()
 );
+const deleteChart = createAction(FileActions.deleteChart, props<{ id: string }>());
 
 export const filesActions = {
   updateTextStorageUnit,
@@ -101,4 +103,5 @@ export const filesActions = {
   deleteMultipleAudios,
   insertNewChartDescription,
   updateChart,
+  deleteChart,
 };
