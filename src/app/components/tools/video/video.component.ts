@@ -28,7 +28,6 @@ export class VideoComponent implements OnInit, OnDestroy {
         .select(getSingleFile({ id: x, type: ToolNames.VIDEO }))
         .pipe(takeUntil(this.destroy$))
         .subscribe((fetchedDescription) => {
-          console.log(fetchedDescription);
           if (fetchedDescription) this.video = fetchedDescription as VideoFileDescription;
         });
     }
