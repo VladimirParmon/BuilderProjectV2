@@ -14,6 +14,7 @@ import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { BarChartData, JSONString, NonCompoundChartResults } from 'src/constants/models';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Defaults } from 'src/app/services/defaults';
 
 @Component({
   selector: 'app-bar-vertical',
@@ -53,13 +54,16 @@ export class BarVerticalComponent implements OnInit, OnChanges, OnDestroy {
 
   handleSizeChange(event: Event, isWidth: boolean) {
     const input = event.target as HTMLInputElement;
-    const value = Number(input.value);
+    let value = Number(input.value);
+    value = value >= Defaults.minGraphSize ? value : Defaults.minGraphSize;
+    value = value <= Defaults.maxGraphSize ? value : Defaults.maxGraphSize;
     if (this.chartData) {
       const oldWidth = this.chartData.view[0];
       const oldHeight = this.chartData.view[1];
       const newSizes: [number, number] = isWidth ? [value, oldHeight] : [oldWidth, value];
       this.chartData = { ...this.chartData, view: newSizes };
     }
+    this.inputDebounce.next(true);
   }
 
   drop(event: CdkDragDrop<NonCompoundChartResults[]>) {
