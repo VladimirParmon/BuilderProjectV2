@@ -1,11 +1,11 @@
-@use "../../../../styles.scss";
+@use "src/constants/_variables.scss" as v;
 
 .spacer {
   flex: 1 1 auto;
 }
 
 .header {
-  height: styles.$header-height;
+  height: v.$header-height;
 }
 
 .header-logo {

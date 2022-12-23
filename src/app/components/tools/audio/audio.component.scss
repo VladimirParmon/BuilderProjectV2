@@ -1,5 +1,4 @@
-@use "@angular/material" as mat;
-@use "src/styles.scss";
+@use "src/constants/__variables.scss" as v;
 
 .audio-unit {
   display: flex;
@@ -22,7 +21,7 @@
 
 .custom-placeholder {
   border-radius: 30px;
-  border: 1px solid mat.get-color-from-palette(styles.$Builder-accent, 500);
+  border: 1px solid v.getMeSomeColor("accent", 500);
   min-height: 70px;
   width: 500px;
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);

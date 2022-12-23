@@ -1,0 +1,16 @@
+@use "@angular/material" as mat;
+@use "./__theme.scss" as theme;
+
+@function getMeSomeColor($wanted-type, $saturation) {
+  $type: map-get(
+    (
+      primary: theme.$Builder-primary,
+      accent: theme.$Builder-accent,
+      warn: theme.$Builder-warn,
+    ),
+    $wanted-type
+  );
+  @return mat.get-color-from-palette($type, $saturation);
+}
+
+$header-height: 60px;

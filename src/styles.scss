@@ -1,29 +1,12 @@
+@use "src/constants/__theme.scss" as theme;
 @use "@angular/material" as mat;
-@use "./constants/_palette" as palette;
-@include mat.core();
-
 @import "~quill/dist/quill.snow.css";
-
-$Builder-primary: mat.define-palette(palette.$mslu);
-$Builder-accent: mat.define-palette(palette.$mslu-light);
-$Builder-warn: mat.define-palette(mat.$red-palette, 800);
-$Builder-theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $Builder-primary,
-      accent: $Builder-accent,
-      warn: $Builder-warn,
-    ),
-  )
-);
-
-@include mat.all-component-themes($Builder-theme);
+@include mat.core();
+@include mat.all-component-themes(theme.$Builder-theme);
 
 $main-blue: #14609a;
 $light-blue: #dde6ef;
 $bg-light: #ffffff;
-
-$header-height: 60px;
 
 html {
   height: 100%;
@@ -219,7 +202,7 @@ $text-editor-sizes: "8px", "9px", "10px", "12px", "14px", "16px", "20px", "24px"
     top: 0;
     right: 0;
     z-index: 2;
-    background-color: rgba($color: mat.get-color-from-palette($Builder-accent, 50), $alpha: 0.97);
+    //background-color: rgba($color: mat.get-color-from-palette($Builder-accent, 50), $alpha: 0.97);
   }
 }
 

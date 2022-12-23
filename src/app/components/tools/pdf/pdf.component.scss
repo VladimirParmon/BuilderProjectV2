@@ -1,5 +1,4 @@
-@use "@angular/material" as mat;
-@use "src/styles.scss";
+@use "src/constants/__variables.scss" as v;
 
 .pdf-container {
   display: flex;
@@ -53,7 +52,7 @@
 }
 
 .custom-placeholder {
-  border: 1px solid mat.get-color-from-palette(styles.$Builder-accent, 500);
+  border: 1px solid v.getMeSomeColor("accent", 500);
   min-height: 35px;
   width: 500px;
   border-radius: 20px;

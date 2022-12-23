@@ -1,0 +1,15 @@
+@use "@angular/material" as mat;
+@use "./_palette" as palette;
+
+$Builder-primary: mat.define-palette(palette.$mslu);
+$Builder-accent: mat.define-palette(palette.$mslu-light);
+$Builder-warn: mat.define-palette(mat.$red-palette, 800);
+$Builder-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $Builder-primary,
+      accent: $Builder-accent,
+      warn: $Builder-warn,
+    ),
+  )
+);

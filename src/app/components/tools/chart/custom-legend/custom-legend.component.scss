@@ -1,5 +1,4 @@
-@use "@angular/material" as mat;
-@use "/src/styles.scss";
+@use "src/constants/__variables.scss" as v;
 
 .legend {
   display: flex;
@@ -10,7 +9,7 @@
   max-width: 300px;
   gap: 15px;
   padding: 10px;
-  background-color: mat.get-color-from-palette(styles.$Builder-accent, 100);
+  background-color: v.getMeSomeColor("accent", 100);
 
   &__item {
     display: flex;
