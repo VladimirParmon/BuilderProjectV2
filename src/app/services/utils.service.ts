@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import {
   BasicFileDescription,
+  ChartDescription,
   CollageToolDescription,
   ImageFileDescription,
   Lookup,
@@ -80,6 +81,8 @@ export class UtilsService {
         return MediaFileTypes.PDFs;
       case ToolNames.VIDEO:
         return MediaFileTypes.VIDEOS;
+      case ToolNames.CHART:
+        return MediaFileTypes.CHARTS;
       default:
         return MediaFileTypes.IMAGES;
     }
@@ -129,6 +132,14 @@ export class UtilsService {
       this.propertyCheck(object, 'currentJustifyContent') &&
       this.propertyCheck(object, 'currentAlignItems') &&
       this.propertyCheck(object, 'currentFlow')
+    );
+  }
+
+  isChartDescription(object: any): object is ChartDescription {
+    return (
+      this.propertyCheck(object, 'id'),
+      this.propertyCheck(object, 'chartType'),
+      this.propertyCheck(object, 'chartData')
     );
   }
 

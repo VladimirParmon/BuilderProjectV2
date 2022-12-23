@@ -1,0 +1,81 @@
+<div class="container" *ngIf="chartData">
+  <div
+    class="chart-wrapper"
+    #containerRef
+    [style.width.px]="chartData.view[0]"
+    [style.height.px]="chartData.view[1]"
+  >
+    <ngx-charts-bar-vertical
+      [view]="[containerRef.offsetWidth, containerRef.offsetHeight]"
+      [scheme]="chartData.colorScheme"
+      [results]="chartData.results"
+      [gradient]="chartData.gradient"
+      [xAxis]="chartData.xAxis"
+      [yAxis]="chartData.yAxis"
+      [showXAxisLabel]="chartData.showXAxisLabel"
+      [showYAxisLabel]="chartData.showYAxisLabel"
+      [xAxisLabel]="chartData.xAxisLabel"
+      [yAxisLabel]="chartData.yAxisLabel"
+    >
+    </ngx-charts-bar-vertical>
+  </div>
+
+  <app-custom-legend
+    *ngIf="chartData.legend"
+    [chartResults]="chartData.results"
+    [style.align-self]="'center'"
+  ></app-custom-legend>
+
+  <div *ngIf="(isGlobalEditOn$ | async) && !isExample" class="controls">
+    <app-chart-size
+      [width]="chartData.view[0]"
+      [height]="chartData.view[1]"
+      (handle-size-change)="handleSizeChange($event)"
+    ></app-chart-size>
+
+    <div class="controls__inputs">
+      <mat-form-field>
+        <mat-label>Название оси Х</mat-label>
+        <input
+          matInput
+          [(ngModel)]="chartData.xAxisLabel"
+          (ngModelChange)="inputDebounce.next($event)"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Название оси Y</mat-label>
+        <input
+          matInput
+          [(ngModel)]="chartData.yAxisLabel"
+          (ngModelChange)="inputDebounce.next($event)"
+        />
+      </mat-form-field>
+    </div>
+
+    <app-items-list
+      class="controls__values"
+      [chartResults]="chartData.results"
+      (debounce)="inputDebounce.next($event)"
+      (dispatch-changes)="dispatchToParent($event)"
+      (add-entry)="addEntry()"
+      (delete-entry)="deleteEntry($event)"
+    ></app-items-list>
+
+    <div class="controls__checkboxes">
+      <div class="controls__axes">
+        <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.showXAxisLabel"
+          >Ось Х</mat-checkbox
+        >
+        <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.showYAxisLabel"
+          >Ось Y</mat-checkbox
+        >
+      </div>
+      <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.legend"
+        >Показывать легенду</mat-checkbox
+      >
+      <mat-checkbox (ngModelChange)="dispatchToParent()" [(ngModel)]="chartData.gradient"
+        >Градиент</mat-checkbox
+      >
+    </div>
+  </div>
+</div>

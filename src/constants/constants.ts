@@ -42,6 +42,7 @@ export enum ToolNames {
   PDF = 'PDF',
   SLIDER = 'slider',
   COLLAGE = 'collage',
+  CHART = 'chart',
 }
 
 export enum MediaFileTypes {
@@ -50,7 +51,82 @@ export enum MediaFileTypes {
   VIDEOS = 'videos',
   PDFs = 'PDFs',
   AUDIOS = 'audios',
+  CHARTS = 'charts',
 }
+
+export enum ChartTypes {
+  BAR_VERTICAL = 'bar_vertical',
+  PIE = 'pie',
+}
+
+export const standardChartColors = [
+  '#d7eaf3',
+  '#77b5d9',
+  '#14397d',
+  '#AAAAAA',
+  '#7A7978',
+  '#87CBAC',
+  '#90FFDC',
+  '#8DE4FF',
+  '#8AC4FF',
+];
+
+export const barVerticalExample = JSON.stringify({
+  view: [400, 350],
+  colorScheme: {
+    domain: standardChartColors,
+  },
+  gradient: false,
+  xAxis: true,
+  yAxis: true,
+  legend: true,
+  showXAxisLabel: true,
+  showYAxisLabel: true,
+  xAxisLabel: 'My X label',
+  yAxisLabel: 'My important Y label data',
+  results: [
+    {
+      name: 'Germany',
+      value: 40632,
+    },
+    {
+      name: 'United States',
+      value: 50000,
+    },
+    {
+      name: 'France',
+      value: 36745,
+    },
+  ],
+});
+
+export const pieChartExample = JSON.stringify({
+  view: [400, 400],
+  colorScheme: {
+    domain: standardChartColors,
+  },
+  gradient: false,
+  showLegend: true,
+  showLabels: true,
+  isDoughnut: false,
+  explodeSlices: false,
+  arcWidth: 0.25,
+  legendPosition: 'below',
+  results: [
+    {
+      name: 'Germany',
+      value: 40632,
+    },
+    {
+      name: 'United States',
+      value: 50000,
+    },
+    {
+      name: 'France',
+      value: 36745,
+    },
+  ],
+});
 
 export enum ExpandButtonInnerText {
   OPEN = 'Свернуть',
@@ -82,6 +158,10 @@ export const toolsList: ToolbarToolListOption[] = [
   {
     name: ToolNames.SLIDER,
     icon: 'auto_awesome_motion',
+  },
+  {
+    name: ToolNames.CHART,
+    icon: 'area_chart',
   },
   // {
   //   name: ToolNames.PRESENTATION,

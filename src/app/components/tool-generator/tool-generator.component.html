@@ -32,5 +32,6 @@
       [toolDescriptionId]="toolDescription.id"
       (notify)="getNotification()"
     ></app-slider>
+    <app-chart *ngSwitchCase="names.CHART" [toolDescriptionId]="toolDescription.id"></app-chart>
   </div>
 </div>

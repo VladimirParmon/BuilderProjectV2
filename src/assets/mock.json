@@ -4,7 +4,7 @@
       "id": "somePageId",
       "name": "somePageName",
       "childPages": ["somePageId2", "somePageId3"],
-      "tools": ["someToolDescriptionId", "someSliderTool", "someCollageTool"],
+      "tools": [],
       "parentId": ""
     },
     {
@@ -60,7 +60,8 @@
     ],
     "videos": [],
     "PDFs": [],
-    "audios": []
+    "audios": [],
+    "charts": []
   },
   "tools": [
     {

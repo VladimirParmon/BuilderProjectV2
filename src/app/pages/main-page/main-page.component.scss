@@ -1,10 +1,10 @@
-@use "../../../styles.scss";
+@use "src/constants/_variables.scss" as v;
 
 .main-page-container {
   position: relative;
   display: flex;
   width: 100%;
-  height: calc(100% - styles.$header-height - 4px);
+  height: calc(100% - v.$header-height - 4px);
   justify-content: space-between;
   overflow: hidden;
   background-image: url("../../../assets/img/mslu-logo-4.jpg");

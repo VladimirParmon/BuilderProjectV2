@@ -1,5 +1,7 @@
+import { Color, LegendPosition } from '@swimlane/ngx-charts';
 import {
   ActionCases,
+  ChartTypes,
   ExpandButtonInnerText,
   FlexboxFlowOptions,
   FlexboxPositioningOptions,
@@ -11,6 +13,8 @@ type PageId = string;
 export type ToolDescriptionId = string;
 export type FileDescriptionId = string;
 export type TextDescriptionId = string;
+type ChartDescriptionId = string;
+export type JSONString = string;
 
 export interface JSONDataStorage {
   contents: SinglePageInfo[];
@@ -24,7 +28,8 @@ export type ToolDescription =
   | AudioToolDescription
   | VideoToolDescription
   | PDFToolDescription
-  | TextToolDescription;
+  | TextToolDescription
+  | ChartToolDescription;
 
 export interface SinglePageInfo {
   id: PageId;
@@ -47,7 +52,55 @@ export type MultimediaFilesCategories = {
   [MediaFileTypes.VIDEOS]: VideoFileDescription[];
   [MediaFileTypes.PDFs]: PDFFileDescription[];
   [MediaFileTypes.AUDIOS]: AudioFileDescription[];
+  [MediaFileTypes.CHARTS]: ChartDescription[];
 };
+
+export type StorageUnitTypes =
+  | TextDescription
+  | ImageFileDescription
+  | VideoFileDescription
+  | PDFFileDescription
+  | AudioFileDescription
+  | ChartDescription;
+
+export interface ChartDescription {
+  id: ChartDescriptionId;
+  chartType: ChartTypes;
+  chartData: JSONString;
+}
+
+export interface BarChartData {
+  view: [number, number];
+  colorScheme: string | Color;
+  gradient: boolean;
+  xAxis: boolean;
+  yAxis: boolean;
+  legend: boolean;
+  showXAxisLabel: boolean;
+  showYAxisLabel: boolean;
+  xAxisLabel: string;
+  yAxisLabel: string;
+  results: NonCompoundChartResults[];
+}
+
+export interface NonCompoundChartResults {
+  name: string;
+  value: number;
+  extra?: any;
+}
+
+export interface PieChartData {
+  view: [number, number];
+  colorScheme: string | Color;
+  gradient: boolean;
+  showLegend: boolean;
+  showLabels: boolean;
+  isDoughnut: boolean;
+  explodeSlices: boolean;
+  legendPosition: LegendPosition;
+  results: NonCompoundChartResults[];
+  arcWidth: number;
+}
 
 export interface TextDescription {
   id: TextDescriptionId;
@@ -73,7 +126,11 @@ interface BasicToolDescription {
   content: ToolDescriptionContent;
 }
 
-export type ToolDescriptionContent = FileDescriptionId[] | FileDescriptionId | TextDescription;
+export type ToolDescriptionContent =
+  | FileDescriptionId[]
+  | FileDescriptionId
+  | TextDescription
+  | ChartDescriptionId;
 
 export interface CollageToolDescription extends BasicToolDescription {
   currentJustifyContent: FlexboxPositioningOptions;
@@ -86,6 +143,7 @@ export type AudioToolDescription = BasicToolDescription;
 export type VideoToolDescription = BasicToolDescription;
 export type PDFToolDescription = BasicToolDescription;
 export type TextToolDescription = BasicToolDescription;
+export type ChartToolDescription = BasicToolDescription;
 
 export interface Lookup {
   [key: string]: SinglePageInfo;

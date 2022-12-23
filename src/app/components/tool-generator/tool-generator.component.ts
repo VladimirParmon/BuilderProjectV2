@@ -78,44 +78,54 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     this.store.dispatch(toolsActions.deleteTool({ toolDescriptionId }));
 
     const toolType = this.toolDescription.type;
-    if (toolType === ToolNames.TEXT) {
-      this.deleteTextToolStorageUnit();
-    } else if (toolType === ToolNames.VIDEO) {
-      this.deleteRelatedVideoStorageUnit();
-    } else {
-      const fileDescriptionIds = this.toolDescription.content;
-      if (this.utilsService.isNonEmptyArrayOfStrings(fileDescriptionIds)) {
-        switch (toolType) {
-          case ToolNames.COLLAGE:
-            this.deleteAllCollageImages(fileDescriptionIds);
-            break;
-          case ToolNames.PDF:
-            this.deleteAllRelatedPDFs(fileDescriptionIds);
-            break;
-          case ToolNames.AUDIO:
-            this.deleteAllRelatedAudios(fileDescriptionIds);
-            break;
-        }
+
+    const toolHasOnlyOneFileByDesign = this.utilsService.isString(this.toolDescription.content);
+
+    if (toolHasOnlyOneFileByDesign) {
+      const storageUnitDescriptionId = this.toolDescription.content as string;
+      switch (toolType) {
+        case ToolNames.TEXT:
+          this.deleteTextToolStorageUnit(storageUnitDescriptionId);
+          break;
+        case ToolNames.VIDEO:
+          this.deleteRelatedVideoStorageUnit(storageUnitDescriptionId);
+          break;
+        case ToolNames.CHART:
+          this.deleteRelatedChartStorageUnit(storageUnitDescriptionId);
+          break;
+      }
+    }
+
+    const toolHasMultipleFilesByDesign = this.utilsService.isNonEmptyArrayOfStrings(
+      this.toolDescription.content
+    );
+
+    if (toolHasMultipleFilesByDesign) {
+      const fileDescriptionIds = this.toolDescription.content as string[];
+      switch (toolType) {
+        case ToolNames.COLLAGE:
+          this.deleteAllCollageImages(fileDescriptionIds);
+          break;
+        case ToolNames.PDF:
+          this.deleteAllRelatedPDFs(fileDescriptionIds);
+          break;
+        case ToolNames.AUDIO:
+          this.deleteAllRelatedAudios(fileDescriptionIds);
+          break;
       }
     }
   }
 
-  deleteTextToolStorageUnit() {
-    if (this.toolDescription) {
-      const storageUnitDescriptionId = this.toolDescription.content;
-      if (this.utilsService.isString(storageUnitDescriptionId)) {
-        this.store.dispatch(filesActions.deleteTextStorageUnit({ id: storageUnitDescriptionId }));
-      }
-    }
+  deleteTextToolStorageUnit(id: string) {
+    this.store.dispatch(filesActions.deleteTextStorageUnit({ id }));
   }
 
-  deleteRelatedVideoStorageUnit() {
-    if (this.toolDescription) {
-      const fileDescriptionId = this.toolDescription.content;
-      if (this.utilsService.isString(fileDescriptionId)) {
-        this.store.dispatch(filesActions.deleteVideo({ fileDescriptionId }));
-      }
-    }
+  deleteRelatedVideoStorageUnit(fileDescriptionId: string) {
+    this.store.dispatch(filesActions.deleteVideo({ fileDescriptionId }));
+  }
+
+  deleteRelatedChartStorageUnit(id: string) {
+    this.store.dispatch(filesActions.deleteChart({ id }));
   }
 
   deleteAllCollageImages(imageDescriptionIds: string[]) {

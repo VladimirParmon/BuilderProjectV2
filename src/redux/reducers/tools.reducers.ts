@@ -12,6 +12,7 @@ export const toolsReducer = createReducer(
     toolsActions.insertNewSliderTool,
     toolsActions.insertNewVideoTool,
     toolsActions.insertNewTextTool,
+    toolsActions.insertNewChartTool,
     (state, { toolDescription }) => {
       return [...state, toolDescription];
     }

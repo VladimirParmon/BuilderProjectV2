@@ -5,7 +5,7 @@ import { contentsActions } from 'src/redux/actions/contents.actions';
 import { filesActions } from 'src/redux/actions/files.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { v4 as uuidv4 } from 'uuid';
-import { ToolNames } from 'src/constants/constants';
+import { ChartTypes, ToolNames } from 'src/constants/constants';
 import { Defaults } from './defaults';
 import { UtilsService } from './utils.service';
 
@@ -138,5 +138,24 @@ export class ToolService {
     this.store.dispatch(filesActions.insertNewImageFilesDescriptions({ filesDescriptions }));
     this.store.dispatch(toolsActions.insertNewSliderTool({ toolDescription }));
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: sliderToolDescriptionId }));
+  }
+
+  createNewChartTool(pageId: string, chartType: ChartTypes) {
+    const chartStorageUnitDescriptionId = uuidv4();
+    const chartToolDescriptionId = uuidv4();
+    const chartStorageUnitDescription: m.ChartDescription = {
+      id: chartStorageUnitDescriptionId,
+      chartType,
+      chartData: Defaults.getChartExample(chartType),
+    };
+    const toolDescription: m.ChartToolDescription = {
+      id: chartToolDescriptionId,
+      type: ToolNames.CHART,
+      content: chartStorageUnitDescriptionId,
+    };
+
+    this.store.dispatch(filesActions.insertNewChartDescription({ chartStorageUnitDescription }));
+    this.store.dispatch(toolsActions.insertNewChartTool({ toolDescription }));
+    this.store.dispatch(contentsActions.addTool({ pageId, toolId: chartToolDescriptionId }));
   }
 }

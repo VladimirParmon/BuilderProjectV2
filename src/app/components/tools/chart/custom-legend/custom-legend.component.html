@@ -1,0 +1,6 @@
+<div class="legend" *ngIf="chartResults">
+  <div class="legend__item" *ngFor="let item of chartResults; let i = index">
+    <div class="legend__color-cube" [style.background-color]="colors[i]"></div>
+    <span>{{ item.name }}</span>
+  </div>
+</div>

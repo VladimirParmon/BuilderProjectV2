@@ -1,5 +1,4 @@
-@use "@angular/material" as mat;
-@use "../../../../styles.scss";
+@use "src/constants/__variables.scss" as v;
 
 .cdk-drag-placeholder {
   display: none;
@@ -25,7 +24,7 @@
     top: 0;
     height: 100%;
     width: 50px;
-    border: 1px solid mat.get-color-from-palette(styles.$Builder-accent, 500);
+    border: 1px solid v.getMeSomeColor("accent", 500);
     display: flex;
     justify-content: center;
     padding-top: 10px;
@@ -48,11 +47,11 @@
 }
 
 .drop-before {
-  border-top: 1px solid mat.get-color-from-palette(styles.$Builder-primary, 200);
+  border-top: 1px solid v.getMeSomeColor("primary", 200);
 }
 
 .drop-after {
-  border-bottom: 1px solid mat.get-color-from-palette(styles.$Builder-primary, 200);
+  border-bottom: 1px solid v.getMeSomeColor("primary", 200);
 }
 
 .node-title {
@@ -82,7 +81,7 @@
     cursor: pointer;
 
     &:hover {
-      color: mat.get-color-from-palette(styles.$Builder-primary, A700);
+      color: v.getMeSomeColor("primary", A700);
     }
   }
 }

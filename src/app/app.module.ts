@@ -47,6 +47,14 @@ import { AudioComponent } from './components/tools/audio/audio.component';
 import { SliderComponent } from './components/tools/slider/slider.component';
 import { FullscreenDirective } from './directives/fullscreen.directive';
 import { FsListenerDirective } from './directives/fs-listener.directive';
+import { ChartComponent } from './components/tools/chart/chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BarVerticalComponent } from './components/tools/chart/bar-vertical/bar-vertical.component';
+import { PieComponent } from './components/tools/chart/pie/pie.component';
+import { ChooseChartComponent } from './components/modals/choose-chart/choose-chart.component';
+import { ItemsListComponent } from './components/tools/chart/items-list/items-list.component';
+import { ChartSizeComponent } from './components/tools/chart/chart-size/chart-size.component';
+import { CustomLegendComponent } from './components/tools/chart/custom-legend/custom-legend.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +79,13 @@ import { FsListenerDirective } from './directives/fs-listener.directive';
     SliderComponent,
     FullscreenDirective,
     FsListenerDirective,
+    ChartComponent,
+    BarVerticalComponent,
+    PieComponent,
+    ChooseChartComponent,
+    ItemsListComponent,
+    ChartSizeComponent,
+    CustomLegendComponent,
   ],
   imports: [
     FormsModule,
@@ -96,6 +111,7 @@ import { FsListenerDirective } from './directives/fs-listener.directive';
     MatRadioModule,
     LetModule,
     GalleryModule,
+    NgxChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
