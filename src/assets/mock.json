@@ -1,10 +1,11 @@
 {
+  "isDummy": true,
   "contents": [
     {
       "id": "somePageId",
       "name": "somePageName",
       "childPages": ["somePageId2", "somePageId3"],
-      "tools": [],
+      "tools": ["someToolDescriptionId", "someSliderTool", "someCollageTool"],
       "parentId": ""
     },
     {

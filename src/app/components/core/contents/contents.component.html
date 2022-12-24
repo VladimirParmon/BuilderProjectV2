@@ -84,6 +84,7 @@
         }}
       </button>
       <button
+        *ngIf="!(stateService.isDummy$ | async)"
         class="tree-button"
         mat-raised-button
         (click)="openAddNewPageDialog()"
@@ -92,7 +93,7 @@
         Добавить
       </button>
     </div>
-    <div class="tree-checkboxes">
+    <div class="tree-checkboxes" *ngIf="!(stateService.isDummy$ | async)">
       <mat-checkbox
         class="tree-checkbox"
         (change)="toggleDND($event.checked)"
@@ -119,7 +120,7 @@
     <ng-container *ngTemplateOutlet="tmplNode; context: { node: node }"></ng-container>
   </div>
 
-  <div class="tree-buttons__bottom">
+  <div class="tree-buttons__bottom" *ngIf="!(stateService.isDummy$ | async)">
     <button class="tree-button" mat-raised-button (click)="saveTree(contentsData)">
       Сохранить
     </button>
