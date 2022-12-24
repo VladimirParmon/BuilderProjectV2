@@ -202,7 +202,10 @@ $text-editor-sizes: "8px", "9px", "10px", "12px", "14px", "16px", "20px", "24px"
     top: 0;
     right: 0;
     z-index: 2;
-    //background-color: rgba($color: mat.get-color-from-palette($Builder-accent, 50), $alpha: 0.97);
+    background-color: rgba(
+      $color: mat.get-color-from-palette(theme.$Builder-accent, 50),
+      $alpha: 0.97
+    );
   }
 }
 
