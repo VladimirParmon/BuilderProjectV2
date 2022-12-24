@@ -56,6 +56,8 @@ import { ItemsListComponent } from './components/tools/chart/items-list/items-li
 import { ChartSizeComponent } from './components/tools/chart/chart-size/chart-size.component';
 import { CustomLegendComponent } from './components/tools/chart/custom-legend/custom-legend.component';
 
+import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy } from '@angular/common';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -88,6 +90,7 @@ import { CustomLegendComponent } from './components/tools/chart/custom-legend/cu
     CustomLegendComponent,
   ],
   imports: [
+    AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     MatToolbarModule,
@@ -101,7 +104,6 @@ import { CustomLegendComponent } from './components/tools/chart/custom-legend/cu
     DragDropModule,
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({}),
     BrowserAnimationsModule,
@@ -113,7 +115,10 @@ import { CustomLegendComponent } from './components/tools/chart/custom-legend/cu
     GalleryModule,
     NgxChartsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: APP_BASE_HREF, useValue: '/' },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
