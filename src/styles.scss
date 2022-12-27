@@ -32,7 +32,6 @@ app-view {
   flex: 0 1 auto;
   min-width: 300px;
   padding-left: 15px;
-  padding-right: 15px;
 }
 
 app-view,
@@ -50,6 +49,10 @@ app-chart {
 app-slider {
   flex: 0 1 auto;
   min-width: 300px;
+}
+
+app-welcome-page {
+  width: 100%;
 }
 
 //################# Custom modal windows ##################

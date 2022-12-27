@@ -45,6 +45,8 @@ export class ViewComponent implements OnDestroy {
               if (data) {
                 this.pageData = data;
                 this.inputValue = data.name;
+              } else {
+                this.router.navigate(['/']);
               }
             });
           this.stateService.currentPageId$.next(pageId);

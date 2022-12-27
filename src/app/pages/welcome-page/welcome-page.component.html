@@ -1,0 +1,12 @@
+<div class="welcome-page">
+  <h1>Добро пожаловать!</h1>
+  <h2>Чтобы начать работу, Вам нужно выбрать страницу</h2>
+  <button
+    mat-raised-button
+    color="primary"
+    *ngIf="isGlobalEditOn$ | async"
+    (click)="openAddNewPageDialog()"
+  >
+    Создать новую
+  </button>
+</div>
