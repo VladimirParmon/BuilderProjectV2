@@ -50,24 +50,11 @@ export class ToolbarComponent implements OnDestroy {
       case ToolNames.TEXT:
         if (this.currentPageId) this.toolService.createNewTextTool(this.currentPageId);
         break;
-      case ToolNames.AUDIO:
-        this.openNewDialog(ToolNames.AUDIO);
-        break;
-      case ToolNames.PDF:
-        this.openNewDialog(ToolNames.PDF);
-        break;
-      case ToolNames.COLLAGE:
-        this.openNewDialog(ToolNames.COLLAGE);
-        break;
-      case ToolNames.VIDEO:
-        this.openNewDialog(ToolNames.VIDEO);
-        break;
-      case ToolNames.SLIDER:
-        this.openNewDialog(ToolNames.SLIDER);
-        break;
       case ToolNames.CHART:
         this.openChartSelector();
         break;
+      default:
+        this.openNewDialog(name);
     }
   }
 
