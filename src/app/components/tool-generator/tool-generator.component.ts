@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FileDescriptionId, ToolDescription } from 'src/constants/models';
+import { ToolDescription } from 'src/constants/models';
 import { ModalWindowsText, ToolNames } from 'src/constants/constants';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
@@ -10,8 +10,8 @@ import { ConfirmActionComponent } from '../modals/confirm-action/confirm-action.
 import { Store } from '@ngrx/store';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { contentsActions } from 'src/redux/actions/contents.actions';
-import { filesActions } from 'src/redux/actions/files.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
+import { StorageUnitsService } from 'src/app/services/storage-units.service';
 
 @Component({
   selector: 'app-tool-generator',
@@ -47,7 +47,8 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private utilsService: UtilsService,
     public dialog: MatDialog,
-    public store: Store
+    public store: Store,
+    private storageUnitsService: StorageUnitsService
   ) {}
 
   ngOnInit(): void {
@@ -79,70 +80,54 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
     const toolType = this.toolDescription.type;
 
-    const toolHasOnlyOneFileByDesign = this.utilsService.isString(this.toolDescription.content);
-
-    if (toolHasOnlyOneFileByDesign) {
-      const storageUnitDescriptionId = this.toolDescription.content as string;
-      switch (toolType) {
-        case ToolNames.TEXT:
-          this.deleteTextToolStorageUnit(storageUnitDescriptionId);
-          break;
-        case ToolNames.VIDEO:
-          this.deleteRelatedVideoStorageUnit(storageUnitDescriptionId);
-          break;
-        case ToolNames.CHART:
-          this.deleteRelatedChartStorageUnit(storageUnitDescriptionId);
-          break;
-      }
-    }
-
-    const toolHasMultipleFilesByDesign = this.utilsService.isNonEmptyArrayOfStrings(
-      this.toolDescription.content
-    );
-
-    if (toolHasMultipleFilesByDesign) {
-      const fileDescriptionIds = this.toolDescription.content as string[];
-      switch (toolType) {
-        case ToolNames.COLLAGE:
-          this.deleteAllCollageImages(fileDescriptionIds);
-          break;
-        case ToolNames.PDF:
-          this.deleteAllRelatedPDFs(fileDescriptionIds);
-          break;
-        case ToolNames.AUDIO:
-          this.deleteAllRelatedAudios(fileDescriptionIds);
-          break;
-      }
+    switch (toolType) {
+      case ToolNames.TEXT:
+      case ToolNames.VIDEO:
+      case ToolNames.CHART:
+        this.deleteSingleRelatedStorageUnit(this.toolDescription, toolType);
+        break;
+      default:
+        this.deleteMultipleRelatedStorageUnits(this.toolDescription, toolType);
     }
   }
 
-  deleteTextToolStorageUnit(id: string) {
-    this.store.dispatch(filesActions.deleteTextStorageUnit({ id }));
+  deleteSingleRelatedStorageUnit(toolDescription: ToolDescription, toolType: ToolNames) {
+    const storageUnitDescriptionId = toolDescription.content;
+    const typeCheck = this.utilsService.isString(storageUnitDescriptionId);
+    if (!typeCheck) return;
+    switch (toolType) {
+      case ToolNames.TEXT:
+        this.storageUnitsService.deleteTextToolStorageUnit(storageUnitDescriptionId);
+        break;
+      case ToolNames.VIDEO:
+        this.storageUnitsService.deleteRelatedVideoStorageUnit(storageUnitDescriptionId);
+        break;
+      case ToolNames.CHART:
+        this.storageUnitsService.deleteRelatedChartStorageUnit(storageUnitDescriptionId);
+        break;
+    }
   }
 
-  deleteRelatedVideoStorageUnit(fileDescriptionId: string) {
-    this.store.dispatch(filesActions.deleteVideo({ fileDescriptionId }));
-  }
-
-  deleteRelatedChartStorageUnit(id: string) {
-    this.store.dispatch(filesActions.deleteChart({ id }));
-  }
-
-  deleteAllCollageImages(imageDescriptionIds: string[]) {
-    this.store.dispatch(filesActions.deleteMultipleImages({ imageDescriptionIds }));
-  }
-
-  deleteAllRelatedPDFs(fileDescriptionIds: string[]) {
-    this.store.dispatch(filesActions.deleteMultiplePDFs({ fileDescriptionIds }));
-  }
-
-  deleteAllRelatedAudios(fileDescriptionIds: string[]) {
-    this.store.dispatch(filesActions.deleteMultipleAudios({ fileDescriptionIds }));
+  deleteMultipleRelatedStorageUnits(toolDescription: ToolDescription, toolType: ToolNames) {
+    const fileDescriptionIds = toolDescription.content;
+    const typeCheck = this.utilsService.isNonEmptyArrayOfStrings(fileDescriptionIds);
+    if (!typeCheck) return;
+    switch (toolType) {
+      case ToolNames.COLLAGE:
+        this.storageUnitsService.deleteAllCollageImages(fileDescriptionIds);
+        break;
+      case ToolNames.PDF:
+        this.storageUnitsService.deleteAllRelatedPDFs(fileDescriptionIds);
+        break;
+      case ToolNames.AUDIO:
+        this.storageUnitsService.deleteAllRelatedAudios(fileDescriptionIds);
+        break;
+    }
   }
 
   openDeleteDialog() {
     const dialogConfig = this.utilsService.createMatDialogConfig(
-      ['delete-page-dialog'], //TODO: change this
+      ['delete-tool-dialog'],
       ModalWindowsText.DELETE_TOOL,
       15
     );
@@ -154,13 +139,5 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
   getNotification() {
     this.delete();
-  }
-
-  getToolContentsClone() {
-    if (this.toolDescription) {
-      const x = this.toolDescription.content as FileDescriptionId[];
-      return this.utilsService.arrayDeepCopy(x);
-    }
-    return [];
   }
 }
