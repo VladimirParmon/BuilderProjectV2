@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, filter, Subject, takeUntil, switchMap } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
-import { ToolService } from 'src/app/services/tool.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ToolNames } from 'src/constants/constants';
 import { PDFFileDescription, ToolDescriptionId } from 'src/constants/models';
@@ -13,6 +12,7 @@ import { getMultipleFiles } from 'src/redux/selectors/files.selectors';
 import { ChooseFileComponent } from '../../modals/choose-file/choose-file.component';
 import { filesActions } from 'src/redux/actions/files.actions';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
+import { StorageUnitsService } from 'src/app/services/storage-units.service';
 
 @Component({
   selector: 'app-pdf',
@@ -33,7 +33,7 @@ export class PDFComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private store: Store,
     private utilsService: UtilsService,
-    private toolService: ToolService,
+    private storageUnitsService: StorageUnitsService,
     private dialog: MatDialog
   ) {}
 
@@ -82,7 +82,7 @@ export class PDFComponent implements OnInit, OnDestroy {
     if (this.PDFFilesIds && this.toolDescriptionId) {
       const toolDescriptionId = this.toolDescriptionId;
       const { filesDescriptions, fileDescriptionIds } =
-        this.toolService.createPDFDescriptions(fileNames);
+        this.storageUnitsService.createPDFDescriptions(fileNames);
 
       this.store.dispatch(filesActions.insertNewPDFFilesDescriptions({ filesDescriptions }));
       this.store.dispatch(

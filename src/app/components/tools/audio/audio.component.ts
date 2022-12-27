@@ -13,6 +13,7 @@ import { getMultipleFiles } from 'src/redux/selectors/files.selectors';
 import { ChooseFileComponent } from '../../modals/choose-file/choose-file.component';
 import { filesActions } from 'src/redux/actions/files.actions';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
+import { StorageUnitsService } from 'src/app/services/storage-units.service';
 
 @Component({
   selector: 'app-audio',
@@ -33,8 +34,8 @@ export class AudioComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private store: Store,
     private utilsService: UtilsService,
-    private toolService: ToolService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private storageUnitsService: StorageUnitsService
   ) {}
 
   ngOnInit(): void {
@@ -82,7 +83,7 @@ export class AudioComponent implements OnInit, OnDestroy {
     if (this.audioFilesIds && this.toolDescriptionId) {
       const toolDescriptionId = this.toolDescriptionId;
       const { filesDescriptions, fileDescriptionIds } =
-        this.toolService.createAudioDescriptions(fileNames);
+        this.storageUnitsService.createAudioDescriptions(fileNames);
 
       this.store.dispatch(filesActions.insertNewAudioFilesDescriptions({ filesDescriptions }));
       this.store.dispatch(

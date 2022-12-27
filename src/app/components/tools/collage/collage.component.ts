@@ -15,9 +15,8 @@ import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs
 import { MatDialog } from '@angular/material/dialog';
 import { ChooseFileComponent } from '../../modals/choose-file/choose-file.component';
 import { toolsActions } from 'src/redux/actions/tools.actions';
-import { ToolService } from 'src/app/services/tool.service';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
-import { FullscreenService } from 'src/app/services/fullscreen.service';
+import { StorageUnitsService } from 'src/app/services/storage-units.service';
 
 @Component({
   selector: 'app-collage',
@@ -46,7 +45,7 @@ export class CollageComponent implements OnDestroy, OnInit {
     private store: Store,
     private utilsService: UtilsService,
     private stateService: StateService,
-    private toolService: ToolService,
+    private storageUnitsService: StorageUnitsService,
     private dialog: MatDialog
   ) {
     this.picSizeUpdate
@@ -137,7 +136,7 @@ export class CollageComponent implements OnDestroy, OnInit {
     if (this.toolDescription) {
       const toolDescriptionId = this.toolDescription.id;
       const { filesDescriptions, fileDescriptionIds } =
-        this.toolService.createImageDescriptions(fileNames);
+        this.storageUnitsService.createImageDescriptions(fileNames);
 
       this.store.dispatch(filesActions.insertNewImageFilesDescriptions({ filesDescriptions }));
       this.store.dispatch(
