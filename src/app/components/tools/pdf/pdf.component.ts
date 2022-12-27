@@ -13,6 +13,7 @@ import { ChooseFileComponent } from '../../modals/choose-file/choose-file.compon
 import { filesActions } from 'src/redux/actions/files.actions';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { StorageUnitsService } from 'src/app/services/storage-units.service';
+import { ChecksService } from 'src/app/services/checks.service';
 
 @Component({
   selector: 'app-pdf',
@@ -34,7 +35,8 @@ export class PDFComponent implements OnInit, OnDestroy {
     private store: Store,
     private utilsService: UtilsService,
     private storageUnitsService: StorageUnitsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private checksService: ChecksService
   ) {}
 
   ngOnInit(): void {
@@ -43,9 +45,9 @@ export class PDFComponent implements OnInit, OnDestroy {
         .select(selectToolDescription(this.toolDescriptionId))
         .pipe(
           takeUntil(this.destroy$),
-          filter(this.utilsService.isDefined),
+          filter(this.checksService.isDefined),
           filter((fetchedDescription) =>
-            this.utilsService.isBasicToolDescription(fetchedDescription)
+            this.checksService.isBasicToolDescription(fetchedDescription)
           ),
           switchMap((fetchedDescription) => {
             const arrayOfIds = fetchedDescription.content as string[];
@@ -63,7 +65,7 @@ export class PDFComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((files) => {
         if (files) {
-          if (this.utilsService.isBasicFileDescriptionArray(files)) this.PDFFiles = files;
+          if (this.checksService.isBasicFileDescriptionArray(files)) this.PDFFiles = files;
         } else {
           this.destroy$.next(true);
           this.deleteTheToolSinceItsEmpty.emit('this tool is empty, please delete it');

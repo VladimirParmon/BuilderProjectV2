@@ -2,11 +2,11 @@ import { ChartDescription, JSONString } from 'src/constants/models';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, Subject, takeUntil, switchMap } from 'rxjs';
-import { UtilsService } from 'src/app/services/utils.service';
 import { ChartTypes, ToolNames } from 'src/constants/constants';
 import { getSingleFile } from 'src/redux/selectors/files.selectors';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { filesActions } from 'src/redux/actions/files.actions';
+import { ChecksService } from 'src/app/services/checks.service';
 
 @Component({
   selector: 'app-chart',
@@ -21,7 +21,7 @@ export class ChartComponent implements OnInit, OnDestroy {
 
   chartDescription: ChartDescription | null = null;
 
-  constructor(private store: Store, private utilsService: UtilsService) {}
+  constructor(private store: Store, private checksService: ChecksService) {}
 
   ngOnInit(): void {
     if (this.toolDescriptionId) {
@@ -29,9 +29,9 @@ export class ChartComponent implements OnInit, OnDestroy {
         .select(selectToolDescription(this.toolDescriptionId))
         .pipe(
           takeUntil(this.destroy$),
-          filter(this.utilsService.isDefined),
+          filter(this.checksService.isDefined),
           filter((fetchedDescription) =>
-            this.utilsService.isBasicToolDescription(fetchedDescription)
+            this.checksService.isBasicToolDescription(fetchedDescription)
           ),
           switchMap((fetchedDescription) => {
             const chartDescriptionId = fetchedDescription.content as string;
@@ -48,7 +48,7 @@ export class ChartComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((chartDescription) => {
         if (chartDescription) {
-          if (this.utilsService.isChartDescription(chartDescription))
+          if (this.checksService.isChartDescription(chartDescription))
             this.chartDescription = { ...chartDescription };
         }
       });

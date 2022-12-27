@@ -12,6 +12,7 @@ import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { contentsActions } from 'src/redux/actions/contents.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { StorageUnitsService } from 'src/app/services/storage-units.service';
+import { ChecksService } from 'src/app/services/checks.service';
 
 @Component({
   selector: 'app-tool-generator',
@@ -48,7 +49,8 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     private utilsService: UtilsService,
     public dialog: MatDialog,
     public store: Store,
-    private storageUnitsService: StorageUnitsService
+    private storageUnitsService: StorageUnitsService,
+    private checksService: ChecksService
   ) {}
 
   ngOnInit(): void {
@@ -93,7 +95,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
   deleteSingleRelatedStorageUnit(toolDescription: ToolDescription, toolType: ToolNames) {
     const storageUnitDescriptionId = toolDescription.content;
-    const typeCheck = this.utilsService.isString(storageUnitDescriptionId);
+    const typeCheck = this.checksService.isString(storageUnitDescriptionId);
     if (!typeCheck) return;
     switch (toolType) {
       case ToolNames.TEXT:
@@ -110,7 +112,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
 
   deleteMultipleRelatedStorageUnits(toolDescription: ToolDescription, toolType: ToolNames) {
     const fileDescriptionIds = toolDescription.content;
-    const typeCheck = this.utilsService.isNonEmptyArrayOfStrings(fileDescriptionIds);
+    const typeCheck = this.checksService.isNonEmptyArrayOfStrings(fileDescriptionIds);
     if (!typeCheck) return;
     switch (toolType) {
       case ToolNames.COLLAGE:

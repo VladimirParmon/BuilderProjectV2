@@ -17,6 +17,7 @@ import { ChooseFileComponent } from '../../modals/choose-file/choose-file.compon
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { StorageUnitsService } from 'src/app/services/storage-units.service';
+import { ChecksService } from 'src/app/services/checks.service';
 
 @Component({
   selector: 'app-collage',
@@ -46,7 +47,8 @@ export class CollageComponent implements OnDestroy, OnInit {
     private utilsService: UtilsService,
     private stateService: StateService,
     private storageUnitsService: StorageUnitsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private checksService: ChecksService
   ) {
     this.picSizeUpdate
       .pipe(debounceTime(500), distinctUntilChanged())
@@ -62,16 +64,16 @@ export class CollageComponent implements OnDestroy, OnInit {
         .select(selectToolDescription(this.toolDescriptionId))
         .pipe(
           takeUntil(this.destroy$),
-          filter(this.utilsService.isDefined),
+          filter(this.checksService.isDefined),
           filter((fetchedDescription) =>
-            this.utilsService.isCollageToolDescription(fetchedDescription)
+            this.checksService.isCollageToolDescription(fetchedDescription)
           ),
           tap((fetchedDescription) => {
             this.toolDescription = { ...fetchedDescription } as CollageToolDescription;
           }),
           switchMap((fetchedDescription) => {
             const arrayOfIds = fetchedDescription.content as string[];
-            if (this.utilsService.isNonEmptyArrayOfStrings(arrayOfIds)) {
+            if (this.checksService.isNonEmptyArrayOfStrings(arrayOfIds)) {
               return this.fetchPics(arrayOfIds);
             } else {
               return EMPTY;
@@ -100,7 +102,7 @@ export class CollageComponent implements OnDestroy, OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((pics) => {
         if (pics) {
-          if (this.utilsService.isImageFileDescriptionArray(pics)) this.images = [...pics];
+          if (this.checksService.isImageFileDescriptionArray(pics)) this.images = [...pics];
         } else {
           this.destroy$.next(true);
           this.deleteTheToolSinceItsEmpty.emit('this tool is empty, please delete it');

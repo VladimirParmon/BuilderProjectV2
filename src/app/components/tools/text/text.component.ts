@@ -11,6 +11,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { StateService } from 'src/app/services/state.service';
 import { QuillModules } from 'ngx-quill';
 import { filesActions } from 'src/redux/actions/files.actions';
+import { ChecksService } from 'src/app/services/checks.service';
 
 @Component({
   selector: 'app-text',
@@ -28,7 +29,8 @@ export class TextComponent implements OnInit, OnDestroy {
     public store: Store,
     public stateService: StateService,
     private utilsService: UtilsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private checksService: ChecksService
   ) {
     this.quillForm = this.fb.group({
       html: new FormControl(),
@@ -57,7 +59,7 @@ export class TextComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.toolContent) {
-      if (this.utilsService.isString(this.toolContent)) {
+      if (this.checksService.isString(this.toolContent)) {
         this.textFileId = this.toolContent;
       }
     }

@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, filter, Subject, takeUntil, switchMap } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
-import { ToolService } from 'src/app/services/tool.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ToolNames } from 'src/constants/constants';
 import { AudioFileDescription, ToolDescriptionId } from 'src/constants/models';
@@ -14,6 +13,7 @@ import { ChooseFileComponent } from '../../modals/choose-file/choose-file.compon
 import { filesActions } from 'src/redux/actions/files.actions';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { StorageUnitsService } from 'src/app/services/storage-units.service';
+import { ChecksService } from 'src/app/services/checks.service';
 
 @Component({
   selector: 'app-audio',
@@ -35,7 +35,8 @@ export class AudioComponent implements OnInit, OnDestroy {
     private store: Store,
     private utilsService: UtilsService,
     private dialog: MatDialog,
-    private storageUnitsService: StorageUnitsService
+    private storageUnitsService: StorageUnitsService,
+    private checksService: ChecksService
   ) {}
 
   ngOnInit(): void {
@@ -44,9 +45,9 @@ export class AudioComponent implements OnInit, OnDestroy {
         .select(selectToolDescription(this.toolDescriptionId))
         .pipe(
           takeUntil(this.destroy$),
-          filter(this.utilsService.isDefined),
+          filter(this.checksService.isDefined),
           filter((fetchedDescription) =>
-            this.utilsService.isBasicToolDescription(fetchedDescription)
+            this.checksService.isBasicToolDescription(fetchedDescription)
           ),
           switchMap((fetchedDescription) => {
             const arrayOfIds = fetchedDescription.content as string[];
@@ -64,7 +65,7 @@ export class AudioComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((files) => {
         if (files) {
-          if (this.utilsService.isBasicFileDescriptionArray(files)) this.audioFiles = files;
+          if (this.checksService.isBasicFileDescriptionArray(files)) this.audioFiles = files;
         } else {
           this.destroy$.next(true);
           this.deleteTheToolSinceItsEmpty.emit('this tool is empty, please delete it');
