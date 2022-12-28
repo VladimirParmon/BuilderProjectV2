@@ -13,6 +13,7 @@ import { contentsActions } from 'src/redux/actions/contents.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { StorageUnitsService } from 'src/app/services/storage-units.service';
 import { ChecksService } from 'src/app/services/checks.service';
+import { filesActions } from 'src/redux/actions/files.actions';
 
 @Component({
   selector: 'app-tool-generator',
@@ -78,7 +79,6 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     const pageId = this.pageId;
 
     this.store.dispatch(contentsActions.deleteTool({ pageId, toolDescriptionId }));
-    this.store.dispatch(toolsActions.deleteTool({ toolDescriptionId }));
 
     const toolType = this.toolDescription.type;
 
@@ -86,44 +86,55 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
       case ToolNames.TEXT:
       case ToolNames.VIDEO:
       case ToolNames.CHART:
-        this.deleteSingleRelatedStorageUnit(this.toolDescription, toolType);
+        this.withSingleRelated(this.toolDescription, toolType);
         break;
       default:
-        this.deleteMultipleRelatedStorageUnits(this.toolDescription, toolType);
+        this.withMultipleRelated(this.toolDescription, toolType);
     }
   }
 
-  deleteSingleRelatedStorageUnit(toolDescription: ToolDescription, toolType: ToolNames) {
+  withSingleRelated(toolDescription: ToolDescription, toolType: ToolNames) {
+    const toolDescriptionId = toolDescription.id;
     const storageUnitDescriptionId = toolDescription.content;
     const typeCheck = this.checksService.isString(storageUnitDescriptionId);
     if (!typeCheck) return;
     switch (toolType) {
       case ToolNames.TEXT:
-        this.storageUnitsService.deleteTextToolStorageUnit(storageUnitDescriptionId);
+        this.store.dispatch(toolsActions.deleteTextTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteTextStorageUnit({ storageUnitDescriptionId }));
         break;
       case ToolNames.VIDEO:
-        this.storageUnitsService.deleteRelatedVideoStorageUnit(storageUnitDescriptionId);
+        this.store.dispatch(toolsActions.deleteVideoTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteVideo({ storageUnitDescriptionId }));
         break;
       case ToolNames.CHART:
-        this.storageUnitsService.deleteRelatedChartStorageUnit(storageUnitDescriptionId);
+        this.store.dispatch(toolsActions.deleteChartTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteChart({ storageUnitDescriptionId }));
         break;
     }
   }
 
-  deleteMultipleRelatedStorageUnits(toolDescription: ToolDescription, toolType: ToolNames) {
+  withMultipleRelated(toolDescription: ToolDescription, toolType: ToolNames) {
+    const toolDescriptionId = toolDescription.id;
     const fileDescriptionIds = toolDescription.content;
     const typeCheck = this.checksService.isNonEmptyArrayOfStrings(fileDescriptionIds);
     if (!typeCheck) return;
     switch (toolType) {
       case ToolNames.COLLAGE:
-        this.storageUnitsService.deleteAllCollageImages(fileDescriptionIds);
+        this.store.dispatch(toolsActions.deleteCollageTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteMultipleImages({ fileDescriptionIds }));
         break;
       case ToolNames.PDF:
-        this.storageUnitsService.deleteAllRelatedPDFs(fileDescriptionIds);
+        this.store.dispatch(toolsActions.deletePDFTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteMultiplePDFs({ fileDescriptionIds }));
         break;
       case ToolNames.AUDIO:
-        this.storageUnitsService.deleteAllRelatedAudios(fileDescriptionIds);
+        this.store.dispatch(toolsActions.deleteAudioTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteMultipleAudios({ fileDescriptionIds }));
         break;
+      case ToolNames.SLIDER:
+        this.store.dispatch(toolsActions.deleteChartTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteMultipleImages({ fileDescriptionIds }));
     }
   }
 

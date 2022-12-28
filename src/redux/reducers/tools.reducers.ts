@@ -17,16 +17,24 @@ export const toolsReducer = createReducer(
       return [...state, toolDescription];
     }
   ),
-  //TODO: separate actions for each tool for transparency
-  on(toolsActions.deleteTool, (state, { toolDescriptionId }) =>
-    state.filter((el) => el.id !== toolDescriptionId)
+
+  on(
+    toolsActions.deleteTextTool,
+    toolsActions.deleteAudioTool,
+    toolsActions.deleteVideoTool,
+    toolsActions.deleteSliderTool,
+    toolsActions.deleteCollageTool,
+    toolsActions.deleteChartTool,
+    toolsActions.deletePDFTool,
+    (state, { toolDescriptionId }) => state.filter((el) => el.id !== toolDescriptionId)
   ),
   on(
-    //TODO: naming here is wrong
-    toolsActions.updateToolContents,
-    toolsActions.updatePDFToolContents,
+    toolsActions.updateTextToolContents,
     toolsActions.updateAudioToolContents,
+    toolsActions.updateVideoToolContents,
     toolsActions.updateSliderToolContents,
+    toolsActions.updatePDFToolContents,
+    toolsActions.updateChartToolContents,
     (state, { toolDescriptionId, newContents }) =>
       state.map((el) => (el.id === toolDescriptionId ? { ...el, content: newContents } : el))
   ),

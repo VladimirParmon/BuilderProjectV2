@@ -1,107 +1,15 @@
-import { createAction, props } from '@ngrx/store';
-import {
-  TextDescription,
-  ImageFileDescription,
-  AudioFileDescription,
-  PDFFileDescription,
-  VideoFileDescription,
-  ChartDescription,
-  JSONString,
-} from 'src/constants/models';
-
-enum FileActions {
-  updateText = '[Files/Text] Update the description of a text unit',
-  insertText = '[Files/Text] Insert a new text unit',
-  insertImages = '[Files/Image] Insert new images to the files storage',
-  insertVideo = '[Files/Video] Insert a new video to the files storage',
-  insertPDF = '[Files/PDF] Insert new PDFs to the files storage',
-  insertAudio = '[Files/Audio] Insert new audios to the files storage',
-  deleteText = '[Files/Text] Delete a text storage unit',
-  updateImageWidth = '[Files/Image] Update the width of an image',
-  deleteImage = '[Files/Image] Delete an image file description from store',
-  deleteMultipleImages = '[Files/Image] Delete multiple image file descriptions from store',
-  deletePDF = '[Files/PDF] Delete a PDF file description from store',
-  deleteMultiplePDFs = '[Files/PDF] Mass delete PDF files (usually, when the related tool is deleted)',
-  deleteVideo = '[Files/Video] Delete a video description',
-  deleteAudio = '[Files/Audio] Delete an audio description',
-  deleteMultipleAudios = '[Files/Audios] Delete multiple audio file descriptions from store',
-  insertNewChart = '[Files/Charts] Insert a new chart storage unit',
-  updateChart = '[Files/Charts] Update chart data',
-  deleteChart = '[Files/Charts] Delete chart data',
-}
-
-const updateTextStorageUnit = createAction(
-  FileActions.updateText,
-  props<{ id: string; newText: string }>()
-);
-const insertNewTextStorageUnit = createAction(
-  FileActions.insertText,
-  props<{ textDescription: TextDescription }>()
-);
-const insertNewImageFilesDescriptions = createAction(
-  FileActions.insertImages,
-  props<{ filesDescriptions: ImageFileDescription[] }>()
-);
-const insertNewVideoFileDescription = createAction(
-  FileActions.insertVideo,
-  props<{ fileDescription: VideoFileDescription }>()
-);
-const insertNewPDFFilesDescriptions = createAction(
-  FileActions.insertPDF,
-  props<{ filesDescriptions: PDFFileDescription[] }>()
-);
-const insertNewAudioFilesDescriptions = createAction(
-  FileActions.insertAudio,
-  props<{ filesDescriptions: AudioFileDescription[] }>()
-);
-const deleteTextStorageUnit = createAction(FileActions.deleteText, props<{ id: string }>());
-const updateImageWidth = createAction(
-  FileActions.updateImageWidth,
-  props<{ imageDescriptionId: string; newWidth: number }>()
-);
-const deleteImage = createAction(FileActions.deleteImage, props<{ fileDescriptionId: string }>());
-const deleteMultipleImages = createAction(
-  FileActions.deleteMultipleImages,
-  props<{ imageDescriptionIds: string[] }>()
-);
-const deletePDF = createAction(FileActions.deletePDF, props<{ fileDescriptionId: string }>());
-const deleteMultiplePDFs = createAction(
-  FileActions.deleteMultiplePDFs,
-  props<{ fileDescriptionIds: string[] }>()
-);
-const deleteVideo = createAction(FileActions.deleteVideo, props<{ fileDescriptionId: string }>());
-const deleteAudio = createAction(FileActions.deleteAudio, props<{ fileDescriptionId: string }>());
-const deleteMultipleAudios = createAction(
-  FileActions.deleteMultipleAudios,
-  props<{ fileDescriptionIds: string[] }>()
-);
-const insertNewChartDescription = createAction(
-  FileActions.insertNewChart,
-  props<{ chartStorageUnitDescription: ChartDescription }>()
-);
-const updateChart = createAction(
-  FileActions.updateChart,
-  props<{ fileDescriptionId: string; newData: JSONString }>()
-);
-const deleteChart = createAction(FileActions.deleteChart, props<{ id: string }>());
+import { audioActions } from './files/audio.actions';
+import { chartActions } from './files/chart.actions';
+import { imagesActions } from './files/images.actions';
+import { PDFsActions } from './files/pdf.actions';
+import { textActions } from './files/text.actions';
+import { videoActions } from './files/video.actions';
 
 export const filesActions = {
-  updateTextStorageUnit,
-  insertNewTextStorageUnit,
-  insertNewImageFilesDescriptions,
-  insertNewAudioFilesDescriptions,
-  insertNewPDFFilesDescriptions,
-  deleteTextStorageUnit,
-  insertNewVideoFileDescription,
-  updateImageWidth,
-  deleteImage,
-  deleteMultipleImages,
-  deletePDF,
-  deleteMultiplePDFs,
-  deleteVideo,
-  deleteAudio,
-  deleteMultipleAudios,
-  insertNewChartDescription,
-  updateChart,
-  deleteChart,
+  ...textActions,
+  ...imagesActions,
+  ...PDFsActions,
+  ...videoActions,
+  ...audioActions,
+  ...chartActions,
 };

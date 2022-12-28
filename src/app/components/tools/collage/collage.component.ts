@@ -182,7 +182,7 @@ export class CollageComponent implements OnDestroy, OnInit {
         whereTo === 'left' ? (this.currentPicIndex -= 1) : (this.currentPicIndex += 1);
       const newContents = this.utilsService.moveInArray(oldContents, newIndex, selectedImageId);
       this.store.dispatch(
-        toolsActions.updateToolContents({
+        toolsActions.updateTextToolContents({
           toolDescriptionId: this.toolDescription.id,
           newContents,
         })
