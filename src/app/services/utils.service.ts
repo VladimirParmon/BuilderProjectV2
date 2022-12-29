@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { Lookup, RecursiveTreeNode, SinglePageInfo } from 'src/constants/models';
+import { Lookup, RecursiveTreeNode, SinglePageInfo } from 'src/constants/models/contents';
 import { inputTypes, MediaFileTypes, ToolNames } from 'src/constants/constants';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -118,5 +118,12 @@ export class UtilsService {
     } else {
       return fileName;
     }
+  }
+
+  getFileNameNoExtension(filePath: string, toolType: ToolNames) {
+    const strippedName = this.getFileName(filePath);
+    const noExtension = this.removeFileExtension(strippedName, toolType);
+    if (strippedName.length > 50) return noExtension.slice(0, 50) + '...';
+    return noExtension;
   }
 }

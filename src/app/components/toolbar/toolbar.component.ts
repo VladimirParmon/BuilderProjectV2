@@ -5,7 +5,7 @@ import { BehaviorSubject, filter, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { ToolService } from 'src/app/services/tool.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { ToolbarToolListOption } from 'src/constants/models';
+import { ToolbarToolListOption } from 'src/constants/models/general';
 import { ChooseFileComponent } from '../modals/choose-file/choose-file.component';
 import { toolsList, ToolNames, ChartTypes } from 'src/constants/constants';
 import { ChooseChartComponent } from '../modals/choose-chart/choose-chart.component';

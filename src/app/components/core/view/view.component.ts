@@ -5,7 +5,7 @@ import { StateService } from 'src/app/services/state.service';
 
 import { filter, takeUntil } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { SinglePageInfo } from 'src/constants/models';
+import { SinglePageInfo } from 'src/constants/models/contents';
 import { Store } from '@ngrx/store';
 import { getOnePageInfo } from 'src/redux/selectors/contents.selectors';
 import { contentsActions } from 'src/redux/actions/contents.actions';

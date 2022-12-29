@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { JSONDataStorage } from 'src/constants/models';
+import { JSONDataStorage } from 'src/constants/models/general';
 import { globalActions } from 'src/redux/actions/global.actions';
 import * as myJSON from 'src/assets/mock.json';
 

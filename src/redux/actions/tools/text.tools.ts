@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { TextToolDescription } from 'src/constants/models';
+import { TextToolDescription } from 'src/constants/models/tools';
 
 enum TextActions {
   insertNewTextTool = '[Tools/Text] Insert a new text tool description',

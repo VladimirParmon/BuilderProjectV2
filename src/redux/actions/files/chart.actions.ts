@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ChartDescription, JSONString } from 'src/constants/models';
+import { ChartDescription, JSONString } from 'src/constants/models/charts';
 
 enum ChartActions {
   insertNewChart = '[Files/Charts] Insert a new chart storage unit',

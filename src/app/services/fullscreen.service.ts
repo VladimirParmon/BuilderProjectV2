@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { HostListener, Inject, Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',

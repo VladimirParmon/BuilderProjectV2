@@ -1,5 +1,5 @@
 import { Defaults } from 'src/app/services/defaults';
-import { NonCompoundChartResults } from 'src/constants/models';
+import { NonCompoundChartResults } from 'src/constants/models/charts';
 import { BarVerticalComponent } from './bar-vertical/bar-vertical.component';
 import { PieComponent } from './pie/pie.component';
 

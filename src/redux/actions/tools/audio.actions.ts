@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { AudioToolDescription } from 'src/constants/models';
+import { AudioToolDescription } from 'src/constants/models/tools';
 
 enum AudioActions {
   insertNewAudioTool = '[Tools/Audio] Insert a new audio tool description',

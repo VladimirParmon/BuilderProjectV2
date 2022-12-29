@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { PDFToolDescription } from 'src/constants/models';
+import { PDFToolDescription } from 'src/constants/models/tools';
 
 enum PDFActions {
   insertNewPDFTool = '[Tools/PDF] Insert a new PDF tool description',

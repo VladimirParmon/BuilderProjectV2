@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { SinglePageInfo } from 'src/constants/models';
+import { SinglePageInfo } from 'src/constants/models/contents';
 import { selectContentsState } from './index.selectors';
 
 export const selectAllPagesInfo = createSelector(

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { SinglePageInfo } from 'src/constants/models';
+import { SinglePageInfo } from 'src/constants/models/contents';
 
 enum ContentsActions {
   addNewPage = '[Contents/Page] Add a new empty page',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import * as m from 'src/constants/models';
+import * as m from 'src/constants/models/files';
 import { UtilsService } from './utils.service';
 import { Defaults } from './defaults';
 

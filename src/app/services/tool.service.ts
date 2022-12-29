@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as m from 'src/constants/models';
+import * as m from 'src/constants/models/tools';
 import { contentsActions } from 'src/redux/actions/contents.actions';
 import { filesActions } from 'src/redux/actions/files.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
@@ -9,6 +9,12 @@ import { ChartTypes, ToolNames } from 'src/constants/constants';
 import { Defaults } from './defaults';
 import { UtilsService } from './utils.service';
 import { StorageUnitsService } from './storage-units.service';
+import {
+  TextDescription,
+  TextDescriptionId,
+  VideoFileDescription,
+} from 'src/constants/models/files';
+import { ChartDescription } from 'src/constants/models/charts';
 
 @Injectable({
   providedIn: 'root',
@@ -21,10 +27,10 @@ export class ToolService {
   ) {}
 
   createNewTextTool(pageId: string) {
-    const textDescriptionId: m.TextDescriptionId = uuidv4();
+    const textDescriptionId: TextDescriptionId = uuidv4();
     const textToolDescriptionId: m.ToolDescriptionId = uuidv4();
 
-    const textDescription: m.TextDescription = {
+    const textDescription: TextDescription = {
       id: textDescriptionId,
       text: '',
     };
@@ -57,7 +63,7 @@ export class ToolService {
   createNewVideoTool(pageId: string, fileName: string) {
     const videoToolDescriptionId = uuidv4();
     const fileDescriptionId = uuidv4();
-    const fileDescription: m.VideoFileDescription = {
+    const fileDescription: VideoFileDescription = {
       id: fileDescriptionId,
       pathToFile: this.utilsService.getTempFilesPath(fileName),
     };
@@ -124,7 +130,7 @@ export class ToolService {
   createNewChartTool(pageId: string, chartType: ChartTypes) {
     const chartStorageUnitDescriptionId = uuidv4();
     const chartToolDescriptionId = uuidv4();
-    const chartStorageUnitDescription: m.ChartDescription = {
+    const chartStorageUnitDescription: ChartDescription = {
       id: chartStorageUnitDescriptionId,
       chartType,
       chartData: Defaults.getChartExample(chartType),

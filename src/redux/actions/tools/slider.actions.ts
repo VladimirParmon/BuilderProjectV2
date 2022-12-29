@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { SliderToolDescription } from 'src/constants/models';
+import { SliderToolDescription } from 'src/constants/models/tools';
 
 enum SliderActions {
   insertNewSliderTool = '[Tools/Slider] Insert a new slider tool description',

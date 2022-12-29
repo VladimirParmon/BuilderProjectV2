@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ToolDescription } from 'src/constants/models';
+import { ToolDescription } from 'src/constants/models/tools';
 import { ModalWindowsText, ToolNames } from 'src/constants/constants';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
@@ -11,7 +11,6 @@ import { Store } from '@ngrx/store';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { contentsActions } from 'src/redux/actions/contents.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
-import { StorageUnitsService } from 'src/app/services/storage-units.service';
 import { ChecksService } from 'src/app/services/checks.service';
 import { filesActions } from 'src/redux/actions/files.actions';
 
@@ -41,6 +40,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
   toolDescription: ToolDescription | null = null;
 
   hasAlreadyBeenManuallyDeleted = false;
+  autoMessage = '';
 
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -50,7 +50,6 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     private utilsService: UtilsService,
     public dialog: MatDialog,
     public store: Store,
-    private storageUnitsService: StorageUnitsService,
     private checksService: ChecksService
   ) {}
 
@@ -73,7 +72,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     if (manuallyDeleted) {
       this.hasAlreadyBeenManuallyDeleted = true;
     } else {
-      this.utilsService.openSnackBar('Пустой блок был автоматически удален', 3000);
+      this.utilsService.openSnackBar(this.autoMessage, 3000);
     }
     const toolDescriptionId = this.toolDescriptionId;
     const pageId = this.pageId;
@@ -150,7 +149,8 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     });
   }
 
-  getNotification() {
+  getNotification(message: string) {
+    this.autoMessage = message;
     this.delete();
   }
 }

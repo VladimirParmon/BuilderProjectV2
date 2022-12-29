@@ -7,7 +7,7 @@ import { EnterNameComponent } from 'src/app/components/modals/enter-name/enter-n
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ModalWindowsText } from 'src/constants/constants';
-import { SinglePageInfo } from 'src/constants/models';
+import { SinglePageInfo } from 'src/constants/models/contents';
 import { contentsActions } from 'src/redux/actions/contents.actions';
 import { v4 as uuidv4 } from 'uuid';
 

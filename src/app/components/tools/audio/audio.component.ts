@@ -2,18 +2,19 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, filter, Subject, takeUntil, switchMap } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ToolNames } from 'src/constants/constants';
-import { AudioFileDescription, ToolDescriptionId } from 'src/constants/models';
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { getMultipleFiles } from 'src/redux/selectors/files.selectors';
 import { ChooseFileComponent } from '../../modals/choose-file/choose-file.component';
 import { filesActions } from 'src/redux/actions/files.actions';
-import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { StorageUnitsService } from 'src/app/services/storage-units.service';
 import { ChecksService } from 'src/app/services/checks.service';
+import { _fetchFiles, _fetchToolDescription } from '../common';
+import { AudioToolDescription, ToolDescriptionId } from 'src/constants/models/tools';
+import { AudioFileDescription } from 'src/constants/models/files';
 
 @Component({
   selector: 'app-audio',
@@ -22,13 +23,21 @@ import { ChecksService } from 'src/app/services/checks.service';
 })
 export class AudioComponent implements OnInit, OnDestroy {
   @Input() toolDescriptionId: ToolDescriptionId | null = null;
-  @Output('notify') deleteTheToolSinceItsEmpty = new EventEmitter<string>();
+  @Output('notify') deleteTheTool = new EventEmitter<string>();
 
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   audioFilesIds: string[] | null = null;
   audioFiles: AudioFileDescription[] = [];
+
+  fetchToolDescription = _fetchToolDescription;
+  fetchFiles = _fetchFiles;
+  fileFetcher = getMultipleFiles;
+
+  descriptionTypeCheck = this.checksService.isValidBasicToolDescription;
+  contentsTypeCheck = this.checksService.isNonEmptyArrayOfStrings;
+  filesTypeCheck = this.checksService.isBasicFileDescriptionArray;
 
   constructor(
     private stateService: StateService,
@@ -41,43 +50,22 @@ export class AudioComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.toolDescriptionId) {
-      this.store
-        .select(selectToolDescription(this.toolDescriptionId))
+      this.fetchToolDescription()
         .pipe(
-          takeUntil(this.destroy$),
-          filter(this.checksService.isDefined),
-          filter((fetchedDescription) =>
-            this.checksService.isBasicToolDescription(fetchedDescription)
-          ),
-          switchMap((fetchedDescription) => {
-            const arrayOfIds = fetchedDescription.content as string[];
-            this.audioFilesIds = arrayOfIds;
-            return this.fetchAudios(arrayOfIds);
-          })
+          switchMap((fetchedDescription: AudioToolDescription) => {
+            this.audioFilesIds = fetchedDescription.content;
+            return this.fetchFiles(this.audioFilesIds, ToolNames.AUDIO);
+          }),
+          switchMap((files: AudioFileDescription[]) => files)
         )
-        .subscribe();
+        .subscribe((files: AudioFileDescription[]) => {
+          this.audioFiles = files;
+        });
     }
   }
 
-  async fetchAudios(ids: string[]) {
-    return this.store
-      .select(getMultipleFiles({ ids, type: ToolNames.AUDIO }))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((files) => {
-        if (files) {
-          if (this.checksService.isBasicFileDescriptionArray(files)) this.audioFiles = files;
-        } else {
-          this.destroy$.next(true);
-          this.deleteTheToolSinceItsEmpty.emit('this tool is empty, please delete it');
-        }
-      });
-  }
-
   getName(filePath: string) {
-    const strippedName = this.utilsService.getFileName(filePath);
-    const noExtension = this.utilsService.removeFileExtension(strippedName, ToolNames.AUDIO);
-    if (strippedName.length > 50) return noExtension.slice(0, 50) + '...';
-    return noExtension;
+    return this.utilsService.getFileNameNoExtension(filePath, ToolNames.AUDIO);
   }
 
   addAudio(fileNames: string[]) {
@@ -108,7 +96,7 @@ export class AudioComponent implements OnInit, OnDestroy {
   openDialogToChooseFiles() {
     const dialogConfig = this.utilsService.createMatDialogConfig(
       ['choose-file-dialog'],
-      ToolNames.PDF,
+      ToolNames.AUDIO,
       15
     );
     const dialogRef = this.dialog.open(ChooseFileComponent, dialogConfig);

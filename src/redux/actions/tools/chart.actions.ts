@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ChartToolDescription } from 'src/constants/models';
+import { ChartToolDescription } from 'src/constants/models/tools';
 
 enum ChartActions {
   insertNewChartTool = '[Tools/Chart] Insert a new chart tool description',

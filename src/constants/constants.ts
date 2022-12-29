@@ -1,4 +1,4 @@
-import { ToolbarToolListOption } from './models';
+import { ToolbarToolListOption } from './models/general';
 
 export enum inputTypes {
   IMAGES = '.png, .jpg, .jpeg, .gif',
@@ -12,6 +12,12 @@ export enum ModalWindowsText {
   DELETE_PAGE = 'Удалить страницу',
   GENERATE_SITE = 'Пожалуйста, дайте проекту имя',
   DELETE_TOOL = 'Вы точно хотите удалить этот блок?',
+}
+
+export enum ToolDeletionMessages {
+  EMPTY = 'Пустой блок был автоматически удален',
+  BROKEN = 'Блок автоматически был удален, так как данные были повреждены',
+  UNKNOWN = 'Неизвестная ошибка привела к удалению блока',
 }
 
 export enum ActionCases {

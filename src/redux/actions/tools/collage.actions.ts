@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { FlexboxFlowOptions, FlexboxPositioningOptions } from 'src/constants/constants';
-import { CollageToolDescription } from 'src/constants/models';
+import { CollageToolDescription } from 'src/constants/models/tools';
 
 enum CollageActions {
   updateCollageToolLayout = '[Tool/Collage] Update layout settings (justify, align, flow)',

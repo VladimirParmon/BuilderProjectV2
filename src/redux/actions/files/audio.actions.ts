@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { AudioFileDescription } from 'src/constants/models';
+import { AudioFileDescription } from 'src/constants/models/files';
 
 enum AudioActions {
   insertAudio = '[Files/Audio] Insert new audios to the files storage',

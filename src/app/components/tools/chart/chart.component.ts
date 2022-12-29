@@ -1,12 +1,13 @@
-import { ChartDescription, JSONString } from 'src/constants/models';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { filter, Subject, takeUntil, switchMap } from 'rxjs';
+import { ObservableInput, Subject, switchMap } from 'rxjs';
 import { ChartTypes, ToolNames } from 'src/constants/constants';
 import { getSingleFile } from 'src/redux/selectors/files.selectors';
-import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { filesActions } from 'src/redux/actions/files.actions';
 import { ChecksService } from 'src/app/services/checks.service';
+import { ChartDescription, JSONString } from 'src/constants/models/charts';
+import { _fetchFiles, _fetchToolDescription } from '../common';
+import { ChartToolDescription } from 'src/constants/models/tools';
 
 @Component({
   selector: 'app-chart',
@@ -16,42 +17,35 @@ import { ChecksService } from 'src/app/services/checks.service';
 export class ChartComponent implements OnInit, OnDestroy {
   @Input() toolDescriptionId: string | null = null;
   destroy$: Subject<boolean> = new Subject<boolean>();
+  @Output('notify') deleteTheTool = new EventEmitter<string>();
 
   chartTypes = ChartTypes;
 
   chartDescription: ChartDescription | null = null;
 
+  fetchToolDescription = _fetchToolDescription;
+  fetchFiles = _fetchFiles;
+  fileFetcher = getSingleFile;
+
+  descriptionTypeCheck = this.checksService.isValidBasicToolDescription;
+  contentsTypeCheck = this.checksService.isString;
+  filesTypeCheck = this.checksService.isValidChartDescription;
+
   constructor(private store: Store, private checksService: ChecksService) {}
 
   ngOnInit(): void {
     if (this.toolDescriptionId) {
-      this.store
-        .select(selectToolDescription(this.toolDescriptionId))
+      this.fetchToolDescription()
         .pipe(
-          takeUntil(this.destroy$),
-          filter(this.checksService.isDefined),
-          filter((fetchedDescription) =>
-            this.checksService.isBasicToolDescription(fetchedDescription)
-          ),
-          switchMap((fetchedDescription) => {
-            const chartDescriptionId = fetchedDescription.content as string;
-            return this.fetchChartData(chartDescriptionId);
-          })
+          switchMap((fetchedDescription: ChartToolDescription) => {
+            return this.fetchFiles(fetchedDescription.content, ToolNames.CHART);
+          }),
+          switchMap((res: ObservableInput<ChartDescription>) => res)
         )
-        .subscribe();
+        .subscribe((description: ChartDescription) => {
+          this.chartDescription = description;
+        });
     }
-  }
-
-  async fetchChartData(id: string) {
-    return this.store
-      .select(getSingleFile({ id, type: ToolNames.CHART }))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((chartDescription) => {
-        if (chartDescription) {
-          if (this.checksService.isChartDescription(chartDescription))
-            this.chartDescription = { ...chartDescription };
-        }
-      });
   }
 
   ngOnDestroy(): void {

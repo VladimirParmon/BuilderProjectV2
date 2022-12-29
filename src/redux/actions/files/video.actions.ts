@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { VideoFileDescription } from 'src/constants/models';
+import { VideoFileDescription } from 'src/constants/models/files';
 
 enum VideoActions {
   insertVideo = '[Files/Video] Insert a new video to the files storage',

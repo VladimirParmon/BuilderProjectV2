@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { PDFFileDescription } from 'src/constants/models';
+import { PDFFileDescription } from 'src/constants/models/files';
 
 enum PDFActions {
   insertPDF = '[Files/PDF] Insert new PDFs to the files storage',

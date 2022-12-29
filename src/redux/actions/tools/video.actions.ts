@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { VideoToolDescription } from 'src/constants/models';
+import { VideoToolDescription } from 'src/constants/models/tools';
 
 export enum VideoActions {
   insertNewVideoTool = '[Tools/Video] Insert a new video tool description',

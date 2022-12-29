@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ImageFileDescription } from 'src/constants/models';
+import { ImageFileDescription } from 'src/constants/models/files';
 
 enum ImagesActions {
   insertImages = '[Files/Image] Insert new images to the files storage',

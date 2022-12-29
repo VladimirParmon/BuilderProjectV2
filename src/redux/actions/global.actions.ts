@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { JSONDataStorage } from 'src/constants/models';
+import { JSONDataStorage } from 'src/constants/models/general';
 
 export enum APIActions {
   retrieveFromJSONSuccess = '[Server call/Load project] Save retrieved from the local JSON file data',

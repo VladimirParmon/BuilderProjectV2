@@ -2,7 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { UtilsService } from 'src/app/services/utils.service';
-import { NonCompoundChartResults } from 'src/constants/models';
+import { NonCompoundChartResults } from 'src/constants/models/charts';
 
 @Component({
   selector: 'app-items-list',

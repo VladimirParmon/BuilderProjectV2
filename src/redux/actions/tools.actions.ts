@@ -1,5 +1,3 @@
-import { createAction, props } from '@ngrx/store';
-
 import { audioActions } from './tools/audio.actions';
 import { chartActions } from './tools/chart.actions';
 import { collageActions } from './tools/collage.actions';

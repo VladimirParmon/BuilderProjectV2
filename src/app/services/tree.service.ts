@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { RecursiveTreeNode, DropInfo, Lookup, SinglePageInfo } from 'src/constants/models';
+import { RecursiveTreeNode, DropInfo, Lookup, SinglePageInfo } from 'src/constants/models/contents';
 import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';

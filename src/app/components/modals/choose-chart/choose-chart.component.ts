@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ChartTypes } from 'src/constants/constants';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Defaults } from 'src/app/services/defaults';
-import { JSONString } from 'src/constants/models';
+import { JSONString } from 'src/constants/models/charts';
 
 @Component({
   selector: 'app-choose-chart',

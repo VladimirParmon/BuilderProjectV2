@@ -2,18 +2,20 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, filter, Subject, takeUntil, switchMap } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { ToolNames } from 'src/constants/constants';
-import { PDFFileDescription, ToolDescriptionId } from 'src/constants/models';
+
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { getMultipleFiles } from 'src/redux/selectors/files.selectors';
 import { ChooseFileComponent } from '../../modals/choose-file/choose-file.component';
 import { filesActions } from 'src/redux/actions/files.actions';
-import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { StorageUnitsService } from 'src/app/services/storage-units.service';
 import { ChecksService } from 'src/app/services/checks.service';
+import { PDFToolDescription, ToolDescriptionId } from 'src/constants/models/tools';
+import { PDFFileDescription } from 'src/constants/models/files';
+import { _fetchFiles, _fetchToolDescription } from '../common';
 
 @Component({
   selector: 'app-pdf',
@@ -30,6 +32,14 @@ export class PDFComponent implements OnInit, OnDestroy {
   PDFFilesIds: string[] | null = null;
   PDFFiles: PDFFileDescription[] = [];
 
+  fetchToolDescription = _fetchToolDescription;
+  fetchFiles = _fetchFiles;
+  isDefined = this.checksService.isDefined;
+  descriptionTypeCheck = this.checksService.isValidBasicToolDescription;
+  contentsTypeCheck = this.checksService.isNonEmptyArrayOfStrings;
+  filesTypeCheck = this.checksService.isBasicFileDescriptionArray;
+  fileFetcher = getMultipleFiles;
+
   constructor(
     private stateService: StateService,
     private store: Store,
@@ -41,38 +51,21 @@ export class PDFComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.toolDescriptionId) {
-      this.store
-        .select(selectToolDescription(this.toolDescriptionId))
+      this.fetchToolDescription()
         .pipe(
-          takeUntil(this.destroy$),
-          filter(this.checksService.isDefined),
-          filter((fetchedDescription) =>
-            this.checksService.isBasicToolDescription(fetchedDescription)
-          ),
-          switchMap((fetchedDescription) => {
-            const arrayOfIds = fetchedDescription.content as string[];
-            this.PDFFilesIds = arrayOfIds;
-            return this.fetchPDFs(arrayOfIds);
-          })
+          switchMap((fetchedDescription: PDFToolDescription) => {
+            this.PDFFilesIds = fetchedDescription.content;
+            return this.fetchFiles(this.PDFFilesIds, ToolNames.PDF);
+          }),
+          switchMap((files: PDFFileDescription[]) => files)
         )
-        .subscribe();
+        .subscribe((files: PDFFileDescription[]) => {
+          this.PDFFiles = files;
+        });
     }
   }
 
-  async fetchPDFs(ids: string[]) {
-    return this.store
-      .select(getMultipleFiles({ ids, type: ToolNames.PDF }))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((files) => {
-        if (files) {
-          if (this.checksService.isBasicFileDescriptionArray(files)) this.PDFFiles = files;
-        } else {
-          this.destroy$.next(true);
-          this.deleteTheToolSinceItsEmpty.emit('this tool is empty, please delete it');
-        }
-      });
-  }
-
+  //TODO: include this into service
   getName(filePath: string) {
     const strippedName = this.utilsService.getFileName(filePath);
     const noPDFExtension = strippedName.replace(/.pdf/i, '');

@@ -8,11 +8,11 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { StateService } from 'src/app/services/state.service';
-import { JSONString, PieChartData } from 'src/constants/models';
 import { debounceTime } from 'rxjs/operators';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { _addEntry, _deleteEntry, _dispatchToParent, _handleSizeChange } from '../common';
 import { UtilsService } from 'src/app/services/utils.service';
+import { JSONString, PieChartData } from 'src/constants/models/charts';
 
 @Component({
   selector: 'app-pie',

@@ -1,17 +1,18 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import Quill from 'quill';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, ObservableInput, Subject, switchMap } from 'rxjs';
 import { UtilsService } from 'src/app/services/utils.service';
-import { TextDescription, ToolDescriptionContent } from 'src/constants/models';
 import { getSingleFile } from 'src/redux/selectors/files.selectors';
 import { fontFamilies, fontSizes, ToolNames } from 'src/constants/constants';
-
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { StateService } from 'src/app/services/state.service';
 import { QuillModules } from 'ngx-quill';
 import { filesActions } from 'src/redux/actions/files.actions';
 import { ChecksService } from 'src/app/services/checks.service';
+import { TextToolDescription, ToolDescriptionContent } from 'src/constants/models/tools';
+import { TextDescription } from 'src/constants/models/files';
+import { _fetchFiles, _fetchToolDescription } from '../common';
 
 @Component({
   selector: 'app-text',
@@ -19,11 +20,12 @@ import { ChecksService } from 'src/app/services/checks.service';
   styleUrls: ['./text.component.scss'],
 })
 export class TextComponent implements OnInit, OnDestroy {
-  @Input() toolContent: ToolDescriptionContent | null = null;
+  @Input() toolDescriptionId: ToolDescriptionContent | null = null;
   textFileId: string | null = null;
   destroy$: Subject<boolean> = new Subject<boolean>();
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   isToolbarHidden: boolean = false;
+  @Output('notify') deleteTheTool = new EventEmitter<string>();
 
   constructor(
     public store: Store,
@@ -57,21 +59,26 @@ export class TextComponent implements OnInit, OnDestroy {
 
   quillForm: FormGroup;
 
+  fetchToolDescription = _fetchToolDescription;
+  fetchFiles = _fetchFiles;
+  fileFetcher = getSingleFile;
+
+  descriptionTypeCheck = this.checksService.isValidBasicToolDescription;
+  contentsTypeCheck = this.checksService.isString;
+  filesTypeCheck = this.checksService.isValidTextDescription;
+
   ngOnInit(): void {
-    if (this.toolContent) {
-      if (this.checksService.isString(this.toolContent)) {
-        this.textFileId = this.toolContent;
-      }
-    }
-    if (this.textFileId) {
-      this.store
-        .select(getSingleFile({ id: this.textFileId, type: ToolNames.TEXT }))
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data) => {
-          const textDescription = data as TextDescription;
-          if (textDescription) {
-            this.quillForm.setValue({ html: textDescription.text });
-          }
+    if (this.toolDescriptionId) {
+      this.fetchToolDescription()
+        .pipe(
+          switchMap((fetchedDescription: TextToolDescription) => {
+            this.textFileId = fetchedDescription.content;
+            return this.fetchFiles(this.textFileId, ToolNames.TEXT);
+          }),
+          switchMap((description: ObservableInput<TextDescription>) => description)
+        )
+        .subscribe((description: TextDescription) => {
+          this.quillForm.setValue({ html: description.text });
         });
     }
     this.registerFontsAndSizes();

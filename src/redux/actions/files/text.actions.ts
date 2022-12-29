@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { TextDescription } from 'src/constants/models';
+import { TextDescription } from 'src/constants/models/files';
 
 enum TextActions {
   updateText = '[Files/Text] Update the description of a text unit',

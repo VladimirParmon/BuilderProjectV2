@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { toolsActions } from 'src/redux/actions/tools.actions';
 import { initialState } from 'src/redux/';
-import { FileDescriptionId } from 'src/constants/models';
+import { FileDescriptionId } from 'src/constants/models/files';
 
 export const toolsReducer = createReducer(
   initialState.tools,

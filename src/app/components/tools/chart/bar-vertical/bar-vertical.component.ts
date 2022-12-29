@@ -11,9 +11,10 @@ import {
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { BarChartData, JSONString } from 'src/constants/models';
+
 import { debounceTime } from 'rxjs/operators';
 import { _addEntry, _deleteEntry, _dispatchToParent, _handleSizeChange } from '../common';
+import { BarChartData, JSONString } from 'src/constants/models/charts';
 
 @Component({
   selector: 'app-bar-vertical',

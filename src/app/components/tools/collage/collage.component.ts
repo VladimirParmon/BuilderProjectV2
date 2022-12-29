@@ -1,23 +1,20 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, EMPTY, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { FlexboxFlowOptions, FlexboxPositioningOptions, ToolNames } from 'src/constants/constants';
-import {
-  CollageToolDescription,
-  FileDescriptionId,
-  ImageFileDescription,
-} from 'src/constants/models';
 import { filesActions } from 'src/redux/actions/files.actions';
 import { getMultipleFiles } from 'src/redux/selectors/files.selectors';
-import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ChooseFileComponent } from '../../modals/choose-file/choose-file.component';
 import { toolsActions } from 'src/redux/actions/tools.actions';
-import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { StorageUnitsService } from 'src/app/services/storage-units.service';
 import { ChecksService } from 'src/app/services/checks.service';
+import { CollageToolDescription } from 'src/constants/models/tools';
+import { FileDescriptionId, ImageFileDescription } from 'src/constants/models/files';
+import { _fetchFiles, _fetchToolDescription } from '../common';
 
 @Component({
   selector: 'app-collage',
@@ -26,7 +23,7 @@ import { ChecksService } from 'src/app/services/checks.service';
 })
 export class CollageComponent implements OnDestroy, OnInit {
   @Input() toolDescriptionId: string | null = null;
-  @Output('notify') deleteTheToolSinceItsEmpty = new EventEmitter<string>();
+  @Output('notify') deleteTheTool = new EventEmitter<string>();
 
   isGlobalEditOn: boolean = true;
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -41,6 +38,14 @@ export class CollageComponent implements OnDestroy, OnInit {
   currentPicWidth: number = 0;
 
   picSizeUpdate = new Subject<string>();
+
+  fetchToolDescription = _fetchToolDescription;
+  fetchFiles = _fetchFiles;
+  fileFetcher = getMultipleFiles;
+
+  descriptionTypeCheck = this.checksService.isValidCollageToolDescription;
+  contentsTypeCheck = this.checksService.isNonEmptyArrayOfStrings;
+  filesTypeCheck = this.checksService.isValidImageFileDescriptionArray;
 
   constructor(
     private store: Store,
@@ -59,29 +64,17 @@ export class CollageComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    if (this.toolDescriptionId) {
-      this.store
-        .select(selectToolDescription(this.toolDescriptionId))
-        .pipe(
-          takeUntil(this.destroy$),
-          filter(this.checksService.isDefined),
-          filter((fetchedDescription) =>
-            this.checksService.isCollageToolDescription(fetchedDescription)
-          ),
-          tap((fetchedDescription) => {
-            this.toolDescription = { ...fetchedDescription } as CollageToolDescription;
-          }),
-          switchMap((fetchedDescription) => {
-            const arrayOfIds = fetchedDescription.content as string[];
-            if (this.checksService.isNonEmptyArrayOfStrings(arrayOfIds)) {
-              return this.fetchPics(arrayOfIds);
-            } else {
-              return EMPTY;
-            }
-          })
-        )
-        .subscribe();
-    }
+    this.fetchToolDescription()
+      .pipe(
+        switchMap((fetchedDescription: CollageToolDescription) => {
+          this.toolDescription = fetchedDescription;
+          return this.fetchFiles(fetchedDescription.content, ToolNames.COLLAGE);
+        }),
+        switchMap((files: ImageFileDescription[]) => files)
+      )
+      .subscribe((files: ImageFileDescription[]) => {
+        this.images = files;
+      });
 
     this.isGlobalEditOnSub();
   }
@@ -93,20 +86,6 @@ export class CollageComponent implements OnDestroy, OnInit {
       .subscribe((state) => {
         this.isGlobalEditOn = state;
         if (state === false) this.currentPicIndex = -1;
-      });
-  }
-
-  async fetchPics(arrayOfIds: string[]) {
-    return this.store
-      .select(getMultipleFiles({ ids: arrayOfIds, type: ToolNames.COLLAGE }))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((pics) => {
-        if (pics) {
-          if (this.checksService.isImageFileDescriptionArray(pics)) this.images = [...pics];
-        } else {
-          this.destroy$.next(true);
-          this.deleteTheToolSinceItsEmpty.emit('this tool is empty, please delete it');
-        }
       });
   }
 
@@ -153,7 +132,7 @@ export class CollageComponent implements OnDestroy, OnInit {
   resizePic() {
     const imageDescription = this.images[this.currentPicIndex];
     const imageDescriptionId = imageDescription.id;
-    const newWidth = this.currentPicWidth;
+    const newWidth = this.currentPicWidth > 20 ? this.currentPicIndex : 20;
     this.store.dispatch(filesActions.updateImageWidth({ imageDescriptionId, newWidth }));
   }
 
