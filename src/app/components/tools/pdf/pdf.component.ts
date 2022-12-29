@@ -65,12 +65,8 @@ export class PDFComponent implements OnInit, OnDestroy {
     }
   }
 
-  //TODO: include this into service
   getName(filePath: string) {
-    const strippedName = this.utilsService.getFileName(filePath);
-    const noPDFExtension = strippedName.replace(/.pdf/i, '');
-    if (strippedName.length > 50) return noPDFExtension.slice(0, 50) + '...';
-    return noPDFExtension;
+    return this.utilsService.getFileNameNoExtension(filePath, ToolNames.PDF);
   }
 
   addPDF(fileNames: string[]) {

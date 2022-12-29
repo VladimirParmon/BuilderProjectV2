@@ -111,6 +111,9 @@ export class UtilsService {
       case ToolNames.AUDIO:
         extensionsArray = inputTypes.AUDIO;
         break;
+      case ToolNames.PDF:
+        extensionsArray = inputTypes.PDF;
+        break;
     }
     if (extensionsArray) {
       const expressionString = extensionsArray.split(',').join('\\b|\\b');
