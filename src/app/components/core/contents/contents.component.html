@@ -22,6 +22,7 @@
       >
         {{ isNodeExpanded(node.relatedPageId) ? "expand_less" : "expand_more" }}
       </mat-icon>
+      <div *ngIf="!node.childNodes.length" class="node-title__icon invisible"></div>
       <span class="node-title__name-span" (click)="navigate(node.relatedPageId)">{{
         node.relatedPageName
       }}</span>

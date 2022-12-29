@@ -11,7 +11,7 @@ import {
   SinglePageInfo,
   Lookup,
   DropInfo,
-} from 'src/constants/models';
+} from 'src/constants/models/contents';
 import { ModalWindowsText, ExpandButtonInnerText } from 'src/constants/constants';
 import { selectAllPagesInfo } from 'src/redux/selectors/contents.selectors';
 import { tap } from 'rxjs';

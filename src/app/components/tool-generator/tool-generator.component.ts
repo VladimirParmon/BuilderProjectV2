@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FileDescriptionId, ToolDescription } from 'src/constants/models';
+import { ToolDescription } from 'src/constants/models/tools';
 import { ModalWindowsText, ToolNames } from 'src/constants/constants';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
@@ -10,8 +10,9 @@ import { ConfirmActionComponent } from '../modals/confirm-action/confirm-action.
 import { Store } from '@ngrx/store';
 import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
 import { contentsActions } from 'src/redux/actions/contents.actions';
-import { filesActions } from 'src/redux/actions/files.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
+import { ChecksService } from 'src/app/services/checks.service';
+import { filesActions } from 'src/redux/actions/files.actions';
 
 @Component({
   selector: 'app-tool-generator',
@@ -39,6 +40,7 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
   toolDescription: ToolDescription | null = null;
 
   hasAlreadyBeenManuallyDeleted = false;
+  autoMessage = '';
 
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -47,7 +49,8 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private utilsService: UtilsService,
     public dialog: MatDialog,
-    public store: Store
+    public store: Store,
+    private checksService: ChecksService
   ) {}
 
   ngOnInit(): void {
@@ -69,80 +72,74 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     if (manuallyDeleted) {
       this.hasAlreadyBeenManuallyDeleted = true;
     } else {
-      this.utilsService.openSnackBar('Пустой блок был автоматически удален', 3000);
+      this.utilsService.openSnackBar(this.autoMessage, 3000);
     }
     const toolDescriptionId = this.toolDescriptionId;
     const pageId = this.pageId;
 
     this.store.dispatch(contentsActions.deleteTool({ pageId, toolDescriptionId }));
-    this.store.dispatch(toolsActions.deleteTool({ toolDescriptionId }));
 
     const toolType = this.toolDescription.type;
 
-    const toolHasOnlyOneFileByDesign = this.utilsService.isString(this.toolDescription.content);
-
-    if (toolHasOnlyOneFileByDesign) {
-      const storageUnitDescriptionId = this.toolDescription.content as string;
-      switch (toolType) {
-        case ToolNames.TEXT:
-          this.deleteTextToolStorageUnit(storageUnitDescriptionId);
-          break;
-        case ToolNames.VIDEO:
-          this.deleteRelatedVideoStorageUnit(storageUnitDescriptionId);
-          break;
-        case ToolNames.CHART:
-          this.deleteRelatedChartStorageUnit(storageUnitDescriptionId);
-          break;
-      }
-    }
-
-    const toolHasMultipleFilesByDesign = this.utilsService.isNonEmptyArrayOfStrings(
-      this.toolDescription.content
-    );
-
-    if (toolHasMultipleFilesByDesign) {
-      const fileDescriptionIds = this.toolDescription.content as string[];
-      switch (toolType) {
-        case ToolNames.COLLAGE:
-          this.deleteAllCollageImages(fileDescriptionIds);
-          break;
-        case ToolNames.PDF:
-          this.deleteAllRelatedPDFs(fileDescriptionIds);
-          break;
-        case ToolNames.AUDIO:
-          this.deleteAllRelatedAudios(fileDescriptionIds);
-          break;
-      }
+    switch (toolType) {
+      case ToolNames.TEXT:
+      case ToolNames.VIDEO:
+      case ToolNames.CHART:
+        this.withSingleRelated(this.toolDescription, toolType);
+        break;
+      default:
+        this.withMultipleRelated(this.toolDescription, toolType);
     }
   }
 
-  deleteTextToolStorageUnit(id: string) {
-    this.store.dispatch(filesActions.deleteTextStorageUnit({ id }));
+  withSingleRelated(toolDescription: ToolDescription, toolType: ToolNames) {
+    const toolDescriptionId = toolDescription.id;
+    const storageUnitDescriptionId = toolDescription.content;
+    const typeCheck = this.checksService.isString(storageUnitDescriptionId);
+    if (!typeCheck) return;
+    switch (toolType) {
+      case ToolNames.TEXT:
+        this.store.dispatch(toolsActions.deleteTextTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteTextStorageUnit({ storageUnitDescriptionId }));
+        break;
+      case ToolNames.VIDEO:
+        this.store.dispatch(toolsActions.deleteVideoTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteVideo({ storageUnitDescriptionId }));
+        break;
+      case ToolNames.CHART:
+        this.store.dispatch(toolsActions.deleteChartTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteChart({ storageUnitDescriptionId }));
+        break;
+    }
   }
 
-  deleteRelatedVideoStorageUnit(fileDescriptionId: string) {
-    this.store.dispatch(filesActions.deleteVideo({ fileDescriptionId }));
-  }
-
-  deleteRelatedChartStorageUnit(id: string) {
-    this.store.dispatch(filesActions.deleteChart({ id }));
-  }
-
-  deleteAllCollageImages(imageDescriptionIds: string[]) {
-    this.store.dispatch(filesActions.deleteMultipleImages({ imageDescriptionIds }));
-  }
-
-  deleteAllRelatedPDFs(fileDescriptionIds: string[]) {
-    this.store.dispatch(filesActions.deleteMultiplePDFs({ fileDescriptionIds }));
-  }
-
-  deleteAllRelatedAudios(fileDescriptionIds: string[]) {
-    this.store.dispatch(filesActions.deleteMultipleAudios({ fileDescriptionIds }));
+  withMultipleRelated(toolDescription: ToolDescription, toolType: ToolNames) {
+    const toolDescriptionId = toolDescription.id;
+    const fileDescriptionIds = toolDescription.content;
+    const typeCheck = this.checksService.isNonEmptyArrayOfStrings(fileDescriptionIds);
+    if (!typeCheck) return;
+    switch (toolType) {
+      case ToolNames.COLLAGE:
+        this.store.dispatch(toolsActions.deleteCollageTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteMultipleImages({ fileDescriptionIds }));
+        break;
+      case ToolNames.PDF:
+        this.store.dispatch(toolsActions.deletePDFTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteMultiplePDFs({ fileDescriptionIds }));
+        break;
+      case ToolNames.AUDIO:
+        this.store.dispatch(toolsActions.deleteAudioTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteMultipleAudios({ fileDescriptionIds }));
+        break;
+      case ToolNames.SLIDER:
+        this.store.dispatch(toolsActions.deleteChartTool({ toolDescriptionId }));
+        this.store.dispatch(filesActions.deleteMultipleImages({ fileDescriptionIds }));
+    }
   }
 
   openDeleteDialog() {
     const dialogConfig = this.utilsService.createMatDialogConfig(
-      ['delete-page-dialog'], //TODO: change this
+      ['delete-tool-dialog'],
       ModalWindowsText.DELETE_TOOL,
       15
     );
@@ -152,15 +149,8 @@ export class ToolGeneratorComponent implements OnInit, OnDestroy {
     });
   }
 
-  getNotification() {
+  getNotification(message: string) {
+    this.autoMessage = message;
     this.delete();
-  }
-
-  getToolContentsClone() {
-    if (this.toolDescription) {
-      const x = this.toolDescription.content as FileDescriptionId[];
-      return this.utilsService.arrayDeepCopy(x);
-    }
-    return [];
   }
 }

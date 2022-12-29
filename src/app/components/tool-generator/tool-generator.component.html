@@ -7,31 +7,40 @@
       (click)="openDeleteDialog()"
       >delete</mat-icon
     >
-    <app-text *ngSwitchCase="names.TEXT" [toolContent]="toolDescription.content"></app-text>
+    <app-text
+      *ngSwitchCase="names.TEXT"
+      [toolDescriptionId]="toolDescription.id"
+      (notify)="getNotification($event)"
+    ></app-text>
     <app-collage
       *ngSwitchCase="names.COLLAGE"
       [toolDescriptionId]="toolDescription.id"
-      (notify)="getNotification()"
+      (notify)="getNotification($event)"
     ></app-collage>
     <app-pdf
       *ngSwitchCase="names.PDF"
       [toolDescriptionId]="toolDescription.id"
-      (notify)="getNotification()"
+      (notify)="getNotification($event)"
     ></app-pdf>
     <app-video
       *ngSwitchCase="names.VIDEO"
       [fileDescriptionId]="toolDescription.content"
+      (notify)="getNotification($event)"
     ></app-video>
     <app-audio
       *ngSwitchCase="names.AUDIO"
       [toolDescriptionId]="toolDescription.id"
-      (notify)="getNotification()"
+      (notify)="getNotification($event)"
     ></app-audio>
     <app-slider
       *ngSwitchCase="names.SLIDER"
       [toolDescriptionId]="toolDescription.id"
-      (notify)="getNotification()"
+      (notify)="getNotification($event)"
     ></app-slider>
-    <app-chart *ngSwitchCase="names.CHART" [toolDescriptionId]="toolDescription.id"></app-chart>
+    <app-chart
+      *ngSwitchCase="names.CHART"
+      [toolDescriptionId]="toolDescription.id"
+      (notify)="getNotification($event)"
+    ></app-chart>
   </div>
 </div>

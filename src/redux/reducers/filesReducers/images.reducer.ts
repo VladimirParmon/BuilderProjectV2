@@ -14,7 +14,7 @@ export const imagesReducer = createReducer(
   on(filesActions.deleteImage, (state, { fileDescriptionId }) =>
     state.filter((i) => i.id !== fileDescriptionId)
   ),
-  on(filesActions.deleteMultipleImages, (state, { imageDescriptionIds }) =>
-    state.filter((i) => !imageDescriptionIds.includes(i.id))
+  on(filesActions.deleteMultipleImages, (state, { fileDescriptionIds }) =>
+    state.filter((i) => !fileDescriptionIds.includes(i.id))
   )
 );

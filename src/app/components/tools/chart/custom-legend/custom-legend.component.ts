@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { standardChartColors } from 'src/constants/constants';
-import { NonCompoundChartResults } from 'src/constants/models';
+import { NonCompoundChartResults } from 'src/constants/models/charts';
 
 @Component({
   selector: 'app-custom-legend',

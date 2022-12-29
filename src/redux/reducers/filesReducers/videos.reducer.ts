@@ -8,7 +8,7 @@ export const videosReducer = createReducer(
     ...state,
     fileDescription,
   ]),
-  on(filesActions.deleteVideo, (state, { fileDescriptionId }) =>
-    state.filter((v) => fileDescriptionId !== v.id)
+  on(filesActions.deleteVideo, (state, { storageUnitDescriptionId }) =>
+    state.filter((v) => storageUnitDescriptionId !== v.id)
   )
 );

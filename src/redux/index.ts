@@ -1,5 +1,5 @@
 import { MediaFileTypes } from 'src/constants/constants';
-import { JSONDataStorage } from 'src/constants/models';
+import { JSONDataStorage } from 'src/constants/models/general';
 
 export const initialState: JSONDataStorage = {
   contents: [],

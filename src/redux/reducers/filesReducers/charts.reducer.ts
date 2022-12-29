@@ -11,5 +11,7 @@ export const chartsReducer = createReducer(
   on(filesActions.updateChart, (state, { fileDescriptionId, newData }) =>
     state.map((d) => (d.id === fileDescriptionId ? { ...d, chartData: newData } : d))
   ),
-  on(filesActions.deleteChart, (state, { id }) => state.filter((c) => c.id !== id))
+  on(filesActions.deleteChart, (state, { storageUnitDescriptionId }) =>
+    state.filter((c) => c.id !== storageUnitDescriptionId)
+  )
 );

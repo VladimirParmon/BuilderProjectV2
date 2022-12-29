@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as m from 'src/constants/models';
+import * as m from 'src/constants/models/tools';
 import { contentsActions } from 'src/redux/actions/contents.actions';
 import { filesActions } from 'src/redux/actions/files.actions';
 import { toolsActions } from 'src/redux/actions/tools.actions';
@@ -8,18 +8,29 @@ import { v4 as uuidv4 } from 'uuid';
 import { ChartTypes, ToolNames } from 'src/constants/constants';
 import { Defaults } from './defaults';
 import { UtilsService } from './utils.service';
+import { StorageUnitsService } from './storage-units.service';
+import {
+  TextDescription,
+  TextDescriptionId,
+  VideoFileDescription,
+} from 'src/constants/models/files';
+import { ChartDescription } from 'src/constants/models/charts';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToolService {
-  constructor(private store: Store, private utilsService: UtilsService) {}
+  constructor(
+    private store: Store,
+    private utilsService: UtilsService,
+    private storageUnitsService: StorageUnitsService
+  ) {}
 
   createNewTextTool(pageId: string) {
-    const textDescriptionId: m.TextDescriptionId = uuidv4();
+    const textDescriptionId: TextDescriptionId = uuidv4();
     const textToolDescriptionId: m.ToolDescriptionId = uuidv4();
 
-    const textDescription: m.TextDescription = {
+    const textDescription: TextDescription = {
       id: textDescriptionId,
       text: '',
     };
@@ -34,18 +45,10 @@ export class ToolService {
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: textToolDescriptionId }));
   }
 
-  createAudioDescriptions(fileNames: string[]) {
-    const filesDescriptions: m.AudioFileDescription[] = fileNames.map((name) => ({
-      id: uuidv4(),
-      pathToFile: this.utilsService.getTempFilesPath(name),
-    }));
-    const fileDescriptionIds = filesDescriptions.map((d) => d.id);
-    return { filesDescriptions, fileDescriptionIds };
-  }
-
   createNewAudioTool(pageId: string, fileNames: string[]) {
     const audioToolDescriptionId = uuidv4();
-    const { filesDescriptions, fileDescriptionIds } = this.createAudioDescriptions(fileNames);
+    const { filesDescriptions, fileDescriptionIds } =
+      this.storageUnitsService.createAudioDescriptions(fileNames);
 
     const toolDescription: m.AudioToolDescription = {
       id: audioToolDescriptionId,
@@ -60,7 +63,7 @@ export class ToolService {
   createNewVideoTool(pageId: string, fileName: string) {
     const videoToolDescriptionId = uuidv4();
     const fileDescriptionId = uuidv4();
-    const fileDescription: m.VideoFileDescription = {
+    const fileDescription: VideoFileDescription = {
       id: fileDescriptionId,
       pathToFile: this.utilsService.getTempFilesPath(fileName),
     };
@@ -74,18 +77,10 @@ export class ToolService {
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: videoToolDescriptionId }));
   }
 
-  createPDFDescriptions(fileNames: string[]) {
-    const filesDescriptions: m.PDFFileDescription[] = fileNames.map((name) => ({
-      id: uuidv4(),
-      pathToFile: this.utilsService.getTempFilesPath(name),
-    }));
-    const fileDescriptionIds = filesDescriptions.map((d) => d.id);
-    return { filesDescriptions, fileDescriptionIds };
-  }
-
   createNewPDFTool(pageId: string, fileNames: string[]) {
     const PDFToolDescriptionId = uuidv4();
-    const { filesDescriptions, fileDescriptionIds } = this.createPDFDescriptions(fileNames);
+    const { filesDescriptions, fileDescriptionIds } =
+      this.storageUnitsService.createPDFDescriptions(fileNames);
 
     const toolDescription: m.PDFToolDescription = {
       id: PDFToolDescriptionId,
@@ -98,19 +93,10 @@ export class ToolService {
     this.store.dispatch(contentsActions.addTool({ pageId, toolId: PDFToolDescriptionId }));
   }
 
-  createImageDescriptions(fileNames: string[]) {
-    const filesDescriptions: m.ImageFileDescription[] = fileNames.map((name) => ({
-      id: uuidv4(),
-      pathToFile: this.utilsService.getTempFilesPath(name),
-      width: Defaults.defaultImageWidth,
-    }));
-    const fileDescriptionIds: m.FileDescriptionId[] = filesDescriptions.map((d) => d.id);
-    return { filesDescriptions, fileDescriptionIds };
-  }
-
   createNewCollageTool(pageId: string, fileNames: string[]) {
     const collageToolDescriptionId = uuidv4();
-    const { filesDescriptions, fileDescriptionIds } = this.createImageDescriptions(fileNames);
+    const { filesDescriptions, fileDescriptionIds } =
+      this.storageUnitsService.createImageDescriptions(fileNames);
 
     const toolDescription: m.CollageToolDescription = {
       id: collageToolDescriptionId,
@@ -128,7 +114,8 @@ export class ToolService {
 
   createNewSliderTool(pageId: string, fileNames: string[]) {
     const sliderToolDescriptionId = uuidv4();
-    const { filesDescriptions, fileDescriptionIds } = this.createImageDescriptions(fileNames);
+    const { filesDescriptions, fileDescriptionIds } =
+      this.storageUnitsService.createImageDescriptions(fileNames);
 
     const toolDescription: m.SliderToolDescription = {
       id: sliderToolDescriptionId,
@@ -143,7 +130,7 @@ export class ToolService {
   createNewChartTool(pageId: string, chartType: ChartTypes) {
     const chartStorageUnitDescriptionId = uuidv4();
     const chartToolDescriptionId = uuidv4();
-    const chartStorageUnitDescription: m.ChartDescription = {
+    const chartStorageUnitDescription: ChartDescription = {
       id: chartStorageUnitDescriptionId,
       chartType,
       chartData: Defaults.getChartExample(chartType),

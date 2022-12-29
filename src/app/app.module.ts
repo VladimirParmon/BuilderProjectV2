@@ -57,6 +57,7 @@ import { ChartSizeComponent } from './components/tools/chart/chart-size/chart-si
 import { CustomLegendComponent } from './components/tools/chart/custom-legend/custom-legend.component';
 
 import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { WelcomePageComponent } from './pages/welcome-page/welcome-page.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy } from '@angular/
     ItemsListComponent,
     ChartSizeComponent,
     CustomLegendComponent,
+    WelcomePageComponent,
   ],
   imports: [
     AppRoutingModule,

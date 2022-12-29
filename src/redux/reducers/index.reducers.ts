@@ -1,5 +1,6 @@
 import { ActionReducerMap, MetaReducer, ActionReducer } from '@ngrx/store';
-import { JSONDataStorage, MultimediaFilesCategories } from 'src/constants/models';
+import { JSONDataStorage } from 'src/constants/models/general';
+import { MultimediaFilesCategories } from 'src/constants/models/files';
 import { contentsReducer } from './contents.reducers';
 import { combinedFilesReducer } from './files.reducers';
 import { toolsReducer } from './tools.reducers';

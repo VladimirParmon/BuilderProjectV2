@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { SinglePageInfo } from 'src/constants/models';
+import { SinglePageInfo } from 'src/constants/models/contents';
 
 enum ContentsActions {
   addNewPage = '[Contents/Page] Add a new empty page',
@@ -19,34 +19,42 @@ const updatePageName = createAction(
   ContentsActions.updatePageName,
   props<{ pageId: string; newName: string }>()
 );
+
 const updatePageChildren = createAction(
   ContentsActions.updatePageChildren,
   props<{ pageId: string; newChildrenIds: string[] }>()
 );
+
 const updateTools = createAction(
   ContentsActions.updateTools,
   props<{ pageId: string; newToolsIds: string[] }>()
 );
+
 const changePageParent = createAction(
   ContentsActions.changePageParent,
   props<{ targetPageId: string; newParentId: string }>()
 );
+
 const removeChildPage = createAction(
   ContentsActions.removeChildPage,
   props<{ targetPageId: string; pageToRemoveId: string }>()
 );
+
 const addChildPage = createAction(
   ContentsActions.addChildPage,
   props<{ targetPageId: string; pageToAddId: string }>()
 );
+
 const updateWholeSlice = createAction(
   ContentsActions.updateWholeSlice,
   props<{ newArray: SinglePageInfo[] }>()
 );
+
 const deleteTool = createAction(
   ContentsActions.deleteTool,
   props<{ pageId: string; toolDescriptionId: string }>()
 );
+
 const addTool = createAction(ContentsActions.addTool, props<{ pageId: string; toolId: string }>());
 const addNewPage = createAction(ContentsActions.addNewPage, props<{ pageInfo: SinglePageInfo }>());
 const deletePage = createAction(ContentsActions.deletePage, props<{ pageId: string }>());

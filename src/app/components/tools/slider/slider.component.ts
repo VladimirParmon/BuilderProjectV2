@@ -1,23 +1,18 @@
 import { GalleryItem, GalleryState, ImageItem } from 'ng-gallery';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, EMPTY, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
-import { UtilsService } from 'src/app/services/utils.service';
 import { ToolNames } from 'src/constants/constants';
-import { FileDescriptionId, ImageFileDescription } from 'src/constants/models';
-import { filesActions } from 'src/redux/actions/files.actions';
+import { FileDescriptionId, ImageFileDescription } from 'src/constants/models/files';
 import { getMultipleFiles } from 'src/redux/selectors/files.selectors';
-import { filter, switchMap } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
-import { ChooseFileComponent } from '../../modals/choose-file/choose-file.component';
 import { toolsActions } from 'src/redux/actions/tools.actions';
-import { ToolService } from 'src/app/services/tool.service';
-import { selectToolDescription } from 'src/redux/selectors/tools.selectors';
-import { FullscreenService } from 'src/app/services/fullscreen.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Gallery, GalleryRef } from 'ng-gallery';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { ChecksService } from 'src/app/services/checks.service';
+import { _fetchFiles, _fetchToolDescription } from '../common';
+import { SliderToolDescription } from 'src/constants/models/tools';
 
 @Component({
   selector: 'app-slider',
@@ -31,7 +26,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 })
 export class SliderComponent implements OnInit, OnDestroy {
   @Input() toolDescriptionId: string | null = null;
-  @Output('notify') deleteTheToolSinceItsEmpty = new EventEmitter<string>();
+  @Output('notify') deleteTheTool = new EventEmitter<string>();
 
   isGlobalEditOn$: BehaviorSubject<boolean> = this.stateService.isGlobalEditOn$;
   currentlyInFullscreen$: BehaviorSubject<boolean> = this.stateService.currentlyInFullscreen$;
@@ -44,58 +39,39 @@ export class SliderComponent implements OnInit, OnDestroy {
   currentIndex: number = 0;
   newInsertionIndexForAnimation: number = -1;
 
+  fetchToolDescription = _fetchToolDescription;
+  fetchFiles = _fetchFiles;
+  fileFetcher = getMultipleFiles;
+
+  descriptionTypeCheck = this.checksService.isValidBasicToolDescription;
+  contentsTypeCheck = this.checksService.isNonEmptyArrayOfStrings;
+  filesTypeCheck = this.checksService.isBasicFileDescriptionArray;
+
   constructor(
     private store: Store,
-    private utilsService: UtilsService,
     private stateService: StateService,
-    private toolService: ToolService,
-    private fullscreenService: FullscreenService,
-    private dialog: MatDialog,
-    private gallery: Gallery
+    private gallery: Gallery,
+    private checksService: ChecksService
   ) {}
 
   ngOnInit(): void {
     if (this.toolDescriptionId) {
       this.galleryRef = this.gallery.ref(this.toolDescriptionId);
-      this.store
-        .select(selectToolDescription(this.toolDescriptionId))
+      this.fetchToolDescription()
         .pipe(
-          takeUntil(this.destroy$),
-          filter(this.utilsService.isDefined),
-          filter((fetchedDescription) =>
-            this.utilsService.isBasicToolDescription(fetchedDescription)
-          ),
-          switchMap((fetchedDescription) => {
-            const arrayOfIds = fetchedDescription.content as string[];
-            if (this.utilsService.isNonEmptyArrayOfStrings(arrayOfIds)) {
-              this.imagesIds = [...arrayOfIds];
-              return this.fetchImages(arrayOfIds);
-            } else {
-              return EMPTY;
-            }
-          })
+          switchMap((fetchedDescription: SliderToolDescription) => {
+            this.imagesIds = fetchedDescription.content;
+            return this.fetchFiles(this.imagesIds, ToolNames.SLIDER);
+          }),
+          switchMap((files: ImageFileDescription[]) => files)
         )
-        .subscribe();
+        .subscribe((files: ImageFileDescription[]) => {
+          this.images = this.transformToGalleryItems(files);
+        });
     }
   }
 
-  async fetchImages(arrayOfIds: string[]) {
-    return this.store
-      .select(getMultipleFiles({ ids: arrayOfIds, type: ToolNames.SLIDER }))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((images) => {
-        if (images) {
-          if (this.utilsService.isImageFileDescriptionArray(images)) {
-            this.images = this.transformToGalleryItem(images);
-          }
-        } else {
-          this.destroy$.next(true);
-          this.deleteTheToolSinceItsEmpty.emit('this tool is empty, please delete it');
-        }
-      });
-  }
-
-  transformToGalleryItem(images: ImageFileDescription[]) {
+  transformToGalleryItems(images: ImageFileDescription[]) {
     return images.map(
       (i) =>
         new ImageItem({

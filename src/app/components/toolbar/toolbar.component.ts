@@ -5,7 +5,7 @@ import { BehaviorSubject, filter, Subject, takeUntil } from 'rxjs';
 import { StateService } from 'src/app/services/state.service';
 import { ToolService } from 'src/app/services/tool.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { ToolbarToolListOption } from 'src/constants/models';
+import { ToolbarToolListOption } from 'src/constants/models/general';
 import { ChooseFileComponent } from '../modals/choose-file/choose-file.component';
 import { toolsList, ToolNames, ChartTypes } from 'src/constants/constants';
 import { ChooseChartComponent } from '../modals/choose-chart/choose-chart.component';
@@ -50,24 +50,11 @@ export class ToolbarComponent implements OnDestroy {
       case ToolNames.TEXT:
         if (this.currentPageId) this.toolService.createNewTextTool(this.currentPageId);
         break;
-      case ToolNames.AUDIO:
-        this.openNewDialog(ToolNames.AUDIO);
-        break;
-      case ToolNames.PDF:
-        this.openNewDialog(ToolNames.PDF);
-        break;
-      case ToolNames.COLLAGE:
-        this.openNewDialog(ToolNames.COLLAGE);
-        break;
-      case ToolNames.VIDEO:
-        this.openNewDialog(ToolNames.VIDEO);
-        break;
-      case ToolNames.SLIDER:
-        this.openNewDialog(ToolNames.SLIDER);
-        break;
       case ToolNames.CHART:
         this.openChartSelector();
         break;
+      default:
+        this.openNewDialog(name);
     }
   }
 
